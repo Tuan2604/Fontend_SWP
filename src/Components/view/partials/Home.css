@@ -1,0 +1,15 @@
+.Homepage {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+.Homepage h1 {
+  margin: 100px 200px;
+  padding-left: 233px;
+  text-align: center;
+}
+.Homepage p {
+  display: flex;
+  margin-left: 0;
+}
