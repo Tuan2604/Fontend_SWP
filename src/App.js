@@ -1,36 +1,6 @@
-// import React from 'react';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import Home from './Components/view/partials/Home';
-// import Login from './Components/view/Login/Login';
-// import Header from './Components/view/partials/Header'; // Import Header component
-// import Register from './Components/view/Register/Register';
-// import SignIn from './signln';
-
-
-// const App = () => {
-//   return (
-//     <Router>
-      
-//       <div>
-        
-//         <Header /> 
-       
-//         <Routes>
-          
-//           <Route path="/" element={<Home />} />
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/Register" element={<Register />}/>
-//         </Routes>
-//       </div>
-//     </Router>
-//   );
-// };
-
-// export default App;
-// src/App.js
 // src/App.js
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Home from './Components/view/partials/Home';
 import Login from './Components/view/Login/Login';
@@ -53,6 +23,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/" replace />} /> {/* Catch-all route */}
           </Routes>
         </CSSTransition>
       </TransitionGroup>

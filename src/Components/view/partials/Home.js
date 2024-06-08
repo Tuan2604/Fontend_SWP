@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './Header';
 import './Home.css'; // Import the CSS file for Home component styling
 
 const Home = () => {
