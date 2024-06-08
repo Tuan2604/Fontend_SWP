@@ -5,7 +5,8 @@ import './Header.css';
 const Header = () => {
   const navigate = useNavigate();
 
-  const logout = () => {
+  const logout = (event) => {
+    event.preventDefault();
     if (window.confirm("Are you sure you want to logout?")) {
       localStorage.clear(); // Clears all data from localStorage
       navigate('/login'); // Redirects to login page using react-router-dom
@@ -27,7 +28,7 @@ const Header = () => {
               <Link to="/register">Register</Link> {/* Link to Register page */}
             </li>
             <li>
-              <a href="#logout" onClick={logout}>Logout</a> {/* Logout link */}
+              <a href="/logout" onClick={logout}>Logout</a> {/* Logout link */}
             </li>
           </ul>
         </div>
