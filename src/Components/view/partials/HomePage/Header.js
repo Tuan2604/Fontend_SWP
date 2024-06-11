@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools } from '@fortawesome/free-solid-svg-icons';
 import './Header.css'; // Ensure the correct import statement for CSS
 
 const Header = () => {
@@ -28,7 +28,7 @@ const Header = () => {
           <ul>
             <li>
               <Link to="/">
-                <FontAwesomeIcon icon={faHome} /> Home
+                <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-fpt-inkythuatso-1-01-01-14-33-35.jpg" alt="Home" className="home-icon" />
               </Link>
             </li>
             {!isLoggedIn && ( // Show login and register links if not logged in
@@ -89,4 +89,3 @@ const Header = () => {
 };
 
 export default Header;
-  
