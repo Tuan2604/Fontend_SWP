@@ -7,6 +7,7 @@ import './Header.css'; // Ensure the correct import statement for CSS
 const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const isLoggedIn = !!localStorage.getItem('email'); // Check if user is logged in
 
   const logout = (event) => {
@@ -21,16 +22,37 @@ const Header = () => {
     setShowMenu(!showMenu);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    navigate(`/search?query=${searchQuery}`);
+  };
+
   return (
     <header className="header">
-      <nav>
-        <div className="li">
+      <nav className="nav-container">
+        <div className="logo">
+          <Link to="/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/FPT_logo_2010.svg/640px-FPT_logo_2010.svg.png" alt="Home" className="home-icon" />
+          </Link>
+        </div>
+        <div className="search-container">
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex' }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="search-input"
+              placeholder="Search..."
+            />
+            <button type="submit" className="search-button">Search</button>
+          </form>
+        </div>
+        <div className="menu">
           <ul>
-            <li>
-              <Link to="/">
-                <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-fpt-inkythuatso-1-01-01-14-33-35.jpg" alt="Home" className="home-icon" />
-              </Link>
-            </li>
             {!isLoggedIn && ( // Show login and register links if not logged in
               <>
                 <li>
