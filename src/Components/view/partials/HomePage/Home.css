@@ -4,24 +4,63 @@
 .home-container {
   text-align: center;
   padding: 20px;
+  background-color: #f0f0f0; /* Light grey background */
+}
+
+.content-container {
+  background-color: #fff; /* White background */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 80%;
 }
 
 .slider-container {
-  width: 80%;
-  margin: 0 auto 20px auto; /* Center the slider and add margin below */
+  width: 100%;
+  margin: 0 auto 20px auto;
 }
 
 .slider-image-container {
+  position: relative;
   width: 100%;
-  height: 300px; /* Set the desired height for the slider */
-  overflow: hidden; /* Hide the overflow to maintain aspect ratio */
+  height: 300px;
+  overflow: hidden;
   border-radius: 10px;
 }
 
 .slider-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensure the image covers the container without stretching */
+  object-fit: cover;
+}
+
+.slick-prev,
+.slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.slick-prev {
+  left: 15px;
+}
+
+.slick-next {
+  right: 15px;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 20px;
+  color: white;
 }
 
 .shopping-cards-container {

@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import './Home.css'; // Import the CSS file for Home component styling
+import Footer from '../Footer/Footer';
 
 const Home = () => {
   const sliderImages = [
@@ -24,7 +25,6 @@ const Home = () => {
       price: '$20,000',
       features: ['Feature 1', 'Feature 2', 'Feature 3']
     },
-    // Add more card data as needed
     {
       imageUrl: 'https://giadungnhaviet.com/wp-content/uploads/2018/09/bo-mach-dieu-khien-arduino-r3-2.jpg',
       title: 'Bang mach dien tu',
@@ -32,7 +32,6 @@ const Home = () => {
       price: '$10,000',
       features: ['Feature 1', 'Feature 2', 'Feature 3']
     },
-
     {
       imageUrl: 'https://library.fpt.edu.vn/Uploads/HN/Images/Catalogue/FPT190025804.png',
       title: 'Sach kanji co ban',
@@ -40,9 +39,6 @@ const Home = () => {
       price: '$10,000',
       features: ['Feature 1', 'Feature 2', 'Feature 3']
     },
-
-  
-
     {
       imageUrl: 'https://dongphuccati.com/images/products/2020/05/18/original/2-1.jpg',
       title: 'Ao fpt',
@@ -50,7 +46,6 @@ const Home = () => {
       price: '$10,000',
       features: ['Feature 1', 'Feature 2', 'Feature 3']
     },
-    
   ];
 
   const sliderSettings = {
@@ -61,37 +56,41 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: true, // Ensure arrows are enabled
   };
 
   return (
     <div className="home-container">
-      <div className="slider-container">
-        <Slider {...sliderSettings}>
-          {sliderImages.map((url, index) => (
-            <div key={index} className="slider-image-container">
-              <img src={url} alt={`Slide ${index + 1}`} className="slider-image" />
-            </div>
-          ))}
-        </Slider>
-      </div>
+      <div className="content-container">
+        <div className="slider-container">
+          <Slider {...sliderSettings}>
+            {sliderImages.map((url, index) => (
+              <div key={index} className="slider-image-container">
+                <img src={url} alt={`Slide ${index + 1}`} className="slider-image" />
+              </div>
+            ))}
+          </Slider>
+        </div>
 
-      <div className="shopping-cards-container">
-        {cardsData.map((card, index) => (
-          <div key={index} className="shopping-card">
-            <img src={card.imageUrl} alt={card.title} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{card.title}</h3>
-              <p className="card-description">{card.description}</p>
-              <p className="card-price">{card.price}</p>
-              <div className="card-features">
-                {card.features.map((feature, idx) => (
-                  <span key={idx} className="card-feature">{feature}</span>
-                ))}
+        <div className="shopping-cards-container">
+          {cardsData.map((card, index) => (
+            <div key={index} className="shopping-card">
+              <img src={card.imageUrl} alt={card.title} className="card-image" />
+              <div className="card-content">
+                <h3 className="card-title">{card.title}</h3>
+                <p className="card-description">{card.description}</p>
+                <p className="card-price">{card.price}</p>
+                <div className="card-features">
+                  {card.features.map((feature, idx) => (
+                    <span key={idx} className="card-feature">{feature}</span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

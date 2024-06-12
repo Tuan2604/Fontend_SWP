@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools, faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
 import './Header.css'; // Ensure the correct import statement for CSS
 
 const Header = () => {
@@ -40,7 +40,7 @@ const Header = () => {
           </Link>
         </div>
         <div className="search-container">
-          <form onSubmit={handleSearchSubmit} style={{ display: 'flex' }}>
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type="text"
               value={searchQuery}
@@ -48,7 +48,9 @@ const Header = () => {
               className="search-input"
               placeholder="Search..."
             />
-            <button type="submit" className="search-button">Search</button>
+            <button type="submit" className="search-button">
+              <FontAwesomeIcon icon={faSearch} />
+            </button>
           </form>
         </div>
         <div className="menu">
@@ -70,7 +72,9 @@ const Header = () => {
             {isLoggedIn && ( // Show logout link if logged in
               <>
                 <li className="dropdown">
-                  <a href="#danh-muc" onClick={toggleMenu}>Danh mục</a>
+                  <a href="#danh-muc" onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={faBars} /> Danh mục
+                  </a>
                   {showMenu && (
                     <ul className="dropdown-menu">
                       <li>
