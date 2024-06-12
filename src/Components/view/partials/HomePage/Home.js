@@ -41,17 +41,11 @@ const Home = () => {
       features: ['Feature 1', 'Feature 2', 'Feature 3']
     },
 
-    {
-      imageUrl: 'https://library.fpt.edu.vn/Uploads/HN/Images/Catalogue/FPT190025804.png',
-      title: 'Sach kanji co ban',
-      description: 'Description of Car 1',
-      price: '$10,000',
-      features: ['Feature 1', 'Feature 2', 'Feature 3']
-    },
+  
 
     {
-      imageUrl: 'https://library.fpt.edu.vn/Uploads/HN/Images/Catalogue/FPT190025804.png',
-      title: 'Sach kanji co ban',
+      imageUrl: 'https://dongphuccati.com/images/products/2020/05/18/original/2-1.jpg',
+      title: 'Ao fpt',
       description: 'Description of Car 1',
       price: '$10,000',
       features: ['Feature 1', 'Feature 2', 'Feature 3']
