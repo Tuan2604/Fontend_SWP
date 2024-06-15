@@ -6,6 +6,9 @@ import Login from './Components/view/Login/Login';
 import Header from './Components/view/partials//HomePage/Header'; 
 import Register from './Components/view/Register/Register';
 import './transitions.css'; // Import the transitions CSS
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const App = () => {
   const location = useLocation();
@@ -26,6 +29,7 @@ const App = () => {
   return (
     <div>
       <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <ToastContainer position="top-right" autoClose={3000} />
       <TransitionGroup>
         <CSSTransition
           key={location.key}
