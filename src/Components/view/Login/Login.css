@@ -1,3 +1,69 @@
+/* .login-container {
+  max-width: 250px;
+  margin: 3em auto;
+  padding: 1.5em;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.input-container {
+  margin-bottom: 1em;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+input {
+  width: 100%;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 0.5em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1em; 
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.login-container img {
+  width: 100%;
+}
+
+.google-signin-button {
+  background-color: #db4437; 
+  border: none;
+  margin-top: 1em;
+}
+
+.google-signin-button:hover {
+  background-color: #c33d2e;
+} */
+
+/* src/Components/view/Login/Login.css */
 .login-container {
   max-width: 250px;
   margin: 3em auto;
@@ -61,10 +127,4 @@ button:hover {
 
 .google-signin-button:hover {
   background-color: #c33d2e;
-}
-.custom-toast {
-  font-size: 18px;
-  background-color: #333;
-  color: #fff;
-  border-radius: 8px;
 }
