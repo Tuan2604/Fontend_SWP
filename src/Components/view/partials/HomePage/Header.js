@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools, faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
-import './Header.css'; // Ensure the correct import statement for CSS
+import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const isLoggedIn = !!localStorage.getItem('email'); // Check if user is logged in
+  const isLoggedIn = !!localStorage.getItem('email');
 
   const logout = (event) => {
     event.preventDefault();
     if (window.confirm("Are you sure you want to logout?")) {
-      localStorage.clear(); // Clears all data from localStorage
-      navigate('/login'); // Redirects to login page using react-router-dom
+      localStorage.clear();
+      navigate('/login');
     }
   };
 
@@ -55,7 +55,7 @@ const Header = () => {
         </div>
         <div className="menu">
           <ul>
-            {!isLoggedIn && ( // Show login and register links if not logged in
+            {!isLoggedIn && (
               <>
                 <li>
                   <Link to="/login">
@@ -69,7 +69,7 @@ const Header = () => {
                 </li>
               </>
             )}
-            {isLoggedIn && ( // Show logout link if logged in
+            {isLoggedIn && (
               <>
                 <li className="dropdown">
                   <a href="#danh-muc" onClick={toggleMenu}>
