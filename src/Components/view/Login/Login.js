@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect from react
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import { WechatOutlined, LockOutlined } from '@ant-design/icons';
 import { auth, provider } from './Firebase';
@@ -6,6 +6,7 @@ import { signInWithPopup } from 'firebase/auth';
 import Home from './Home';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import './Login.css';
 
 const { Title } = Typography;
@@ -15,30 +16,61 @@ const Login = () => {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => { // Add useEffect here
+  useEffect(() => {
     setValue(localStorage.getItem('email'));
   }, []);
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     const { username, password } = values;
-    if (username === 'admin' && password === 'password') {
-      toast.success('Login successful', {
+    try {
+      const response = await axios.post('https://localhost:7071/api/authentication/login', 
+        {
+          email: username,
+          password: password
+        }, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*', // This header is usually set by the server, not the client
+          }
+        }
+      );
+  
+      // Handle the response as needed
+      console.log('Response:', response.data);
+  
+      if (response.data.accessToken) {
+        toast.success('Login successful', {
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeButton: false,
+          className: 'custom-toast',
+        });
+        
+        // Store tokens and user info in localStorage
+        localStorage.setItem('email', response.data.userInfo.email);
+        localStorage.setItem('fullname', response.data.userInfo.fullname);
+        localStorage.setItem('role', response.data.userInfo.role);
+        localStorage.setItem('phoneNumber', response.data.userInfo.phoneNumber);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+  
+        setValue(response.data.userInfo.email);
+        navigate('/');
+      } else {
+        throw new Error(response.data.message || 'Invalid username or password');
+      }
+    } catch (error) {
+      toast.error(error.message, {
         autoClose: 2000,
         hideProgressBar: true,
-        closeButton: false, // Remove close button
-        className: 'custom-toast' // Optional: Add a custom class for additional styling
+        closeButton: false,
+        className: 'custom-toast',
       });
-      navigate('/');
-    } else {
-      toast.error('Invalid username or password', {
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeButton: false, // Remove close button
-        className: 'custom-toast' // Optional: Add a custom class for additional styling
-      });
-      setError('Invalid username or password');
+      setError(error.message);
     }
   };
+  
 
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, provider)
@@ -48,8 +80,8 @@ const Login = () => {
         toast.success('Login successful', {
           autoClose: 2000,
           hideProgressBar: true,
-          closeButton: false, // Remove close button
-          className: 'custom-toast' // Optional: Add a custom class for additional styling
+          closeButton: false,
+          className: 'custom-toast',
         });
         navigate('/');
       })
@@ -57,8 +89,8 @@ const Login = () => {
         toast.error(error.message, {
           autoClose: 2000,
           hideProgressBar: true,
-          closeButton: false, // Remove close button
-          className: 'custom-toast' // Optional: Add a custom class for additional styling
+          closeButton: false,
+          className: 'custom-toast',
         });
         setError(error.message);
       });
@@ -80,9 +112,9 @@ const Login = () => {
         >
           <Form.Item
             name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: 'Please input your Email!' }]}
           >
-            <Input prefix={<WechatOutlined />} placeholder="Username" />
+            <Input prefix={<WechatOutlined />} placeholder="username" />
           </Form.Item>
           <Form.Item
             name="password"
