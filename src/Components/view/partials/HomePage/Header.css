@@ -40,11 +40,9 @@
 .search-button {
   width: 45px;
   padding: 8px 12px;
-
   background-color: #fff;
   color: #e38d13;
   cursor: pointer; /* Rounded corners for the button */
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,6 +57,7 @@
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  align-items: center; /* Ensure menu items are centered vertically */
 }
 
 nav ul {
@@ -132,6 +131,14 @@ nav ul li .dropdown-menu li a:hover {
 
 nav ul li:hover .dropdown-menu {
   display: block;
+}
+
+.welcome {
+  margin-right: 20px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+  white-space: nowrap; /* Prevents the welcome text from wrapping */
 }
 
 .fade-enter {

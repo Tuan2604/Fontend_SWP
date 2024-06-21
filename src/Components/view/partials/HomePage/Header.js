@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faUserPlus, faSignOutAlt, faBook, faPen, faBox, faTools, faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,14 @@ const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [fullname, setFullname] = useState('');
   const isLoggedIn = !!localStorage.getItem('email');
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setFullname(localStorage.getItem('fullname'));
+    }
+  }, [isLoggedIn]);
 
   const logout = (event) => {
     event.preventDefault();
@@ -71,9 +78,12 @@ const Header = () => {
             )}
             {isLoggedIn && (
               <>
+                <li className="welcome">
+                  Welcome {fullname}
+                </li>
                 <li className="dropdown">
                   <a href="#danh-muc" onClick={toggleMenu}>
-                    <FontAwesomeIcon icon={faBars} /> Danh mục
+                    <FontAwesomeIcon icon={faBars} /> Menu
                   </a>
                   {showMenu && (
                     <ul className="dropdown-menu">
