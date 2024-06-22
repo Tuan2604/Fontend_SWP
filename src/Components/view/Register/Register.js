@@ -79,7 +79,7 @@ const Register = () => {
                         { required: true, message: 'Please input your Full Name!' },
                         {
                             pattern: /^[a-zA-Z0-9_]{5,30}$/,
-                            message: 'Full Name must be 5-30 characters long and not contain special characters!'
+                            message: 'Full Name must be 5-30 characters long and not contain special characters'
                         }
                     ]}
                 >
@@ -92,7 +92,7 @@ const Register = () => {
                         { type: 'email', message: 'Please enter a valid email address!' },
                         {
                             pattern: /^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/,
-                            message: 'Email must be a valid FPT email address (ending with @fpt.edu.vn)!'
+                            message: 'Email must be a valid FPT email address (ending with @fpt.edu.vn)'
                         }
                     ]}
                 >
@@ -104,7 +104,7 @@ const Register = () => {
                         { required: true, message: 'Please input your Phone number!' },
                         {
                             pattern: /^0[0-9]{9}$/,
-                            message: 'Phone number must start with 0 and be 10 digits long!'
+                            message: 'Phone number must start with 0 and be 10 digits long'
                         }
                     ]}
                 >
