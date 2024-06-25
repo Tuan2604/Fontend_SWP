@@ -124,7 +124,7 @@ const Header = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/PostNews/PostCreate.js">
+                        <Link to="/post-create">
                           <FontAwesomeIcon icon={faFile} /> Create Post
                         </Link>
                       </li>
