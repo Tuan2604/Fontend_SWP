@@ -1,8 +1,10 @@
 // src/Components/view/Register/Register.js
 import React, { useState } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
-import { UserOutlined, LockOutlined, WechatOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { UserOutlined, WechatOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import './Register.css';
 
 const { Title } = Typography;
@@ -10,16 +12,57 @@ const { Title } = Typography;
 const Register = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
-    const onFinish = (values) => {
-        const { password, confirm } = values;
-        if (password !== confirm) {
-            setError('Passwords do not match');
-            setSuccess('');
-        } else {
-            // Add your registration logic here
-            setError('');
-            setSuccess('Registration successful! Please login.');
+    const onFinish = async (values) => {
+        const { fullname, email, phoneNumber } = values;
+        try {
+            const response = await axios.post('https://localhost:7071/api/authentication/register', 
+                {
+                    fullname: fullname,
+                    email: email,
+                    phoneNumber: phoneNumber
+                }, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*', // This header is usually set by the server, not the client
+                    }
+                }
+            );
+
+            // Handle the response as needed
+            console.log('Response:', response.data);
+
+            if (response.status === 200) {
+                toast.success('Registration successful.Please login.', {
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeButton: false,
+                    className: 'custom-toast',
+                });
+                setSuccess('Registration successful.Please login.');
+                navigate('/login');
+            } else {
+                throw new Error(response.data.message || 'Registration failed');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.error('Bad Request: Please check your input fields.', {
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeButton: false,
+                    className: 'custom-toast',
+                });
+            } else {
+                toast.error(error.message, {
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeButton: false,
+                    className: 'custom-toast',
+                });
+            }
+            setError(error.message);
         }
     };
 
@@ -31,50 +74,41 @@ const Register = () => {
             {success && <p className="success">{success}</p>}
             <Form name="register" className="register-form" onFinish={onFinish}>
                 <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your Username!' }]}
+                    name="fullname"
+                    rules={[
+                        { required: true, message: 'Please input your Full Name!' },
+                        {
+                            pattern: /^[a-zA-Z0-9_]{5,30}$/,
+                            message: 'Full Name must be 5-30 characters long and not contain special characters'
+                        }
+                    ]}
                 >
-                    <Input placeholder="Username" prefix={<UserOutlined />} />
+                    <Input placeholder="Full Name" prefix={<UserOutlined />} />
                 </Form.Item>
                 <Form.Item
                     name="email"
                     rules={[
+                        { required: true, message: 'Please input your Email!' },
+                        { type: 'email', message: 'Please enter a valid email address!' },
                         {
-                            required: true,
-                            message: 'Please input your Email!',
-                            type: 'email',
-                        },
+                            pattern: /^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/,
+                            message: 'Email must be a valid FPT email address (ending with @fpt.edu.vn)'
+                        }
                     ]}
                 >
                     <Input placeholder="Email" prefix={<WechatOutlined />} />
                 </Form.Item>
                 <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
-                    hasFeedback
-                >
-                    <Input.Password placeholder="Password" prefix={<LockOutlined />} />
-                </Form.Item>
-                <Form.Item
-                    name="confirm"
-                    dependencies={['password']}
-                    hasFeedback
+                    name="phoneNumber"
                     rules={[
+                        { required: true, message: 'Please input your Phone number!' },
                         {
-                            required: true,
-                            message: 'Please confirm your password!',
-                        },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('password') === value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                            },
-                        }),
+                            pattern: /^0[0-9]{9}$/,
+                            message: 'Phone number must start with 0 and be 10 digits long'
+                        }
                     ]}
                 >
-                    <Input.Password placeholder="Confirm Password" prefix={<LockOutlined />} />
+                    <Input placeholder="Phone Number" prefix={<PhoneOutlined />} />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="register-form-button">

@@ -1,57 +1,37 @@
-.register-container {
-  position: relative;
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
+.user-management-container {
+  max-width: 800px;
+  margin: 3em auto;
+  padding: 1.5em;
   border: 1px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  margin: 3em auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
 }
 
-.register-container img {
+.ant-table {
+  margin-bottom: 1em;
+}
+
+.ant-btn-primary {
   width: 100%;
-}
-
-.input-container {
-  margin-bottom: 15px;
-}
-
-.input-container label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-container input {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #007bff;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-button:hover {
-  background-color: #45a049;
+.ant-btn-primary:hover {
+  background-color: #0056b3;
 }
 
-.error {
-  color: red;
-  margin-bottom: 10px;
+.ant-btn-default {
+  background-color: #db4437; /* Google brand color */
+  border: none;
+  width: 100%;
 }
 
-.success {
-  color: green;
-  margin-bottom: 10px;
+.ant-btn-default:hover {
+  background-color: #c33d2e;
 }
+
 .custom-toast {
   height: 18px;
   width: 300px; /* Set a width for the toast */
