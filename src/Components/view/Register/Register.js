@@ -72,6 +72,8 @@ const Register = () => {
     if (isLogin) navigate("/");
   }, [isLogin, navigate]);
 
+  if (isLogin) return null;
+
   return (
     <div className="register-container">
       <img

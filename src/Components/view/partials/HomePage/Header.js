@@ -12,6 +12,7 @@ import {
   faSearch,
   faBars,
   faFile,
+  faListCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 

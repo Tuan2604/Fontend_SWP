@@ -65,11 +65,12 @@ const Login = ({ onLogin, isLoggedIn }) => {
     }
   };
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ isLogin:", isLogin);
     if (isLogin) {
       navigate("/");
     }
   }, [isLogin, navigate]);
+
+  if (isLogin) return null;
 
   return (
     <div className="login-container">
