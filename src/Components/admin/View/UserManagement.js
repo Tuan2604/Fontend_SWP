@@ -27,7 +27,7 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader }) => {
   const handleFetchData = async () => {
     try {
       const response = await axios.get(
-        "https://localhost:7071/api/user-management"
+        "/user-management"
       );
       if (response.status === 200) {
         setData(response.data); // Assuming response.data is an array of users

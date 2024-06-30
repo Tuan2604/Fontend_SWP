@@ -104,6 +104,7 @@ nav ul li a:hover {
 }
 
 nav ul li .dropdown-menu {
+  width: 200px;
   display: none;
   position: absolute;
   top: 100%;

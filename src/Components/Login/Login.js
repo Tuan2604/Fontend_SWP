@@ -5,18 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "./Login.css";
+import { useAuth } from "../hook/useAuth";
 
 const { Title } = Typography;
 
 const Login = ({ onLogin, isLoggedIn }) => {
+  const { setIsLogin, isLogin } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedIn, navigate]);
 
   const onFinish = async (values) => {
     const { email, password } = values;
@@ -46,6 +42,7 @@ const Login = ({ onLogin, isLoggedIn }) => {
         localStorage.setItem("phoneNumber", response.data.userInfo.phoneNumber);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
+        setIsLogin(true);
 
         onLogin();
 
@@ -67,6 +64,12 @@ const Login = ({ onLogin, isLoggedIn }) => {
       setError(error.message);
     }
   };
+  useEffect(() => {
+    console.log("🚀 ~ useEffect ~ isLogin:", isLogin);
+    if (isLogin) {
+      navigate("/");
+    }
+  }, [isLogin, navigate]);
 
   return (
     <div className="login-container">

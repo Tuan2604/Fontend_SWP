@@ -1,0 +1,25 @@
+/* ChatPage.css */
+.chat-container {
+    padding: 24px;
+    background: #fff;
+    min-height: 360px;
+}
+
+.chat-item {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    width: fit-content;
+}
+
+.chat-item-right {
+    background-color: #87d068;
+    /* Green background for user's messages */
+    align-self: flex-end;
+    /* Align messages to the right */
+}
+
+.chat-item-left {
+    background-color: #f0f0f0;
+    /* Light gray background for others' messages */
+}

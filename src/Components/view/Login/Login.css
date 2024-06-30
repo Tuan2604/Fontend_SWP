@@ -65,7 +65,7 @@ button:hover {
 
 /* src/Components/view/Login/Login.css */
 .login-container {
-  max-width: 250px;
+  max-width: 650px;
   margin: 3em auto;
   padding: 1.5em;
   border: 1px solid #ccc;
