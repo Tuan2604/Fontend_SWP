@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import Home from "./Components/view/partials/HomePage/Home";
 import Login from "./Components/Login/Login";
-import Header from "./Components/view/partials/HomePage/Header";
+import UserManagementPage from "./Components/admin/View/UserManagement/UserManagement";
 import Register from "./Components/view/Register/Register";
+import Header from "./Components/view/partials/HomePage/Header";
+import Home from "./Components/view/partials/HomePage/Home";
+import PostCreate from "./Components/view/partials/PostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
-import PostCreate from "./Components/view/partials/PostNews/PostCreate";
-import UserManagementPage from "./Components/admin/View/UserManagement";
-import ProtectedRoute from "./ProtectedRoute";
 import "./transitions.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 const App = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -62,7 +60,6 @@ const App = () => {
                 )
               }
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>

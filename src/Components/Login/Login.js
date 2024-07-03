@@ -3,7 +3,7 @@ import { Form, Input, Button, Typography } from "antd";
 import { WechatOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axiosInstance from "../../authService"; // Sử dụng axiosInstance thay cho axios
 import "./Login.css";
 
 const { Title } = Typography;
@@ -14,14 +14,15 @@ const Login = ({ onLogin, isLoggedIn }) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/");
+      const role = localStorage.getItem("role");
+      navigate(role === "Admin" ? "/admin" : "/");
     }
   }, [isLoggedIn, navigate]);
 
   const onFinish = async (values) => {
     const { email, password } = values;
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         "https://localhost:7071/api/authentication/login",
         { email, password },
         {
@@ -40,12 +41,23 @@ const Login = ({ onLogin, isLoggedIn }) => {
           className: "custom-toast",
         });
 
+        // Store user data in localStorage
         localStorage.setItem("email", response.data.userInfo.email);
         localStorage.setItem("fullname", response.data.userInfo.fullname);
         localStorage.setItem("role", response.data.userInfo.role);
         localStorage.setItem("phoneNumber", response.data.userInfo.phoneNumber);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
+
+        // Log user data to console for debugging
+        console.log("Stored user data:", {
+          email: response.data.userInfo.email,
+          fullname: response.data.userInfo.fullname,
+          role: response.data.userInfo.role,
+          phoneNumber: response.data.userInfo.phoneNumber,
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        });
 
         onLogin();
 
