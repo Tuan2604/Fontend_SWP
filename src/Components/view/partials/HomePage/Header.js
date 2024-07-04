@@ -14,7 +14,7 @@ import {
   faFile,
   faUserCircle, // Import the correct icon for Account
 } from "@fortawesome/free-solid-svg-icons";
-import Account from "../../account/account"; // Import Account component
+
 import "./Header.css";
 
 const Header = () => {

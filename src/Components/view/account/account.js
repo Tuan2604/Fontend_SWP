@@ -41,7 +41,7 @@ const Account = () => {
       <Row gutter={16} style={{ width: "100%" }}>
         <Col span={8} className="account-sidebar">
           <Avatar
-            size={64}
+            size={100}
             style={{ backgroundColor: "#f56a00", verticalAlign: "middle" }}
             icon={<UserOutlined />}
           />
