@@ -4,9 +4,9 @@ import "./Home.css"; // Import the CSS file for Home component styling
 import ShoppingCard from "../Post/ShoppingCard"; // Import the corrected ShoppingCard component
 import Footer from "../Footer/Footer";
 import CategoryBar from "./CategoryBar"; // Import the CategoryBar component
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-
   const navigate = useNavigate();
 
   const sliderImages = [
