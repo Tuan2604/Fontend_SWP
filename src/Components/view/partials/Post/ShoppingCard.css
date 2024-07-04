@@ -1,68 +1,3 @@
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
-
-.home-container {
-  text-align: center;
-  padding: 20px;
-  background-color: #f0f0f0; /* Light grey background */
-}
-
-.content-container {
-  background-color: #fff; /* White background */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px;
-  margin: 0 auto;
-  max-width: 80%;
-}
-
-.slider-container {
-  width: 100%;
-  margin: 0 auto 20px auto;
-}
-
-.slider-image-container {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.slider-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.slick-prev,
-.slick-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  /* background-color: rgba(255, 255, 255, 0.8); */
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.slick-prev {
-  left: 15px;
-}
-
-.slick-next {
-  right: 15px;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  font-size: 20px;
-  color: white;
-}
-
 .shopping-cards-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -113,21 +48,6 @@
   margin-bottom: 10px;
 }
 
-.card-features {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-.card-feature {
-  background-color: #e38d13;
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 10px;
-  margin: 3px 3px 0 0;
-}
-
 .card-buttons {
   display: flex;
   justify-content: space-between;
@@ -146,7 +66,7 @@
 .buy-now-button {
   background-color: #e38d13;
   color: #fff;
-  margin-right: 10px; /* Added margin to separate buttons */
+  margin-right: 10px;
 }
 
 .buy-now-button:hover {
@@ -168,15 +88,23 @@
   margin-top: 20px;
 }
 
+.pagination input[type="number"] {
+  width: 50px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+}
+
 .pagination button {
-  background-color: #e38d13;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
+  padding: 10px;
+  margin: 0 0px; /* Adjust margin for closer alignment */
   cursor: pointer;
-  border-radius: 5px;
+
   font-size: 16px;
+  width: 30px; /* Set fixed width for square buttons */
+  height: 30px; /* Set fixed height for square buttons */
 }
 
 .pagination button:disabled {
@@ -185,6 +113,5 @@
 }
 
 .page-button.active {
-  font-weight: bold;
-  background-color: #1890ff;
+  background-color: #666;
 }

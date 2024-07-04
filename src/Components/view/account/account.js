@@ -15,11 +15,6 @@ const Account = () => {
     phoneNumber: localStorage.getItem("phoneNumber"),
   });
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
-
   const handleEditMode = () => {
     setEditMode(!editMode);
   };

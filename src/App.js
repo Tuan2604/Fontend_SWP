@@ -9,11 +9,11 @@ import UserManagementPage from "./Components/admin/View/UserManagement/UserManag
 import Register from "./Components/view/Register/Register";
 import Header from "./Components/view/partials/HomePage/Header";
 import Home from "./Components/view/partials/HomePage/Home";
-import PostCreate from "./Components/view/partials/PostNews/PostCreate";
+import PostCreate from "./Components/view/partials/CreatePostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
-import Account from "./Components/view/account/account"; // Import Account component
+import Account from "./Components/view/account/account"; // 
 import "./transitions.css";
 import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
 
