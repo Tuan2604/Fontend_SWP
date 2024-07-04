@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -12,7 +13,9 @@ import PostCreate from "./Components/view/partials/PostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
+import Account from "./Components/view/account/account"; // Import Account component
 import "./transitions.css";
+
 const App = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -34,7 +37,7 @@ const App = () => {
 
   return (
     <div>
-      {showHeader && <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />}{" "}
+      {showHeader && <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
       {/* Conditional rendering of Header */}
       <ToastContainer position="top-right" autoClose={3000} />
       <TransitionGroup>
@@ -47,6 +50,8 @@ const App = () => {
             <Route path="/otp-verification" element={<OTPVerification />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Account />} />
+
             <Route
               path="/admin"
               element={
@@ -60,6 +65,7 @@ const App = () => {
                 )
               }
             />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
