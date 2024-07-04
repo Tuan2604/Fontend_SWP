@@ -7,11 +7,20 @@ const UserProvider = ({ children }) => {
     () => JSON.parse(localStorage.getItem("isLoggedIn")) || false
   );
 
+  const [userInformation, setUserInformation] = useState(
+    () => JSON.parse(localStorage.getItem("userInformation")) || {}
+  );
+
+  useEffect(() => {
+      localStorage.setItem("userInformation", JSON.stringify(userInformation));
+  }, [userInformation]);
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLogin);
   }, [isLogin]);
   return (
-    <UserContext.Provider value={{ isLogin, setIsLogin }}>
+    <UserContext.Provider
+      value={{ isLogin, setIsLogin, userInformation, setUserInformation }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -19,7 +28,6 @@ const UserProvider = ({ children }) => {
 
 const useAuth = () => {
   const userContext = useContext(UserContext);
-  console.log(userContext);
   return userContext;
 };
 export { useAuth };

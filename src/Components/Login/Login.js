@@ -9,8 +9,9 @@ import { useAuth } from "../hook/useAuth";
 
 const { Title } = Typography;
 
-const Login = ({ onLogin, isLoggedIn }) => {
-  const { setIsLogin, isLogin } = useAuth();
+const Login = ({ onLogin }) => {
+  const { setIsLogin, isLogin, setUserInformation, userInformation } =
+    useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -43,8 +44,9 @@ const Login = ({ onLogin, isLoggedIn }) => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
         setIsLogin(true);
+        setUserInformation(response.data);
 
-        onLogin();
+        // onLogin();
 
         if (response.data.userInfo.role === "Admin") {
           navigate("/admin");
@@ -66,9 +68,13 @@ const Login = ({ onLogin, isLoggedIn }) => {
   };
   useEffect(() => {
     if (isLogin) {
-      navigate("/");
+      if (userInformation.userInfo?.role === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
-  }, [isLogin, navigate]);
+  }, [isLogin, navigate, userInformation]);
 
   if (isLogin) return null;
 
