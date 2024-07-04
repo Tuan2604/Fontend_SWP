@@ -67,70 +67,70 @@ const Register = () => {
     }
   };
 
-  return (
-    <div className="register-container">
-      <img
-        src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
-        alt="logo-form"
-      />
-      <Title level={3}>Register</Title>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-      <Form name="register" className="register-form" onFinish={onFinish}>
-        <Form.Item
-          name="fullname"
-          rules={[
-            { required: true, message: "Please input your Full Name!" },
-            {
-              pattern: /^[a-zA-Z0-9_]{5,30}$/,
-              message:
-                "Full Name must be 5-30 characters long and not contain special characters",
-            },
-          ]}
-        >
-          <Input placeholder="Full Name" prefix={<UserOutlined />} />
-        </Form.Item>
-        <Form.Item
-          name="email"
-          rules={[
-            { required: true, message: "Please input your Email!" },
-            { type: "email", message: "Please enter a valid email address!" },
-            {
-              pattern: /^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/,
-              message:
-                "Email must be a valid FPT email address (ending with @fpt.edu.vn)",
-            },
-          ]}
-        >
-          <Input placeholder="Email" prefix={<WechatOutlined />} />
-        </Form.Item>
-        <Form.Item
-          name="phoneNumber"
-          rules={[
-            { required: true, message: "Please input your Phone number!" },
-            {
-              pattern: /^0[0-9]{9}$/,
-              message: "Phone number must start with 0 and be 10 digits long",
-            },
-          ]}
-        >
-          <Input placeholder="Phone Number" prefix={<PhoneOutlined />} />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="register-form-button"
-          >
-            Register
-          </Button>
-        </Form.Item>
-        <Form.Item style={{ textAlign: "center" }}>
-          Already have an account? <Link to="/login">Login here</Link>
-        </Form.Item>
-      </Form>
-    </div>
-  );
+    return (
+        <div className="register-container">
+            <img src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png" alt="logo-form" />
+            <Title level={3}>Register</Title>
+            {error && <p className="error">{error}</p>}
+            {success && <p className="success">{success}</p>}
+            <Form name="register" className="register-form" onFinish={onFinish}>
+                <Form.Item
+                    name="username"
+                    rules={[{ required: true, message: 'Please input your Username!' }]}
+                >
+                    <Input placeholder="Username" prefix={<UserOutlined />} />
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email!',
+                            type: 'email',
+                        },
+                    ]}
+                >
+                    <Input placeholder="Email" prefix={<WechatOutlined />} />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                    hasFeedback
+                >
+                    <Input.Password placeholder="Password" prefix={<LockOutlined />} />
+                </Form.Item>
+                <Form.Item
+                    name="confirm"
+                    dependencies={['password']}
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please confirm your password!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                            },
+                        }),
+                    ]}
+                >
+                    <Input.Password placeholder="Confirm Password" prefix={<LockOutlined />} />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className="register-form-button">
+                        Register
+                    </Button>
+                </Form.Item>
+                <Form.Item style={{ textAlign: 'center' }}>
+                    Already have an account? <Link to="/login">Login here</Link>
+                </Form.Item>
+            </Form>
+        </div>
+    );
 };
 
 export default Register;
