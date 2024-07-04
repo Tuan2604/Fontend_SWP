@@ -9,6 +9,7 @@ import {
   faSignOutAlt,
   faTools,
   faUserPlus,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ const Header = () => {
   const { isLogin, userInformation } = useAuth();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
+  const [showAccountMenu, setShowAccountMenu] = useState(false); // State for account menu
   const [searchQuery, setSearchQuery] = useState("");
   const [fullname, setFullname] = useState("");
   const isLoggedIn = !!localStorage.getItem("email");
@@ -40,6 +42,10 @@ const Header = () => {
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleWelcomeClick = () => {
+    setShowAccountMenu(!showAccountMenu); // Toggle account menu visibility
   };
 
   const handleSearchChange = (event) => {
@@ -99,7 +105,23 @@ const Header = () => {
             )}
             {isLoggedIn && (
               <>
-                <li className="welcome">Welcome {fullname}</li>
+                <li className="welcome" onClick={handleWelcomeClick}>
+                  Welcome {fullname} {/* Hiển thị tên người dùng */}
+                  {showAccountMenu && (
+                    <ul className="dropdown-menu">
+                      <li>
+                        <Link to="/account">
+                          <FontAwesomeIcon icon={faUserCircle} /> Account
+                        </Link>
+                      </li>
+                      <li>
+                        <a href="#logout" onClick={logout}>
+                          <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                        </a>
+                      </li>
+                    </ul>
+                  )}
+                </li>
                 <li className="dropdown">
                   <a href="#danh-muc" onClick={toggleMenu}>
                     <FontAwesomeIcon icon={faBars} /> Menu
@@ -133,11 +155,6 @@ const Header = () => {
                       </li>
                     </ul>
                   )}
-                </li>
-                <li>
-                  <a href="#logout" onClick={logout}>
-                    <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-                  </a>
                 </li>
               </>
             )}

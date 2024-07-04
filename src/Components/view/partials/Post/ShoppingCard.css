@@ -1,0 +1,117 @@
+.shopping-cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.shopping-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.shopping-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.card-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.card-description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.card-price {
+  font-size: 14px;
+  color: #e38d13;
+  margin-bottom: 10px;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.buy-now-button,
+.view-details-button {
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.buy-now-button {
+  background-color: #e38d13;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.buy-now-button:hover {
+  background-color: #d07410;
+}
+
+.view-details-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.view-details-button:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination input[type="number"] {
+  width: 50px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: center;
+}
+
+.pagination button {
+  color: #fff;
+  border: none;
+  padding: 10px;
+  margin: 0 0px; /* Adjust margin for closer alignment */
+  cursor: pointer;
+
+  font-size: 16px;
+  width: 30px; /* Set fixed width for square buttons */
+  height: 30px; /* Set fixed height for square buttons */
+}
+
+.pagination button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.page-button.active {
+  background-color: #666;
+}

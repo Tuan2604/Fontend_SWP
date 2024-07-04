@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -9,15 +10,17 @@ import ProfilePage from "./Components/view/Profile/Profile";
 import Register from "./Components/view/Register/Register";
 import Header from "./Components/view/partials/HomePage/Header";
 import Home from "./Components/view/partials/HomePage/Home";
-import PostCreate from "./Components/view/partials/PostNews/PostCreate";
+import PostCreate from "./Components/view/partials/CreatePostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
+import Account from "./Components/view/account/account"; // 
 import "./transitions.css";
 import ChatPage from "./Components/view/Chat/Chat";
 import { useAuth } from "./Components/hook/useAuth";
 import Details from "./Components/view/partials/Details/Details";
 import Dashboard from "./Components/admin/Dashboard";
+import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
 
 const App = () => {
   const location = useLocation();
@@ -41,7 +44,7 @@ const App = () => {
 
   return (
     <div>
-      {showHeader && <Header isLoggedIn={isLogin} onLogout={handleLogout} />}{" "}
+      {showHeader && <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
       {/* Conditional rendering of Header */}
       <ToastContainer position="top-right" autoClose={3000} />
       <TransitionGroup>
@@ -54,6 +57,8 @@ const App = () => {
             <Route path="/otp-verification" element={<OTPVerification />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Account />} />
+
             <Route
               path="/admin"
               element={
@@ -68,6 +73,7 @@ const App = () => {
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/details" element={<Details />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
