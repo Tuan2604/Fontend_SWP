@@ -1,0 +1,21 @@
+.table-responsive {
+  margin: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.table-dark {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.table-dark th,
+.table-dark td {
+  border-color: #454d55;
+}

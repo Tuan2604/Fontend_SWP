@@ -1,15 +1,14 @@
-// src/ProtectedRoute.js
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ element, allowedRoles }) => {
+const ProtectedRoute = ({ element: Element, allowedRoles, ...rest }) => {
   const userRole = localStorage.getItem("role");
 
-  if (allowedRoles.includes(userRole)) {
-    return element;
-  } else {
+  if (!userRole || !allowedRoles.includes(userRole)) {
     return <Navigate to="/" replace />;
   }
+
+  return <Route {...rest} element={<Element />} />;
 };
 
 export default ProtectedRoute;

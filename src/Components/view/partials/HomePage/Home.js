@@ -1,9 +1,13 @@
-import React from 'react';
+ import React from 'react';
 import Slider from 'react-slick';
 import './Home.css'; // Import the CSS file for Home component styling
 import Footer from '../Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
   const sliderImages = [
     'https://daihoc.fpt.edu.vn/wp-content/uploads/2020/02/web-banner-1920x550.jpg',
     'https://microsoft.fptcloud.com/wp-content/uploads/2023/11/FPT-Smart-Cloud-Blog-Post-BR8-1.png',
@@ -72,7 +76,7 @@ const Home = () => {
           </Slider>
         </div>
 
-        <div className="shopping-cards-container">
+        <div onClick={()=>{navigate("/details");}} className="shopping-cards-container">
           {cardsData.map((card, index) => (
             <div key={index} className="shopping-card">
               <img src={card.imageUrl} alt={card.title} className="card-image" />

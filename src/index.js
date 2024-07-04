@@ -7,16 +7,17 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import UserProvider from "./Components/hook/useAuth";
+import "bootstrap/dist/css/bootstrap.css";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 axios.defaults.baseURL = "https://localhost:7071/api";
 root.render(
-  <UserProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <UserProvider>
       <App />
-    </BrowserRouter>
-  </UserProvider>
+    </UserProvider>
+  </BrowserRouter>
 );
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

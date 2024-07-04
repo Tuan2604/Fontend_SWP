@@ -37,17 +37,19 @@ const Login = ({ onLogin }) => {
           className: "custom-toast",
         });
 
+        // Store user data in localStorage
         localStorage.setItem("email", response.data.userInfo.email);
         localStorage.setItem("fullname", response.data.userInfo.fullname);
         localStorage.setItem("role", response.data.userInfo.role);
         localStorage.setItem("phoneNumber", response.data.userInfo.phoneNumber);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
-        setIsLogin(true);
         setUserInformation(response.data);
+        setIsLogin(true);
 
         // onLogin();
-
+        alert("Login success");
+        console.log(response.data.userInfo);
         if (response.data.userInfo.role === "Admin") {
           navigate("/admin");
         } else {
@@ -68,10 +70,12 @@ const Login = ({ onLogin }) => {
   };
   useEffect(() => {
     if (isLogin) {
-      if (userInformation.userInfo?.role === "Admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
+      if (userInformation) {
+        if (userInformation?.userInfo?.role === "Admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }
     }
   }, [isLogin, navigate, userInformation]);
