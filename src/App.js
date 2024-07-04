@@ -15,6 +15,7 @@ import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerific
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
 import Account from "./Components/view/account/account"; // Import Account component
 import "./transitions.css";
+import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
 
 const App = () => {
   const location = useLocation();
@@ -56,7 +57,7 @@ const App = () => {
               path="/admin"
               element={
                 isLoggedIn ? (
-                  <UserManagementPage
+                  <CampusManagementPage
                     isLoggedIn={isLoggedIn}
                     setShowHeader={setShowHeader}
                   />
