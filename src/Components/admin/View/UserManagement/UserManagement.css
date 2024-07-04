@@ -1,9 +1,0 @@
-.user-management-container {
-  width: 100%; /* Ensure it takes the full width */
-  margin: 0; /* Remove the margin */
-  padding: 1.5em;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
-}
-
-/* No changes to other CSS rules required */
