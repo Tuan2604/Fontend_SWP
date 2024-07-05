@@ -14,11 +14,13 @@ import axiosInstance from "../../../../authService";
 import { useNavigate } from "react-router-dom";
 import "./UserManagement.css";
 import AdminLayout from "../../../layout/header/AdminLayout";
+import { useAuth } from "../../../Hook/useAuth";
 
 const { Title } = Typography;
 const { Option } = Select;
 
 const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
+  const { isLogin, setIsLogin, setUserInformation } = useAuth();
   const navigate = useNavigate();
 
   const [reload, setReload] = useState(false);
@@ -28,8 +30,8 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/admin/login"); // Redirect to admin login if not logged in
+    if (!isLogin) {
+      navigate("/login"); // Redirect to admin login if not logged in
       return;
     }
     handleFetchData();
@@ -37,7 +39,7 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
     return () => {
       setShowHeader(true);
     };
-  }, [isLoggedIn, reload, setShowHeader, navigate]);
+  }, [isLogin, reload, setShowHeader, navigate]);
 
   const handleFetchData = async () => {
     try {
@@ -107,9 +109,12 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   };
 
   const handleLogout = () => {
+    console.log(1234);
     setIsLoggedIn(false);
     setShowHeader(true);
-    navigate("/admin/login", { replace: true });
+    setIsLogin(false);
+    setUserInformation({});
+    navigate("/login", { replace: true });
   };
 
   const columns = [

@@ -4,8 +4,11 @@ import "./Home.css"; // Import the CSS file for Home component styling
 import ShoppingCard from "../Post/ShoppingCard"; // Import the corrected ShoppingCard component
 import Footer from "../Footer/Footer";
 import CategoryBar from "./CategoryBar"; // Import the CategoryBar component
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const sliderImages = [
     "https://daihoc.fpt.edu.vn/wp-content/uploads/2020/02/web-banner-1920x550.jpg",
     "https://microsoft.fptcloud.com/wp-content/uploads/2023/11/FPT-Smart-Cloud-Blog-Post-BR8-1.png",

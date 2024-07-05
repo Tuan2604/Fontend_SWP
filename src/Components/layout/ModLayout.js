@@ -1,25 +1,24 @@
+import React, { useState } from "react";
 import {
-  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  LogoutOutlined,
+  AreaChartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
 import { MdApartment } from "react-icons/md";
 
-import { Button, Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Hook/useAuth";
+import { Layout, Menu, Button, theme } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
-const AdminLayout = ({ children }) => {
-  const { handleLogout } = useAuth();
+const ModLayout = ({ children }) => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  // const handleLogout = () => {
-  //   navigate("/");
-  // };
+  const handleLogout = () => {
+    navigate("/");
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -51,12 +50,11 @@ const AdminLayout = ({ children }) => {
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
           <Menu.Item key="1" icon={<UserOutlined />}>
-            User Management
+            <Link to={"/mod/saler-management"}>Saler Management</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            CampusManagementPage
+          <Menu.Item key="2" icon={<AreaChartOutlined />}>
+            <Link to={"/mod/post-management"}>Post Management</Link>
           </Menu.Item>
-
           <Menu.Item
             key="logout"
             onClick={handleLogout}
@@ -86,6 +84,7 @@ const AdminLayout = ({ children }) => {
         </Header>
         <Content
           style={{
+            margin: "24px 16px",
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
@@ -98,4 +97,4 @@ const AdminLayout = ({ children }) => {
     </Layout>
   );
 };
-export default AdminLayout;
+export default ModLayout;

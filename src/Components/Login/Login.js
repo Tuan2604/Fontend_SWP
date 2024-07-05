@@ -3,26 +3,22 @@ import { Form, Input, Button, Typography } from "antd";
 import { WechatOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../authService"; // Sử dụng axiosInstance thay cho axios
+import axios from "axios";
 import "./Login.css";
+import { useAuth } from "../Hook/useAuth";
 
 const { Title } = Typography;
 
-const Login = ({ onLogin, isLoggedIn }) => {
+const Login = ({ onLogin }) => {
+  const { setIsLogin, isLogin, setUserInformation, userInformation } =
+    useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const role = localStorage.getItem("role");
-      navigate(role === "Admin" ? "/admin" : "/");
-    }
-  }, [isLoggedIn, navigate]);
 
   const onFinish = async (values) => {
     const { email, password } = values;
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         "https://localhost:7071/api/authentication/login",
         { email, password },
         {
@@ -48,18 +44,8 @@ const Login = ({ onLogin, isLoggedIn }) => {
         localStorage.setItem("phoneNumber", response.data.userInfo.phoneNumber);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
-
-        // Log user data to console for debugging
-        console.log("Stored user data:", {
-          email: response.data.userInfo.email,
-          fullname: response.data.userInfo.fullname,
-          role: response.data.userInfo.role,
-          phoneNumber: response.data.userInfo.phoneNumber,
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        });
-
-        onLogin();
+        setUserInformation(response.data);
+        setIsLogin(true);
 
         if (response.data.userInfo.role === "Admin") {
           navigate("/admin");
@@ -79,6 +65,20 @@ const Login = ({ onLogin, isLoggedIn }) => {
       setError(error.message);
     }
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      if (userInformation) {
+        if (userInformation?.userInfo?.role === "Admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      }
+    }
+  }, [isLogin, navigate, userInformation]);
+
+  if (isLogin) return null;
 
   return (
     <div className="login-container">

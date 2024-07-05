@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Login from "./Components/Login/Login";
 import UserManagementPage from "./Components/admin/View/UserManagement/UserManagement";
+
 import Register from "./Components/view/Register/Register";
 import Header from "./Components/view/partials/HomePage/Header";
 import Home from "./Components/view/partials/HomePage/Home";
@@ -13,15 +14,17 @@ import PostCreate from "./Components/view/partials/CreatePostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
-import Account from "./Components/view/account/account"; // 
+import Account from "./Components/view/account/account"; //
 import "./transitions.css";
-import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
+
+import { useAuth } from "./Components/Hook/useAuth";
 
 const App = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
+  const { isLogin, userInformation } = useAuth();
   const [showHeader, setShowHeader] = useState(true); // State to control header visibility
 
   useEffect(() => {
@@ -56,16 +59,14 @@ const App = () => {
             <Route
               path="/admin"
               element={
-                isLoggedIn ? (
-                  <CampusManagementPage
-                    isLoggedIn={isLoggedIn}
-                    setShowHeader={setShowHeader}
-                  />
-                ) : (
-                  <Navigate to="/" replace />
-                )
+                <UserManagementPage
+                  isLoggedIn={isLoggedIn}
+                  setShowHeader={setShowHeader}
+                />
               }
             />
+            <Route path="*" element={<Navigate to="/" replace />} />
+
             <Route path="/account" element={<Account />} />
           </Routes>
         </CSSTransition>

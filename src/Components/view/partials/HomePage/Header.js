@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faSignInAlt,
-  faUserPlus,
-  faSignOutAlt,
-  faBook,
-  faPen,
-  faBox,
-  faTools,
-  faSearch,
   faBars,
+  faBook,
+  faBox,
   faFile,
-  faUserCircle, // Import the correct icon for Account
+  faPen,
+  faSearch,
+  faSignInAlt,
+  faSignOutAlt,
+  faTools,
+  faUserPlus,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
+import { useAuth } from "../../../Hook/useAuth";
 
 const Header = () => {
+  const { isLogin, userInformation } = useAuth();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false); // State for account menu
@@ -26,7 +27,7 @@ const Header = () => {
   const isLoggedIn = !!localStorage.getItem("email");
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLogin) {
       setFullname(localStorage.getItem("fullname"));
     }
   }, [isLoggedIn]);
@@ -56,6 +57,7 @@ const Header = () => {
     navigate(`/search?query=${searchQuery}`);
   };
 
+  if (userInformation?.userInfo?.role === "Admin") return null;
   return (
     <header className="header">
       <nav className="nav-container">

@@ -40,9 +40,11 @@
 .search-button {
   width: 45px;
   padding: 8px 12px;
+
   background-color: #fff;
   color: #e38d13;
   cursor: pointer; /* Rounded corners for the button */
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,6 +106,7 @@ nav ul li a:hover {
 }
 
 nav ul li .dropdown-menu {
+  width: 200px;
   display: none;
   position: absolute;
   top: 100%;

@@ -1,15 +1,17 @@
 // src/Components/view/Register/Register.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Typography } from "antd";
 import { UserOutlined, WechatOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "./Register.css";
+import { useAuth } from "../../Hook/useAuth";
 
 const { Title } = Typography;
 
 const Register = () => {
+  const { isLogin } = useAuth();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -66,6 +68,11 @@ const Register = () => {
       setError(error.message);
     }
   };
+  useEffect(() => {
+    if (isLogin) navigate("/");
+  }, [isLogin, navigate]);
+
+  if (isLogin) return null;
 
   return (
     <div className="register-container">
