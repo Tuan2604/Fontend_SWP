@@ -1,4 +1,3 @@
-// App.js
 import React, { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -6,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Login from "./Components/Login/Login";
 import UserManagementPage from "./Components/admin/View/UserManagement/UserManagement";
-
 import Register from "./Components/view/Register/Register";
 import Header from "./Components/view/partials/HomePage/Header";
 import Home from "./Components/view/partials/HomePage/Home";
@@ -14,7 +12,9 @@ import PostCreate from "./Components/view/partials/CreatePostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
 import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerification";
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
-import Account from "./Components/view/account/account"; //
+import Account from "./Components/view/account/account";
+import ItemDetail from "./Components/view/partials/ViewDetail/ItemDetail";
+import ChatPage from "./Components/view/Chat/Chat"; // Import ChatPage component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -54,8 +54,12 @@ const App = () => {
             <Route path="/otp-verification" element={<OTPVerification />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/register" element={<Account />} />
-
+            <Route path="/account" element={<Account />} />
+            <Route path="/item/:itemId" element={<ItemDetail />} />
+            <Route
+              path="/chat/:itemId"
+              element={<ChatPage setShowHeader={setShowHeader} />}
+            />
             <Route
               path="/admin"
               element={
@@ -66,8 +70,6 @@ const App = () => {
               }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
-
-            <Route path="/account" element={<Account />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>

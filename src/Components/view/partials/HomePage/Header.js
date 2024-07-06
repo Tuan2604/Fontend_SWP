@@ -18,25 +18,23 @@ import "./Header.css";
 import { useAuth } from "../../../Hook/useAuth";
 
 const Header = () => {
-  const { isLogin, userInformation } = useAuth();
+  const { isLogin, userInformation, handleLogout } = useAuth();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false); // State for account menu
   const [searchQuery, setSearchQuery] = useState("");
   const [fullname, setFullname] = useState("");
-  const isLoggedIn = !!localStorage.getItem("email");
 
   useEffect(() => {
     if (isLogin) {
       setFullname(localStorage.getItem("fullname"));
     }
-  }, [isLoggedIn]);
+  }, [isLogin]);
 
   const logout = (event) => {
     event.preventDefault();
     if (window.confirm("Are you sure you want to logout?")) {
-      localStorage.clear();
-      navigate("/login");
+      handleLogout();
     }
   };
 
@@ -58,6 +56,7 @@ const Header = () => {
   };
 
   if (userInformation?.userInfo?.role === "Admin") return null;
+
   return (
     <header className="header">
       <nav className="nav-container">
@@ -89,7 +88,7 @@ const Header = () => {
         </div>
         <div className="menu">
           <ul>
-            {!isLoggedIn && (
+            {!isLogin && (
               <>
                 <li>
                   <Link to="/login">
@@ -103,10 +102,10 @@ const Header = () => {
                 </li>
               </>
             )}
-            {isLoggedIn && (
+            {isLogin && (
               <>
                 <li className="welcome" onClick={handleWelcomeClick}>
-                  Welcome {fullname} {/* Hiển thị tên người dùng */}
+                  Welcome {fullname}
                   {showAccountMenu && (
                     <ul className="dropdown-menu">
                       <li>

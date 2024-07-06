@@ -1,4 +1,3 @@
-// src/Components/view/Register/Register.js
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Typography } from "antd";
 import { UserOutlined, WechatOutlined, PhoneOutlined } from "@ant-design/icons";
@@ -38,13 +37,13 @@ const Register = () => {
       console.log("Response:", response.data);
 
       if (response.status === 200) {
-        toast.success("Registration successful.Please login.", {
+        toast.success("Registration successful. Please login.", {
           autoClose: 2000,
           hideProgressBar: true,
           closeButton: false,
           className: "custom-toast",
         });
-        setSuccess("Registration successful.Please login.");
+        setSuccess("Registration successful. Please login.");
         navigate("/login");
       } else {
         throw new Error(response.data.message || "Registration failed");
@@ -89,7 +88,7 @@ const Register = () => {
           rules={[
             { required: true, message: "Please input your Full Name!" },
             {
-              pattern: /^[a-zA-Z0-9_]{5,30}$/,
+              pattern: /^[a-zA-Z0-9\s]{5,30}$/,
               message:
                 "Full Name must be 5-30 characters long and not contain special characters",
             },

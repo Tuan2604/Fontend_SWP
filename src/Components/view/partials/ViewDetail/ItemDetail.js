@@ -1,11 +1,23 @@
-// ShoppingCard.js
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./ShoppingCard.css"; // Import CSS for styling
-import { Typography } from "antd"; // Import Typography from Ant Design
-const { Title } = Typography;
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { Button, Typography } from "antd";
+import {
+  PhoneOutlined,
+  MessageOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
+import "./ItemDetail.css";
+
+const { Title, Paragraph } = Typography;
 
 const cardsData = [
+  {
+    imageUrl:
+      "https://nhatkyduhoc.vn/wp-content/uploads/2020/12/ta%CC%80i-lie%CC%A3%CC%82u-o%CC%82n-thi-640x358-1.png",
+    title: "Tài Liệu SV",
+    description: "Description of Card 1",
+    price: "10,000vnd",
+  },
   {
     imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
     title: "Tài liệu prj",
@@ -106,82 +118,44 @@ const cardsData = [
   },
 ];
 
-const itemsPerPage = 8;
+const ItemDetail = () => {
+  const { itemId } = useParams();
+  const item = cardsData[itemId];
 
-const ShoppingCard = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  // Calculate indexes for pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  if (!item) {
+    return <div>Item not found</div>;
+  }
 
   return (
-    <div>
-      <Title level={2} style={{ textAlign: "left", margin: "20px 0" }}>
-        PostNews
-      </Title>
-      <div className="shopping-cards-container">
-        {currentItems.map((card, index) => (
-          <div key={index} className="shopping-card">
-            <img src={card.imageUrl} alt={card.title} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{card.title}</h3>
-              <p className="card-description">{card.description}</p>
-              <p className="card-price">{card.price}</p>
-              <div className="card-buttons">
-                <button className="buy-now-button">Buy Now</button>
-                <Link to={`/item/${index}`}>
-                  <button className="view-details-button">View Details</button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="pagination">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="arrow-button"
-        >
-          &#8249; {/* Left arrow */}
-        </button>
-        {Array.from({ length: Math.ceil(cardsData.length / itemsPerPage) }).map(
-          (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`page-button ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
+    <div className="item-detail-container">
+      <img src={item.imageUrl} alt={item.title} className="item-image" />
+      <div className="item-details">
+        <Title level={2}>{item.title}</Title>
+        <Paragraph>{item.description}</Paragraph>
+        <Paragraph className="item-price">{item.price}</Paragraph>
+        <div className="contact-buttons">
+          <Button
+            type="primary"
+            icon={<PhoneOutlined />}
+            className="contact-button"
+          >
+            Gọi điện
+          </Button>
+
+          {/* Styling the Link component to remove underline */}
+          <Link to={`/chat/${itemId}`} className="chat-link">
+            <Button
+              type="default"
+              icon={<WechatOutlined />}
+              className="contact-button"
             >
-              {index + 1}
-            </button>
-          )
-        )}
-        <button
-          onClick={handleNextPage}
-          disabled={indexOfLastItem >= cardsData.length}
-          className="arrow-button"
-        >
-          &#8250; {/* Right arrow */}
-        </button>
+              Chat
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ShoppingCard;
+export default ItemDetail;
