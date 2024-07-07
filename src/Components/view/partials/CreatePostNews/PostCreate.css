@@ -16,3 +16,28 @@
 .custom-file-label:hover {
   background-color: #40a9ff;
 }
+
+.post-create-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 90vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+.post-create-form,
+.post-create-image {
+  width: 100%;
+  max-width: 450px;
+}
+
+.post-create-form .ant-form-item {
+  margin-bottom: 10px;
+}
+
+.upload-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

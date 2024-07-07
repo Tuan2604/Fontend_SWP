@@ -14,7 +14,9 @@ import OTPVerification from "./Components/view/partials/ResetPassword/OTPVerific
 import ResetPassword from "./Components/view/partials/ResetPassword/ResetPassword";
 import Account from "./Components/view/account/account";
 import ItemDetail from "./Components/view/partials/ViewDetail/ItemDetail";
-import ChatPage from "./Components/view/Chat/Chat"; // Import ChatPage component
+import ChatPage from "./Components/view/Chat/Chat";
+import Payment from "./Components/view/Payment/Payment";
+import PaySuccess from "./Components/view/Payment/PaySuccess"; // Import PaySuccess component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -25,7 +27,7 @@ const App = () => {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const { isLogin, userInformation } = useAuth();
-  const [showHeader, setShowHeader] = useState(true); // State to control header visibility
+  const [showHeader, setShowHeader] = useState(true);
 
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLoggedIn);
@@ -42,7 +44,6 @@ const App = () => {
   return (
     <div>
       {showHeader && <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
-      {/* Conditional rendering of Header */}
       <ToastContainer position="top-right" autoClose={3000} />
       <TransitionGroup>
         <CSSTransition key={location.key} classNames="fade" timeout={300}>
@@ -60,16 +61,19 @@ const App = () => {
               path="/chat/:itemId"
               element={<ChatPage setShowHeader={setShowHeader} />}
             />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/payment-success" element={<PaySuccess />} />
             <Route
               path="/admin"
               element={
-                <UserManagementPage
-                  isLoggedIn={isLoggedIn}
-                  setShowHeader={setShowHeader}
-                />
+                isLoggedIn ? (
+                  <UserManagementPage setShowHeader={setShowHeader} />
+                ) : (
+                  <Navigate to="/login" />
+                )
               }
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
