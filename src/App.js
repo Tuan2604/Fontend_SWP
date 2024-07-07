@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Login from "./Components/Login/Login";
 import UserManagementPage from "./Components/admin/View/UserManagement/UserManagement";
+import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
 import Register from "./Components/view/Register/Register";
 import Header from "./Components/view/partials/HomePage/Header";
 import Home from "./Components/view/partials/HomePage/Home";
@@ -67,7 +68,27 @@ const App = () => {
               path="/admin"
               element={
                 isLoggedIn ? (
+                  <Navigate to="/admin/user-management" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/admin/user-management"
+              element={
+                isLoggedIn ? (
                   <UserManagementPage setShowHeader={setShowHeader} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/admin/campus-management"
+              element={
+                isLoggedIn ? (
+                  <CampusManagementPage setShowHeader={setShowHeader} />
                 ) : (
                   <Navigate to="/login" />
                 )

@@ -1,28 +1,28 @@
+import React, { useState } from "react";
+import { MdApartment } from "react-icons/md";
 import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useState } from "react";
-import { MdApartment } from "react-icons/md";
-
 import { Button, Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Hook/useAuth";
 const { Header, Sider, Content } = Layout;
-
 const AdminLayout = ({ children }) => {
   const { handleLogout } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  // const handleLogout = () => {
-  //   navigate("/");
-  // };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleNavigate = (path) => {
+    navigate(`/admin/${path}`);
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -50,11 +50,19 @@ const AdminLayout = ({ children }) => {
           </div>
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<UserOutlined />}>
+          <Menu.Item
+            key="1"
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("user-management")}
+          >
             User Management
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            CampusManagementPage
+          <Menu.Item
+            key="2"
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("campus-management")}
+          >
+            Campus Management
           </Menu.Item>
 
           <Menu.Item
