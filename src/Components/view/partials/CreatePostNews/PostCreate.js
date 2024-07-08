@@ -19,7 +19,7 @@ const PostCreate = () => {
     const fetchCategoriesAndCampuses = async () => {
       try {
         const [categoriesResponse, campusesResponse] = await Promise.all([
-          axios.get("https://localhost:7071/api/categories"),
+          axios.get("https://localhost:7071/api/category"),
           axios.get(
             "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
           ),
