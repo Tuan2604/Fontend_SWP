@@ -19,8 +19,9 @@ import "./transitions.css";
 import ChatPage from "./Components/view/Chat/Chat";
 import { useAuth } from "./Components/hook/useAuth";
 import Details from "./Components/view/partials/Details/Details";
-import Dashboard from "./Components/admin/Dashboard";
+// import Dashboard from "./Components/admin/Dashboard";
 import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
+import DashboardPage from "./Components/admin/View/Dashboard/Dashboard";
 
 const App = () => {
   const location = useLocation();
@@ -60,7 +61,7 @@ const App = () => {
             <Route path="/register" element={<Account />} />
 
             <Route
-              path="/admin"
+              path="/admin/user"
               element={
                 <UserManagementPage
                   isLoggedIn={isLoggedIn}
@@ -68,11 +69,12 @@ const App = () => {
                 />
               }
             />
+            <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/details" element={<Details />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route path="/account" element={<Account />} />
           </Routes>
         </CSSTransition>
