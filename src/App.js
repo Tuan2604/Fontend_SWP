@@ -17,7 +17,8 @@ import Account from "./Components/view/account/account";
 import ItemDetail from "./Components/view/partials/ViewDetail/ItemDetail";
 import ChatPage from "./Components/view/Chat/Chat";
 import Payment from "./Components/view/Payment/Payment";
-import PaySuccess from "./Components/view/Payment/PaySuccess"; // Import PaySuccess component
+import PaySuccess from "./Components/view/Payment/PaySuccess";
+import CategoryManagementPage from "./Components/admin/View/Category/Category"; // Import CategoryManagementPage component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -89,6 +90,16 @@ const App = () => {
               element={
                 isLoggedIn ? (
                   <CampusManagementPage setShowHeader={setShowHeader} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/admin/category-management"
+              element={
+                isLoggedIn ? (
+                  <CategoryManagementPage setShowHeader={setShowHeader} />
                 ) : (
                   <Navigate to="/login" />
                 )

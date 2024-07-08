@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { MdApartment } from "react-icons/md";
+import { MdApartment, MdLocationCity } from "react-icons/md";
 import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Hook/useAuth";
 const { Header, Sider, Content } = Layout;
+
 const AdminLayout = ({ children }) => {
   const { handleLogout } = useAuth();
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ const AdminLayout = ({ children }) => {
             </h1>
           </div>
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+        <Menu theme="dark">
           <Menu.Item
             key="1"
             icon={<UserOutlined />}
@@ -59,10 +61,18 @@ const AdminLayout = ({ children }) => {
           </Menu.Item>
           <Menu.Item
             key="2"
-            icon={<UserOutlined />}
+            icon={<MdLocationCity />}
             onClick={() => handleNavigate("campus-management")}
           >
             Campus Management
+          </Menu.Item>
+          {/* Updated Menu item for Category Management */}
+          <Menu.Item
+            key="3"
+            icon={<AppstoreOutlined />}
+            onClick={() => handleNavigate("category-management")}
+          >
+            Category Management
           </Menu.Item>
 
           <Menu.Item
@@ -106,4 +116,5 @@ const AdminLayout = ({ children }) => {
     </Layout>
   );
 };
+
 export default AdminLayout;
