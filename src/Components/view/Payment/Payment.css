@@ -21,15 +21,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px; /* Adjusted margin */
+  margin-right: 20px;
 }
 
 .payment-image {
   max-width: 400px;
   width: 100%;
   object-fit: cover;
-  margin: 0; /* Remove any margin */
-  padding: 0; /* Remove any padding */
 }
 
 .qr-code-container {
@@ -42,4 +40,10 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }

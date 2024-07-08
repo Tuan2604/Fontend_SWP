@@ -1,68 +1,92 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button } from "antd";
 import QRCode from "qrcode.react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../../../../src/authService"; // Import axios instance
 import "./Payment.css"; // Import custom CSS
+import { Footer } from "antd/es/layout/layout";
 
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { formData } = location.state;
+  const { formData, selectedCategoryObj, selectedCampusObj } = location.state;
+  const [categoryName, setCategoryName] = useState("");
+  const [campusName, setCampusName] = useState("");
+  const [countdown, setCountdown] = useState(45); // Countdown timer in seconds
 
-  // Example MoMo payment URL, replace with your actual URL
-  const momoPaymentUrl = "https://momo.vn/payment?amount=100000&orderId=123456";
+  const hardcodedImageUrl =
+    "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
 
-  const handleConfirmPayment = () => {
-    console.log("Payment confirmed!");
-    navigate("/payment-success"); // Navigate to success page
-  };
+  // Use effect to fetch category and campus names by IDs
+  useEffect(() => {
+    if (selectedCategoryObj) {
+      setCategoryName(selectedCategoryObj.name);
+    }
+    if (selectedCampusObj) {
+      setCampusName(selectedCampusObj.name);
+    }
+  }, [selectedCategoryObj, selectedCampusObj]);
 
-  // Format price with VNĐ suffix
-  const formatPrice = (price) => {
-    return `${price.toLocaleString()} VNĐ`;
+  useEffect(() => {
+    // Countdown timer
+    const timer = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown === 1) {
+          navigate("/payfail");
+        }
+        return prevCountdown - 1;
+      });
+    }, 1000);
+
+    // Clean up timer on component unmount
+    return () => clearInterval(timer);
+  }, [navigate]);
+
+  const handlePaymentSuccess = () => {
+    navigate("/payment/payment-success");
   };
 
   return (
-    <Card title="Payment Information" className="payment-card">
-      <div className="payment-info-container">
-        {formData.image && (
+    <div className="payment-card">
+      <Card title="Payment Details" className="payment-card">
+        <div className="payment-info-container">
           <div className="payment-image-container">
-            <img src={formData.image} alt="Post" className="payment-image" />
+            <img src={hardcodedImageUrl} alt="Post" className="payment-image" />
           </div>
-        )}
-        <div className="payment-info">
-          <p>
-            <strong>Tên người đăng:</strong> {formData.fullname}
-          </p>
-          <p>
-            <strong>Tên sản phẩm:</strong> {formData.productName}
-          </p>
-          <p>
-            <strong>Danh mục:</strong> {formData.category}
-          </p>
-          <p>
-            <strong>Giá tiền:</strong> {formatPrice(formData.price)}
-          </p>
-          <p>
-            <strong>Campus:</strong> {formData.campus}
-          </p>
-          <p>
-            <strong>Số điện thoại liên hệ:</strong> {formData.phone}
-          </p>
-          <p>
-            <strong>Thời gian đăng bài:</strong> {formData.duration}
-          </p>
-          <div className="qr-code-container">
-            <QRCode value={momoPaymentUrl} size={128} />
-          </div>
-          <div className="confirm-payment-button-container">
-            <Button type="primary" onClick={handleConfirmPayment}>
-              Xác nhận thanh toán
-            </Button>
+          <div className="payment-info">
+            <p>
+              <strong>Product Name:</strong> {formData.productName}
+            </p>
+            <p>
+              <strong>Category:</strong> {categoryName}
+            </p>
+            <p>
+              <strong>Price:</strong> {formData.price} VND
+            </p>
+            <p>
+              <strong>Campus:</strong> {campusName}
+            </p>
+            <p>
+              <strong>Duration:</strong> {formData.duration}
+            </p>
+            <p>
+              <strong>Phone Number:</strong> {formData.phone}
+            </p>
           </div>
         </div>
-      </div>
-    </Card>
+        <div className="qr-code-container">
+          <QRCode value="https://your-payment-url.com" size={200} />
+        </div>
+        <div className="confirm-payment-button-container">
+          <Button type="primary" onClick={handlePaymentSuccess}>
+            Confirm Payment
+          </Button>
+        </div>
+        <div className="countdown-container">
+          <p>Time remaining: {countdown} seconds</p>
+        </div>
+      </Card>
+    </div>
   );
 };
 

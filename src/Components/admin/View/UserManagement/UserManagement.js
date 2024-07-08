@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   Select,
+  message, // Import message from antd for notifications
 } from "antd";
 import axiosInstance from "../../../../authService";
 import { useNavigate } from "react-router-dom";
@@ -19,8 +20,8 @@ import { useAuth } from "../../../Hook/useAuth";
 const { Title } = Typography;
 const { Option } = Select;
 
-const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
-  const { isLogin, setIsLogin, setUserInformation } = useAuth();
+const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
+  const { isLogin, setIsLogin, userInformation } = useAuth();
   const navigate = useNavigate();
 
   const [reload, setReload] = useState(false);
@@ -50,10 +51,11 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
         setData(response.data);
       } else {
         console.error("Failed to fetch data");
+        message.error("Failed to fetch user data. Please try again later.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred while fetching user data");
+      message.error("An error occurred while fetching user data.");
     }
   };
 
@@ -78,42 +80,67 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
         phoneNumber: values.phoneNumber,
         role: values.role,
       };
+      const accessToken = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
       const response = await axiosInstance.put(
         "https://localhost:7071/api/user-management/edit-user",
-        updatedUser
+        updatedUser,
+        { headers }
       );
       if (response.status === 200) {
         setIsModalOpen(false);
         setReload(!reload); // Trigger reload of user data
+        message.success("User updated successfully.");
       } else {
-        console.error("Failed to update user");
+        console.error(
+          "Failed to update user. Server responded with status:",
+          response.status
+        );
+        message.error("Failed to update user. Please try again later.");
       }
     } catch (error) {
       console.error("Error updating user:", error);
+      if (error.response) {
+        console.error("Server responded with:", error.response.status);
+        message.error(
+          "An error occurred while updating user. Please try again later."
+        );
+      } else {
+        message.error("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
   const handleDeleteUser = async (id) => {
     try {
+      const accessToken = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
       const response = await axiosInstance.delete(
-        `https://localhost:7071/api/user-management/delete-user/${id}`
+        `https://localhost:7071/api/user-management/delete-user/${id}`,
+        { headers }
       );
       if (response.status === 200) {
         setReload(!reload); // Trigger reload of user data
+        message.success("User deleted successfully.");
       } else {
         console.error("Failed to delete user");
+        message.error("Failed to delete user. Please try again later.");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
+      message.error("An error occurred while deleting user.");
     }
   };
 
   const handleLogout = () => {
-    console.log(1234);
     setIsLoggedIn(false);
     setShowHeader(true);
     setIsLogin(false);
-    setUserInformation({});
+    localStorage.removeItem("accessToken");
     navigate("/login", { replace: true });
   };
 

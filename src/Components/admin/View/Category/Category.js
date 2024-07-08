@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Space,
-  Table,
-  Tag,
-  Typography,
-  Modal,
-  Form,
-  Input,
-  Button,
-  Select,
-} from "antd";
+import { Space, Table, Typography, Modal, Form, Input, Button } from "antd";
 import axiosInstance from "../../../../authService";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../../layout/header/AdminLayout";
 import { useAuth } from "../../../Hook/useAuth";
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const UserManagementPage = () => {
   const { isLogin, setIsLogin, setUserInformation } = useAuth();
@@ -66,22 +55,31 @@ const UserManagementPage = () => {
   const handleSaveCategory = async () => {
     try {
       const values = await form.validateFields();
-      const updatedCategory = {
-        id: selectedCategory.id,
-        name: values.name,
-      };
-      const response = await axiosInstance.put(
-        `https://localhost:7071/api/category/${selectedCategory.id}`,
-        updatedCategory
-      );
+      const endpoint = selectedCategory
+        ? `https://localhost:7071/api/category/${selectedCategory.id}`
+        : "https://localhost:7071/api/category";
+      const method = selectedCategory ? "PUT" : "POST";
+
+      const data = selectedCategory
+        ? { id: selectedCategory.id, name: values.name }
+        : { name: values.name };
+
+      const response = await axiosInstance({
+        method,
+        url: endpoint,
+        data,
+      });
+
       if (response.status === 200) {
         setIsModalOpen(false);
         setReload(!reload); // Trigger reload of categories
+        setSelectedCategory(null); // Clear selected category
+        form.resetFields(); // Reset form fields
       } else {
-        console.error("Failed to update category");
+        console.error("Failed to save category");
       }
     } catch (error) {
-      console.error("Error updating category:", error);
+      console.error("Error saving category:", error);
     }
   };
 
@@ -131,7 +129,10 @@ const UserManagementPage = () => {
         <Title level={3}>Category Management</Title>
         <Button
           type="primary"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setSelectedCategory(null); // Clear selected category
+            setIsModalOpen(true);
+          }}
           style={{ marginBottom: 16 }}
         >
           Add Category
@@ -139,10 +140,14 @@ const UserManagementPage = () => {
         <Table columns={columns} dataSource={categories} rowKey="id" />
 
         <Modal
-          title="Edit Category"
+          title={selectedCategory ? "Edit Category" : "Add Category"}
           visible={isModalOpen}
           onOk={handleSaveCategory}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setSelectedCategory(null); // Clear selected category
+            form.resetFields(); // Reset form fields
+          }}
         >
           <Form form={form} layout="vertical">
             <Form.Item

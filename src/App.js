@@ -19,6 +19,7 @@ import ChatPage from "./Components/view/Chat/Chat";
 import Payment from "./Components/view/Payment/Payment";
 import PaySuccess from "./Components/view/Payment/PaySuccess";
 import CategoryManagementPage from "./Components/admin/View/Category/Category"; // Import CategoryManagementPage component
+import PayFail from "./Components/view/Payment/Payfail"; // Import PayFail component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -64,7 +65,8 @@ const App = () => {
               element={<ChatPage setShowHeader={setShowHeader} />}
             />
             <Route path="/payment" element={<Payment />} />
-            <Route path="/payment-success" element={<PaySuccess />} />
+            <Route path="/payment/payment-success" element={<PaySuccess />} />
+            <Route path="/payfail" element={<PayFail />} />
             <Route
               path="/admin"
               element={

@@ -11,6 +11,8 @@ const PostCreate = () => {
   const [fullname, setFullname] = useState("");
   const [categories, setCategories] = useState([]);
   const [campuses, setCampuses] = useState([]);
+  const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
+  const [selectedCampusObj, setSelectedCampusObj] = useState(null);
   const navigate = useNavigate();
   const hardcodedImageUrl =
     "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
@@ -41,19 +43,19 @@ const PostCreate = () => {
     if (storedFullname) {
       setFullname(storedFullname);
     }
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+  }, []);
 
   const onFinish = async (values) => {
     const { productName, category, price, campus, phone, duration } = values;
 
     const formData = {
       title: productName,
-      description: category,
+      description: selectedCategoryObj ? selectedCategoryObj.name : "",
       price,
-      categoryId: category, // Assuming category ID is correct
-      campusId: campus, // Assuming campus ID is correct
-      postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448", // Use the given postModeId for 7 days
-      imagesUrl: [hardcodedImageUrl],
+      categoryId: category,
+      campusId: campus,
+      postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
+      imagesUrl: [hardcodedImageUrl], // Use hardcoded image URL here
       fullname,
       productName,
       campus,
@@ -79,10 +81,61 @@ const PostCreate = () => {
 
       console.log("Post created:", response.data);
 
-      navigate("/payment", { state: { formData } });
+      navigate("/payment", {
+        state: { formData, selectedCategoryObj, selectedCampusObj },
+      });
     } catch (error) {
       console.error("Error creating post:", error);
-      message.error("Failed to create post. Please try again later.");
+      if (error.response && error.response.status === 401) {
+        try {
+          await refreshAccessToken();
+          // Retry original request
+          const newAccessToken = localStorage.getItem("accessToken");
+          const retryResponse = await axios.post(
+            "https://localhost:7071/api/product-post",
+            formData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "*/*",
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            }
+          );
+
+          console.log("Post created after token refresh:", retryResponse.data);
+
+          navigate("/payment", {
+            state: { formData, selectedCategoryObj, selectedCampusObj },
+          });
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          message.error("Failed to refresh token. Please log in again.");
+          // Redirect to login or handle logout
+        }
+      } else {
+        message.error(
+          error.response?.data?.message ||
+            "Failed to create post. Please try again later."
+        );
+      }
+    }
+  };
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    try {
+      const response = await axios.post(
+        "https://localhost:7071/api/refresh-token",
+        { refreshToken }
+      );
+
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      return accessToken;
+    } catch (error) {
+      throw new Error("Error refreshing token");
     }
   };
 
@@ -97,18 +150,25 @@ const PostCreate = () => {
         >
           <Form.Item
             name="productName"
-            label="Tên sản phẩm"
-            rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
+            label="Product Name"
+            rules={[{ required: true, message: "Please enter product name" }]}
           >
-            <Input placeholder="Nhập tên sản phẩm" />
+            <Input placeholder="Enter product name" />
           </Form.Item>
 
           <Form.Item
             name="category"
-            label="Danh mục"
-            rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+            label="Category"
+            rules={[{ required: true, message: "Please select category" }]}
           >
-            <Select placeholder="Chọn danh mục">
+            <Select
+              placeholder="Select category"
+              onChange={(value) => {
+                setSelectedCategoryObj(
+                  categories.find((cat) => cat.id === value)
+                );
+              }}
+            >
               {categories.map((category) => (
                 <Option key={category.id} value={category.id}>
                   {category.name}
@@ -119,18 +179,23 @@ const PostCreate = () => {
 
           <Form.Item
             name="price"
-            label="Giá tiền"
-            rules={[{ required: true, message: "Vui lòng nhập giá tiền" }]}
+            label="Price"
+            rules={[{ required: true, message: "Please enter price" }]}
           >
-            <Input placeholder="Nhập giá tiền" />
+            <Input placeholder="Enter price" />
           </Form.Item>
 
           <Form.Item
             name="campus"
             label="Campus"
-            rules={[{ required: true, message: "Vui lòng chọn campus" }]}
+            rules={[{ required: true, message: "Please select campus" }]}
           >
-            <Select placeholder="Chọn campus">
+            <Select
+              placeholder="Select campus"
+              onChange={(value) => {
+                setSelectedCampusObj(campuses.find((cp) => cp.id === value));
+              }}
+            >
               {campuses.map((campus) => (
                 <Option key={campus.id} value={campus.id}>
                   {campus.name}
@@ -141,41 +206,40 @@ const PostCreate = () => {
 
           <Form.Item
             name="phone"
-            label="Số điện thoại liên hệ"
+            label="Contact Phone Number"
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập số điện thoại liên hệ",
+                message: "Please enter contact phone number",
               },
               {
                 pattern: new RegExp(/^[0-9\b]+$/),
-                message: "Vui lòng nhập số điện thoại hợp lệ",
+                message: "Please enter a valid phone number",
               },
             ]}
           >
-            <Input placeholder="Nhập số điện thoại liên hệ" />
+            <Input placeholder="Enter contact phone number" />
           </Form.Item>
 
           <Form.Item
             name="duration"
-            label="Thời gian đăng bài"
-            rules={[
-              { required: true, message: "Vui lòng chọn thời gian đăng bài" },
-            ]}
+            label="Post Duration"
+            rules={[{ required: true, message: "Please select post duration" }]}
           >
-            <Select placeholder="Chọn thời gian đăng bài">
-              <Option value="7 ngày">7 ngày</Option>
+            <Select placeholder="Select post duration">
+              <Option value="7 days">7 days</Option>
             </Select>
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Đăng bài
+              Create Post
             </Button>
           </Form.Item>
         </Form>
       </Card>
 
+      {/* Display hardcoded image */}
       <Card title="Add Image" className="post-create-image">
         <div className="upload-image-container">
           <img

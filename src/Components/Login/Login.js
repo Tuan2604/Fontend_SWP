@@ -44,6 +44,10 @@ const Login = ({ onLogin }) => {
         localStorage.setItem("phoneNumber", response.data.userInfo.phoneNumber);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
+
+        // Log the access token
+        console.log("Access Token:", response.data.accessToken);
+
         setUserInformation(response.data);
         setIsLogin(true);
 

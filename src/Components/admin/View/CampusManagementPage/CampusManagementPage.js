@@ -131,12 +131,6 @@ const CampusManagementPage = ({ setShowHeader }) => {
 
   const columns = [
     {
-      title: "Campus ID",
-      dataIndex: "id",
-      key: "id",
-      render: (text) => <a>{text}</a>,
-    },
-    {
       title: "Campus Name",
       dataIndex: "name",
       key: "name",
