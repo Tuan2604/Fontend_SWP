@@ -34,7 +34,12 @@ const CampusManagementPage = ({ setShowHeader }) => {
         "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
       );
       if (response.status === 200) {
-        setData(response.data);
+        // Map data to include 'key' for Ant Design Table
+        const formattedData = response.data.map((campus) => ({
+          ...campus,
+          key: campus.id, // Set 'key' for Table row
+        }));
+        setData(formattedData);
       } else {
         console.error("Failed to fetch data");
       }
@@ -125,6 +130,12 @@ const CampusManagementPage = ({ setShowHeader }) => {
   };
 
   const columns = [
+    {
+      title: "Campus ID",
+      dataIndex: "id",
+      key: "id",
+      render: (text) => <a>{text}</a>,
+    },
     {
       title: "Campus Name",
       dataIndex: "name",

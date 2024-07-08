@@ -8,33 +8,52 @@ const { Option } = Select;
 
 const PostCreate = () => {
   const [form] = Form.useForm();
-  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [fullname, setFullname] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [campuses, setCampuses] = useState([]);
   const navigate = useNavigate();
+  const hardcodedImageUrl =
+    "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
 
   useEffect(() => {
-    const fullname = localStorage.getItem("fullname");
-    if (fullname) {
-      setFullname(fullname);
+    const fetchCategoriesAndCampuses = async () => {
+      try {
+        const [categoriesResponse, campusesResponse] = await Promise.all([
+          axios.get("https://localhost:7071/api/categories"),
+          axios.get(
+            "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
+          ),
+        ]);
+
+        setCategories(categoriesResponse.data);
+        setCampuses(campusesResponse.data);
+      } catch (error) {
+        console.error("Error fetching categories and campuses:", error);
+        message.error(
+          "Failed to fetch categories and campuses. Please try again later."
+        );
+      }
+    };
+
+    fetchCategoriesAndCampuses();
+
+    const storedFullname = localStorage.getItem("fullname");
+    if (storedFullname) {
+      setFullname(storedFullname);
     }
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const onFinish = async (values) => {
-    if (!imagePreviewUrl) {
-      message.error("Vui lòng upload hình ảnh trước khi đăng bài!");
-      return;
-    }
-
     const { productName, category, price, campus, phone, duration } = values;
 
     const formData = {
       title: productName,
       description: category,
       price,
-      categoryId: category,
-      campusId: campus,
+      categoryId: category, // Assuming category ID is correct
+      campusId: campus, // Assuming campus ID is correct
       postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448", // Use the given postModeId for 7 days
-      imagesUrl: [imagePreviewUrl],
+      imagesUrl: [hardcodedImageUrl],
       fullname,
       productName,
       campus,
@@ -67,22 +86,6 @@ const PostCreate = () => {
     }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleImageUrlChange = (e) => {
-    const imageUrl = e.target.value;
-    setImagePreviewUrl(imageUrl);
-  };
-
   return (
     <div className="post-create-container">
       <Card title="Create New Post" className="post-create-form">
@@ -106,15 +109,11 @@ const PostCreate = () => {
             rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
           >
             <Select placeholder="Chọn danh mục">
-              <Option value="40b5d134-c705-45f7-9647-d9339b3532a2">
-                Calculator
-              </Option>
-              <Option value="3dca2b4f-6632-4772-9ceb-6d4fbfafb375">
-                Laptop
-              </Option>
-              <Option value="5f2b41a5-3a87-4085-952d-88659f9ccd59">
-                Mouse
-              </Option>
+              {categories.map((category) => (
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -132,24 +131,11 @@ const PostCreate = () => {
             rules={[{ required: true, message: "Vui lòng chọn campus" }]}
           >
             <Select placeholder="Chọn campus">
-              <Option value="f39619b8-4f58-41ae-b4fb-4e42107df882">
-                Cần Thơ
-              </Option>
-              <Option value="f9ab8a24-5f40-4c8a-b096-857f7de97942">
-                Đà Nẵng
-              </Option>
-              <Option value="ef565513-b987-4692-a1dd-8c0ac0f23861">
-                Hà Nội
-              </Option>
-              <Option value="2ff2a074-9086-43aa-a0ca-3e5e604779d5">
-                Hồ Chí Minh
-              </Option>
-              <Option value="7f92a365-7486-4560-aec2-0a59795d7c68">
-                Quy Nhơn
-              </Option>
-              <Option value="c0b0c9a1-7eae-4c03-ad29-a2c94b14bb6d">
-                Other
-              </Option>
+              {campuses.map((campus) => (
+                <Option key={campus.id} value={campus.id}>
+                  {campus.name}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -192,32 +178,10 @@ const PostCreate = () => {
 
       <Card title="Add Image" className="post-create-image">
         <div className="upload-image-container">
-          {imagePreviewUrl ? (
-            <img
-              src={imagePreviewUrl}
-              style={{ width: "100%", marginBottom: "10px" }}
-              alt="Post"
-            />
-          ) : (
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8AGzlRpgqlOr5T1dx1m4lzmtwPDBxsGIzZQ&s"
-              style={{ width: "100%", marginBottom: "10px" }}
-              alt="Post"
-            />
-          )}
-          <input
-            type="file"
-            id="file-input"
-            className="custom-file-input"
-            onChange={handleImageChange}
-          />
-          <label htmlFor="file-input" className="custom-file-label">
-            Upload Image
-          </label>
-          <Input
-            placeholder="Nhập URL ảnh"
-            onChange={handleImageUrlChange}
-            style={{ marginTop: "10px" }}
+          <img
+            src={hardcodedImageUrl}
+            style={{ width: "100%", marginBottom: "10px" }}
+            alt="Post"
           />
         </div>
       </Card>
