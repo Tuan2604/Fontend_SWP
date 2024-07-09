@@ -1,120 +1,42 @@
-// ShoppingCard.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./ShoppingCard.css"; // Import CSS for styling
-import { Typography } from "antd"; // Import Typography from Ant Design
+import axios from "axios";
+import "./ShoppingCard.css";
+import { Typography } from "antd";
 const { Title } = Typography;
-
-const cardsData = [
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "20,000vnd",
-  },
-  {
-    imageUrl:
-      "https://dongphuccati.com/images/products/2020/05/18/original/2-1.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl:
-      "https://dongphuccati.com/images/products/2020/05/18/original/2-1.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl:
-      "https://giadungnhaviet.com/wp-content/uploads/2018/09/bo-mach-dieu-khien-arduino-r3-2.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl:
-      "https://giadungnhaviet.com/wp-content/uploads/2018/09/bo-mach-dieu-khien-arduino-r3-2.jpg",
-    title: "Tài liệu prj",
-    description: "Description of Card 2",
-    price: "$20,000",
-  },
-  {
-    imageUrl:
-      "https://giadungnhaviet.com/wp-content/uploads/2018/09/bo-mach-dieu-khien-arduino-r3-2.jpg",
-    title: "Bang mach dien tu",
-    description: "Description of Card 3",
-    price: "$30,000",
-  },
-  {
-    imageUrl:
-      "https://library.fpt.edu.vn/Uploads/HN/Images/Catalogue/FPT190025804.png",
-    title: "Sach kanji co ban",
-    description: "Description of Card 4",
-    price: "$40,000",
-  },
-  {
-    imageUrl:
-      "https://dongphuccati.com/images/products/2020/05/18/original/2-1.jpg",
-    title: "Ao fpt",
-    description: "Description of Card 5",
-    price: "$50,000",
-  },
-];
-
-const itemsPerPage = 8;
 
 const ShoppingCard = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [cardsData, setCardsData] = useState([]);
+  const itemsPerPage = 8;
 
-  // Calculate indexes for pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          `https://localhost:7071/api/product-post/others?pageIndex=1`
+        );
+        const response2 = await axios.get(
+          `https://localhost:7071/api/product-post/others?pageIndex=2`
+        );
+
+        const formattedData1 = response1.data.map((item) => ({
+          ...item,
+          imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
+        }));
+
+        const formattedData2 = response2.data.map((item) => ({
+          ...item,
+          imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
+        }));
+
+        setCardsData([...formattedData1, ...formattedData2]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -124,9 +46,9 @@ const ShoppingCard = () => {
     setCurrentPage((prevPage) => prevPage - 1);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
@@ -143,7 +65,7 @@ const ShoppingCard = () => {
               <p className="card-price">{card.price}</p>
               <div className="card-buttons">
                 <button className="buy-now-button">Buy Now</button>
-                <Link to={`/item/${index}`}>
+                <Link to={`/item/${card.id}`}>
                   <button className="view-details-button">View Details</button>
                 </Link>
               </div>
@@ -155,27 +77,16 @@ const ShoppingCard = () => {
         <button
           onClick={handlePrevPage}
           disabled={currentPage === 1}
-          className="arrow-button"
+          className={`arrow-button ${currentPage === 1 ? "disabled" : ""}`}
         >
           &#8249; {/* Left arrow */}
         </button>
-        {Array.from({ length: Math.ceil(cardsData.length / itemsPerPage) }).map(
-          (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`page-button ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
-            >
-              {index + 1}
-            </button>
-          )
-        )}
         <button
           onClick={handleNextPage}
           disabled={indexOfLastItem >= cardsData.length}
-          className="arrow-button"
+          className={`arrow-button ${
+            indexOfLastItem >= cardsData.length ? "disabled" : ""
+          }`}
         >
           &#8250; {/* Right arrow */}
         </button>
