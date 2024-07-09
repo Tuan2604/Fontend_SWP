@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "antd";
-import QRCode from "qrcode.react";
+import { Card } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../../src/authService"; // Import axios instance
 import "./Payment.css"; // Import custom CSS
-import { Footer } from "antd/es/layout/layout";
 
 const Payment = () => {
   const location = useLocation();
@@ -16,81 +14,94 @@ const Payment = () => {
   const [countdown, setCountdown] = useState(45); // Countdown timer in seconds
 
   const hardcodedImageUrl =
-    "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
+    "https://gcs.tripi.vn/public-tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
 
-  // Use effect to fetch category and campus names by IDs
+  // Use effect to fetch category and campus names
   useEffect(() => {
-    if (selectedCategoryObj) {
-      setCategoryName(selectedCategoryObj.name);
-      setCategoryDescription(selectedCategoryObj.description);
-    }
-    if (selectedCampusObj) {
-      setCampusName(selectedCampusObj.name);
-    }
-  }, [selectedCategoryObj, selectedCampusObj]);
+    const fetchCategoryAndCampus = async () => {
+      try {
+        if (selectedCategoryObj && selectedCategoryObj.id) {
+          const categoryResponse = await axiosInstance.get(
+            `category/${selectedCategoryObj.id}`
+          );
+          setCategoryName(categoryResponse.data.name);
+          setCategoryDescription(categoryResponse.data.description);
+        }
 
-  useEffect(() => {
-    // Countdown timer
+        if (selectedCampusObj && selectedCampusObj.id) {
+          const campusResponse = await axiosInstance.get(
+            `campus/${selectedCampusObj.id}`
+          );
+          setCampusName(campusResponse.data.name);
+        }
+      } catch (error) {
+        console.error("Error fetching category or campus:", error);
+      }
+    };
+
+    fetchCategoryAndCampus();
+
     const timer = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown === 1) {
-          navigate("/payfail");
+          clearInterval(timer);
+          navigate("/payment/payfail"); // Navigate to payfail page after countdown ends
         }
         return prevCountdown - 1;
       });
     }, 1000);
 
-    // Clean up timer on component unmount
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [selectedCategoryObj, selectedCampusObj, navigate]);
 
-  const handlePaymentSuccess = () => {
+  const handleConfirmClick = () => {
+    // Navigate to payment page when confirm button is clicked
     navigate("/payment/payment-success");
   };
 
   return (
-    <div className="payment-card">
+    <div className="payment-container">
       <Card title="Payment Details" className="payment-card">
-        <div className="payment-info-container">
-          <div className="payment-image-container">
-            <img src={hardcodedImageUrl} alt="Post" className="payment-image" />
-          </div>
-          <div className="payment-info">
-            <p>
-              <strong>Product Name:</strong> {formData.productName}
-            </p>
-            <p>
-              <strong>Category:</strong> {categoryName}
-            </p>
-            <p>
-              <strong>Description:</strong> {formData.description}{" "}
-              {/* Sử dụng mô tả sản phẩm từ formData */}
-            </p>
-            <p>
-              <strong>Price:</strong> {formData.price} VND
-            </p>
-            <p>
-              <strong>Campus:</strong> {campusName}
-            </p>
-            <p>
-              <strong>Duration:</strong> {formData.duration}
-            </p>
-            <p>
-              <strong>Phone Number:</strong> {formData.phone}
-            </p>
-          </div>
+        <h2>Product Information</h2>
+        <p>
+          <strong>Product Name:</strong> {formData.title}
+        </p>
+        <p>
+          <strong>Description:</strong> {formData.description}
+        </p>
+        <p>
+          <strong>Price:</strong> {formData.price}
+        </p>
+        <p>
+          <strong>Category:</strong> {categoryName}
+        </p>
+        <p>
+          <strong>Category Description:</strong> {categoryDescription}
+        </p>
+        <p>
+          <strong>Campus:</strong> {campusName}
+        </p>
+        <p>
+          <strong>Fullname:</strong> {formData.fullname}
+        </p>
+        <p>
+          <strong>Phone:</strong> {formData.phone}
+        </p>
+        <p>
+          <strong>Duration:</strong> {formData.duration}
+        </p>
+        <div className="upload-image-container">
+          <img
+            src={hardcodedImageUrl}
+            style={{ width: "100%", marginBottom: "10px" }}
+            alt="Post"
+          />
         </div>
-        <div className="qr-code-container">
-          <QRCode value="https://your-payment-url.com" size={200} />
-        </div>
-        <div className="confirm-payment-button-container">
-          <Button type="primary" onClick={handlePaymentSuccess}>
-            Confirm Payment
-          </Button>
-        </div>
-        <div className="countdown-container">
-          <p>Time remaining: {countdown} seconds</p>
-        </div>
+        <button onClick={handleConfirmClick}>Confirm Payment</button>
+        <p>
+          <strong>Redirecting to payment failure in:</strong> {countdown}{" "}
+          seconds
+        </p>
       </Card>
     </div>
   );

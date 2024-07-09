@@ -34,13 +34,25 @@ const ItemDetail = () => {
   const imageUrl =
     item.imageUrl || "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg";
 
+  // Format price with thousand separators and VND suffix
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
   return (
     <div className="item-detail-container">
       <img src={imageUrl} alt={item.title} className="item-image" />
       <div className="item-details">
         <Title level={2}>{item.title}</Title>
         <Paragraph>Description: {item.description}</Paragraph>
-        <Paragraph className="item-price">Price:{item.price}</Paragraph>
+        <Paragraph className="item-price">
+          Price: {formatPrice(item.price)}
+        </Paragraph>
 
         {/* Render createdBy information if available */}
         {item.createdBy && (

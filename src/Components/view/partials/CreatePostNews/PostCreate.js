@@ -13,7 +13,9 @@ const PostCreate = () => {
   const [campuses, setCampuses] = useState([]);
   const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
-  const [description, setDescription] = useState(""); // State mới để lưu mô tả sản phẩm
+  const [description, setDescription] = useState(""); // State for product description
+  const [redirectUrl, setRedirectUrl] = useState(""); // State for redirect URL
+  const [formData, setFormData] = useState(null); // State for form data
   const navigate = useNavigate();
   const hardcodedImageUrl =
     "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
@@ -49,9 +51,9 @@ const PostCreate = () => {
   const onFinish = async (values) => {
     const { productName, category, price, campus, phone, duration } = values;
 
-    const formData = {
+    const newFormData = {
       title: productName,
-      description: description, // Sử dụng state mô tả sản phẩm
+      description: description,
       price,
       categoryId: category,
       campusId: campus,
@@ -60,17 +62,17 @@ const PostCreate = () => {
       fullname,
       phone,
       duration,
-      productName,
-      campus,
+      redirectUrl:
+        "https://sandbox.vnpayment.vn/paymentv2/Transaction/PaymentMethod.html?token=8df338774db14acb9b4a136ffc4143f2",
     };
 
-    console.log("Posting form data:", formData);
+    console.log("Posting form data:", newFormData);
 
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await axios.post(
         "https://localhost:7071/api/product-post",
-        formData,
+        newFormData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -82,9 +84,11 @@ const PostCreate = () => {
 
       console.log("Post created:", response.data);
 
-      navigate("/payment", {
-        state: { formData, selectedCategoryObj, selectedCampusObj },
-      });
+      // Set form data after successful post creation
+      setFormData(newFormData);
+
+      // Set redirect URL after successful post creation
+      setRedirectUrl(newFormData.redirectUrl);
     } catch (error) {
       console.error("Error creating post:", error);
       if (error.response && error.response.status === 401) {
@@ -94,7 +98,7 @@ const PostCreate = () => {
           const newAccessToken = localStorage.getItem("accessToken");
           const retryResponse = await axios.post(
             "https://localhost:7071/api/product-post",
-            formData,
+            newFormData,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -106,9 +110,11 @@ const PostCreate = () => {
 
           console.log("Post created after token refresh:", retryResponse.data);
 
-          navigate("/payment", {
-            state: { formData, selectedCategoryObj, selectedCampusObj },
-          });
+          // Set form data after successful post creation
+          setFormData(newFormData);
+
+          // Set redirect URL after successful post creation
+          setRedirectUrl(newFormData.redirectUrl);
         } catch (refreshError) {
           console.error("Error refreshing token:", refreshError);
           message.error("Failed to refresh token. Please log in again.");
@@ -139,6 +145,15 @@ const PostCreate = () => {
       throw new Error("Error refreshing token");
     }
   };
+
+  // Handle redirect after setting redirectUrl state
+  useEffect(() => {
+    if (redirectUrl) {
+      navigate(redirectUrl, {
+        state: { formData, selectedCategoryObj, selectedCampusObj },
+      });
+    }
+  }, [redirectUrl, navigate, formData, selectedCategoryObj, selectedCampusObj]);
 
   return (
     <div className="post-create-container">

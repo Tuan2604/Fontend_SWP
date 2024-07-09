@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faBook,
@@ -10,10 +13,8 @@ import {
   faTools,
   faUserPlus,
   faUserCircle,
+  faListAlt, // Import the ListAlt icon for ListBuyer
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../../../Hook/useAuth";
 
@@ -21,7 +22,7 @@ const Header = () => {
   const { isLogin, userInformation, handleLogout } = useAuth();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [showAccountMenu, setShowAccountMenu] = useState(false); // State for account menu
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [fullname, setFullname] = useState("");
 
@@ -43,7 +44,7 @@ const Header = () => {
   };
 
   const handleWelcomeClick = () => {
-    setShowAccountMenu(!showAccountMenu); // Toggle account menu visibility
+    setShowAccountMenu(!showAccountMenu);
   };
 
   const handleSearchChange = (event) => {
@@ -150,6 +151,11 @@ const Header = () => {
                       <li>
                         <Link to="/post-create">
                           <FontAwesomeIcon icon={faFile} /> Create Post
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/list-buyer">
+                          <FontAwesomeIcon icon={faListAlt} /> ListBuyer
                         </Link>
                       </li>
                     </ul>

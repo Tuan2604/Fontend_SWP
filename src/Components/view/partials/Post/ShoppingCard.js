@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Typography, message } from "antd";
 import "./ShoppingCard.css";
-import { Typography } from "antd";
 const { Title } = Typography;
 
 const ShoppingCard = () => {
@@ -11,32 +11,66 @@ const ShoppingCard = () => {
   const itemsPerPage = 8;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response1 = await axios.get(
-          `https://localhost:7071/api/product-post/others?pageIndex=1`
-        );
-        const response2 = await axios.get(
-          `https://localhost:7071/api/product-post/others?pageIndex=2`
-        );
-
-        const formattedData1 = response1.data.map((item) => ({
-          ...item,
-          imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-        }));
-
-        const formattedData2 = response2.data.map((item) => ({
-          ...item,
-          imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-        }));
-
-        setCardsData([...formattedData1, ...formattedData2]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchCardsData();
+      setCardsData(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchCardsData = async () => {
+    const userToken = localStorage.getItem("accessToken");
+
+    try {
+      const response = await axios.get(
+        `https://localhost:7071/api/product-post/others?pageIndex=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      const formattedData = response.data.map((item) => ({
+        ...item,
+        imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
+      }));
+
+      return formattedData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      if (error.response && error.response.status === 401) {
+        await refreshToken(); // Refresh token if unauthorized
+        return fetchCardsData(); // Retry fetching data
+      }
+      throw error; // Re-throw the error if it's not due to unauthorized
+    }
+  };
+
+  const refreshToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    try {
+      const response = await axios.post(
+        "https://localhost:7071/api/refresh-token",
+        {
+          refreshToken: refreshToken,
+        }
+      );
+
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      // Handle token refresh failure (e.g., logout user)
+      throw error; // Re-throw the error to propagate it up
+    }
+  };
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -49,6 +83,33 @@ const ShoppingCard = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
+  const handleBuyNow = async (postId) => {
+    try {
+      const userToken = localStorage.getItem("accessToken");
+      const messageData = "Tôi muốn mua vật phẩm này"; // Replace with your message
+
+      localStorage.setItem("postId", postId); // Save postId to local storage
+
+      const response = await axios.post(
+        `https://localhost:7071/api/post-apply/${postId}`,
+        JSON.stringify(messageData), // Convert messageData to JSON string
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Successfully applied to buy:", response.data);
+      message.success("Successfully applied to buy this product!");
+      // Optionally handle success actions here (e.g., show a success message)
+    } catch (error) {
+      console.error("Error applying to buy product:", error);
+      message.error("Failed to apply to buy this product.");
+      // Optionally handle error actions here (e.g., show an error message)
+    }
+  };
 
   return (
     <div>
@@ -64,7 +125,12 @@ const ShoppingCard = () => {
               <p className="card-description">{card.description}</p>
               <p className="card-price">{card.price}</p>
               <div className="card-buttons">
-                <button className="buy-now-button">Buy Now</button>
+                <button
+                  className="buy-now-button"
+                  onClick={() => handleBuyNow(card.id)}
+                >
+                  Buy Now
+                </button>
                 <Link to={`/item/${card.id}`}>
                   <button className="view-details-button">View Details</button>
                 </Link>

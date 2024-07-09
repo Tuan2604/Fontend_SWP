@@ -8,7 +8,7 @@ import { useAuth } from "../../../Hook/useAuth"; // Import useAuth hook
 const { Title } = Typography;
 
 const CampusManagementPage = ({ setShowHeader }) => {
-  const { isLogin } = useAuth(); // Use isLogin from useAuth
+  const { isLogin, token } = useAuth(); // Use token from useAuth
   const navigate = useNavigate();
   const [reload, setReload] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,13 +31,18 @@ const CampusManagementPage = ({ setShowHeader }) => {
   const handleFetchData = async () => {
     try {
       const response = await axios.get(
-        "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
+        "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
       );
       if (response.status === 200) {
-        // Map data to include 'key' for Ant Design Table
         const formattedData = response.data.map((campus) => ({
           ...campus,
-          key: campus.id, // Set 'key' for Table row
+          key: campus.id,
         }));
         setData(formattedData);
       } else {
@@ -66,7 +71,13 @@ const CampusManagementPage = ({ setShowHeader }) => {
       };
       const response = await axios.put(
         `https://localhost:7071/api/campus/edit`,
-        updatedCampus
+        updatedCampus,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
       );
       if (response.status === 200) {
         setIsModalOpen(false);
@@ -82,7 +93,15 @@ const CampusManagementPage = ({ setShowHeader }) => {
   const handleDeleteCampus = async (id) => {
     try {
       const response = await axios.delete(
-        `https://localhost:7071/api/campus/delete/${id}`
+        `https://localhost:7071/api/campus/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          data: { id },
+        }
       );
       if (response.status === 200) {
         setReload(!reload);
@@ -108,7 +127,13 @@ const CampusManagementPage = ({ setShowHeader }) => {
       };
       const response = await axios.post(
         "https://localhost:7071/api/campus/add",
-        newCampus
+        newCampus,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
       );
       if (response.status === 200) {
         setIsModalOpen(false);

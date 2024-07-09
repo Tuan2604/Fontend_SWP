@@ -21,6 +21,7 @@ import PaySuccess from "./Components/view/Payment/PaySuccess";
 import CategoryManagementPage from "./Components/admin/View/Category/Category";
 import PayFail from "./Components/view/Payment/Payfail";
 import ProductPostList from "./Components/Moderator/view/BrowserPost/ProductPostList"; // Import ProductPostList component
+import ListBuyer from "./Components/view/ListBuyer/ListBuyer"; // Import ListBuyer component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -108,7 +109,6 @@ const App = () => {
                 )
               }
             />
-
             <Route
               path="/moderator"
               element={
@@ -119,7 +119,6 @@ const App = () => {
                 )
               }
             />
-
             <Route
               path="/moderator/product-post-list"
               element={
@@ -130,6 +129,8 @@ const App = () => {
                 )
               }
             />
+            <Route path="/list-buyer" element={<ListBuyer />} />{" "}
+            {/* Thêm route cho ListBuyer */}
           </Routes>
         </CSSTransition>
       </TransitionGroup>
