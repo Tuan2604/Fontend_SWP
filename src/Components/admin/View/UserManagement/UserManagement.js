@@ -8,17 +8,15 @@ import {
   Form,
   Input,
   Button,
-  Select,
-  message, // Import message from antd for notifications
+  message,
 } from "antd";
-import axiosInstance from "../../../../authService";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./UserManagement.css";
 import AdminLayout from "../../../layout/header/AdminLayout";
 import { useAuth } from "../../../Hook/useAuth";
 
 const { Title } = Typography;
-const { Option } = Select;
 
 const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
   const { isLogin, setIsLogin, userInformation } = useAuth();
@@ -44,8 +42,13 @@ const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
 
   const handleFetchData = async () => {
     try {
-      const response = await axiosInstance.get(
-        "https://localhost:7071/api/user-management"
+      const response = await axios.get(
+        "https://localhost:7071/api/user-management",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
       if (response.status === 200) {
         setData(response.data);
@@ -64,9 +67,7 @@ const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
     setIsModalOpen(true);
     form.setFieldsValue({
       fullname: record.fullname,
-      email: record.email,
       phoneNumber: record.phoneNumber,
-      role: record.role,
     });
   };
 
@@ -76,37 +77,33 @@ const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
       const updatedUser = {
         id: selectedItem.id,
         fullname: values.fullname,
-        email: values.email,
         phoneNumber: values.phoneNumber,
-        role: values.role,
       };
-      const accessToken = localStorage.getItem("accessToken");
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
-      const response = await axiosInstance.put(
+
+      await axios.put(
         "https://localhost:7071/api/user-management/edit-user",
         updatedUser,
-        { headers }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
-      if (response.status === 200) {
-        setIsModalOpen(false);
-        setReload(!reload); // Trigger reload of user data
-        message.success("User updated successfully.");
-      } else {
-        console.error(
-          "Failed to update user. Server responded with status:",
-          response.status
-        );
-        message.error("Failed to update user. Please try again later.");
-      }
+
+      setIsModalOpen(false);
+      setReload(!reload); // Trigger reload of user data
+      message.success("User updated successfully.");
     } catch (error) {
       console.error("Error updating user:", error);
-      if (error.response) {
-        console.error("Server responded with:", error.response.status);
-        message.error(
-          "An error occurred while updating user. Please try again later."
-        );
+      if (error.response && error.response.status === 401) {
+        try {
+          await refreshAccessToken();
+          await handleSaveUser(); // Retry original request
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          message.error("Failed to refresh token. Please log in again.");
+          navigate("/login");
+        }
       } else {
         message.error("An unexpected error occurred. Please try again later.");
       }
@@ -115,24 +112,48 @@ const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
 
   const handleDeleteUser = async (id) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
-      const response = await axiosInstance.delete(
+      await axios.delete(
         `https://localhost:7071/api/user-management/delete-user/${id}`,
-        { headers }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
-      if (response.status === 200) {
-        setReload(!reload); // Trigger reload of user data
-        message.success("User deleted successfully.");
-      } else {
-        console.error("Failed to delete user");
-        message.error("Failed to delete user. Please try again later.");
-      }
+
+      setReload(!reload); // Trigger reload of user data
+      message.success("User deleted successfully.");
     } catch (error) {
       console.error("Error deleting user:", error);
-      message.error("An error occurred while deleting user.");
+      if (error.response && error.response.status === 401) {
+        try {
+          await refreshAccessToken();
+          await handleDeleteUser(id); // Retry original request
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          message.error("Failed to refresh token. Please log in again.");
+          navigate("/login");
+        }
+      } else {
+        message.error("An unexpected error occurred. Please try again later.");
+      }
+    }
+  };
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    try {
+      const response = await axios.post(
+        "https://localhost:7071/api/refresh-token",
+        { refreshToken }
+      );
+
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      return accessToken;
+    } catch (error) {
+      throw new Error("Error refreshing token");
     }
   };
 
@@ -204,29 +225,11 @@ const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
               <Input />
             </Form.Item>
             <Form.Item
-              name="email"
-              label="Email Address"
-              rules={[{ required: true, message: "Please enter email" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
               name="phoneNumber"
               label="Phone Number"
               rules={[{ required: true, message: "Please enter phone number" }]}
             >
               <Input />
-            </Form.Item>
-            <Form.Item
-              name="role"
-              label="Role"
-              rules={[{ required: true, message: "Please select role" }]}
-            >
-              <Select>
-                <Option value="Admin">Admin</Option>
-                <Option value="Moderator">Moderator</Option>
-                <Option value="User">User</Option>
-              </Select>
             </Form.Item>
           </Form>
         </Modal>

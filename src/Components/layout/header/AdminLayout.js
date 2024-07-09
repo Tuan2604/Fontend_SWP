@@ -10,6 +10,7 @@ import {
 import { Button, Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Hook/useAuth";
+
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout = ({ children }) => {
@@ -66,7 +67,6 @@ const AdminLayout = ({ children }) => {
           >
             Campus Management
           </Menu.Item>
-          {/* Updated Menu item for Category Management */}
           <Menu.Item
             key="3"
             icon={<AppstoreOutlined />}
@@ -74,7 +74,6 @@ const AdminLayout = ({ children }) => {
           >
             Category Management
           </Menu.Item>
-
           <Menu.Item
             key="logout"
             onClick={handleLogout}

@@ -45,14 +45,16 @@ const Login = ({ onLogin }) => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
 
-        // Log the access token
-        console.log("Access Token:", response.data.accessToken);
+        console.log("Access Token Role:", response.data.userInfo.role);
 
         setUserInformation(response.data);
         setIsLogin(true);
 
+        // Redirect based on user role
         if (response.data.userInfo.role === "Admin") {
           navigate("/admin");
+        } else if (response.data.userInfo.role === "Moderator") {
+          navigate("/moderator");
         } else {
           navigate("/");
         }
@@ -73,8 +75,11 @@ const Login = ({ onLogin }) => {
   useEffect(() => {
     if (isLogin) {
       if (userInformation) {
+        // Redirect if already logged in
         if (userInformation?.userInfo?.role === "Admin") {
           navigate("/admin");
+        } else if (userInformation?.userInfo?.role === "Moderator") {
+          navigate("/moderator");
         } else {
           navigate("/");
         }

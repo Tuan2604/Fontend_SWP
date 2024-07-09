@@ -13,6 +13,7 @@ const PostCreate = () => {
   const [campuses, setCampuses] = useState([]);
   const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
+  const [description, setDescription] = useState(""); // State mới để lưu mô tả sản phẩm
   const navigate = useNavigate();
   const hardcodedImageUrl =
     "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
@@ -50,17 +51,17 @@ const PostCreate = () => {
 
     const formData = {
       title: productName,
-      description: selectedCategoryObj ? selectedCategoryObj.name : "",
+      description: description, // Sử dụng state mô tả sản phẩm
       price,
       categoryId: category,
       campusId: campus,
       postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
-      imagesUrl: [hardcodedImageUrl], // Use hardcoded image URL here
+      imagesUrl: [hardcodedImageUrl],
       fullname,
-      productName,
-      campus,
       phone,
       duration,
+      productName,
+      campus,
     };
 
     console.log("Posting form data:", formData);
@@ -154,6 +155,17 @@ const PostCreate = () => {
             rules={[{ required: true, message: "Please enter product name" }]}
           >
             <Input placeholder="Enter product name" />
+          </Form.Item>
+
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true, message: "Please enter description" }]}
+          >
+            <Input.TextArea
+              placeholder="Enter description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </Form.Item>
 
           <Form.Item

@@ -11,6 +11,7 @@ const Payment = () => {
   const navigate = useNavigate();
   const { formData, selectedCategoryObj, selectedCampusObj } = location.state;
   const [categoryName, setCategoryName] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
   const [campusName, setCampusName] = useState("");
   const [countdown, setCountdown] = useState(45); // Countdown timer in seconds
 
@@ -21,6 +22,7 @@ const Payment = () => {
   useEffect(() => {
     if (selectedCategoryObj) {
       setCategoryName(selectedCategoryObj.name);
+      setCategoryDescription(selectedCategoryObj.description);
     }
     if (selectedCampusObj) {
       setCampusName(selectedCampusObj.name);
@@ -59,6 +61,10 @@ const Payment = () => {
             </p>
             <p>
               <strong>Category:</strong> {categoryName}
+            </p>
+            <p>
+              <strong>Description:</strong> {formData.description}{" "}
+              {/* Sử dụng mô tả sản phẩm từ formData */}
             </p>
             <p>
               <strong>Price:</strong> {formData.price} VND

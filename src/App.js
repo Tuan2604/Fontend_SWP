@@ -18,8 +18,9 @@ import ItemDetail from "./Components/view/partials/ViewDetail/ItemDetail";
 import ChatPage from "./Components/view/Chat/Chat";
 import Payment from "./Components/view/Payment/Payment";
 import PaySuccess from "./Components/view/Payment/PaySuccess";
-import CategoryManagementPage from "./Components/admin/View/Category/Category"; // Import CategoryManagementPage component
-import PayFail from "./Components/view/Payment/Payfail"; // Import PayFail component
+import CategoryManagementPage from "./Components/admin/View/Category/Category";
+import PayFail from "./Components/view/Payment/Payfail";
+import ProductPostList from "./Components/Moderator/view/BrowserPost/ProductPostList"; // Import ProductPostList component
 import "./transitions.css";
 
 import { useAuth } from "./Components/Hook/useAuth";
@@ -107,7 +108,28 @@ const App = () => {
                 )
               }
             />
-            <Route path="*" element={<Navigate to="/" />} />
+
+            <Route
+              path="/moderator"
+              element={
+                isLoggedIn ? (
+                  <Navigate to="/moderator/product-post-list" />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+
+            <Route
+              path="/moderator/product-post-list"
+              element={
+                isLoggedIn ? (
+                  <ProductPostList setShowHeader={setShowHeader} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
           </Routes>
         </CSSTransition>
       </TransitionGroup>
