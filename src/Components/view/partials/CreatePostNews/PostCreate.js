@@ -134,7 +134,7 @@ const PostCreate = () => {
       campusId: campus,
       postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
       imagesUrl: [hardcodedImageUrl],
-      redirectUrl: "http://localhost:3000/",
+      redirectUrl: "http://localhost:3000",
     };
 
     console.log("Posting form data:", formData);
@@ -153,8 +153,10 @@ const PostCreate = () => {
           },
         }
       );
-      console.log("Post created:", response.data);
-      window.open(response.data);
+      console.log("Post created:", response.data.paymentUrl);
+      console.log("payment id:", response.data.paymentId);
+      localStorage.setItem("paymentId", response.data.paymentId);
+      window.open(response.data.paymentUrl);
       // navigate("/payment", {
       //   state: { formData, selectedCategoryObj, selectedCampusObj },
       // });
