@@ -158,6 +158,11 @@ const Header = () => {
                           <FontAwesomeIcon icon={faListAlt} /> ListBuyer
                         </Link>
                       </li>
+                      <li>
+                        <Link to="/purchased-list">
+                          <FontAwesomeIcon icon={faListAlt} /> Purchased list
+                        </Link>
+                      </li>
                     </ul>
                   )}
                 </li>

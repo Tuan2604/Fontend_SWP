@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Select, Card, message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./PostCreate.css";
 
@@ -13,9 +13,7 @@ const PostCreate = () => {
   const [campuses, setCampuses] = useState([]);
   const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
-  const [description, setDescription] = useState(""); // State for product description
-  const [redirectUrl, setRedirectUrl] = useState(""); // State for redirect URL
-  const [formData, setFormData] = useState(null); // State for form data
+  const [description, setDescription] = useState(""); // State mới để lưu mô tả sản phẩm
   const navigate = useNavigate();
   const hardcodedImageUrl =
     "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
@@ -48,31 +46,105 @@ const PostCreate = () => {
     }
   }, []);
 
+  // const onFinish = async (values) => {
+  //   const { productName, category, price, campus, phone, duration } = values;
+
+  //   const formData = {
+  //     title: productName,
+  //     description: description, // Sử dụng state mô tả sản phẩm
+  //     price,
+  //     categoryId: category,
+  //     campusId: campus,
+  //     postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
+  //     imagesUrl: [hardcodedImageUrl],
+  //     fullname,
+  //     phone,
+  //     duration,
+  //     productName,
+  //     campus,
+  //   };
+
+  //   console.log("Posting form data:", formData);
+
+  //   try {
+  //     const accessToken = localStorage.getItem("accessToken");
+  //     console.log("accessToken", accessToken);
+  //     const response = await axios.post(
+  //       "https://localhost:7071/api/product-post",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "*/*",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+  //     console.log("Post created:", response.data);
+
+  //     // navigate("/payment", {
+  //     //   state: { formData, selectedCategoryObj, selectedCampusObj },
+  //     // });
+  //   } catch (error) {
+  //     console.error("Error creating post:", error);
+  //     // if (error.response && error.response.status === 401) {
+  //     //   try {
+  //     //     await refreshAccessToken();
+  //     //     // Retry original request
+  //     //     const newAccessToken = localStorage.getItem("accessToken");
+  //     //     const retryResponse = await axios.post(
+  //     //       "https://localhost:7071/api/product-post",
+  //     //       formData,
+  //     //       {
+  //     //         headers: {
+  //     //           "Content-Type": "application/json",
+  //     //           Accept: "*/*",
+  //     //           Authorization: `Bearer ${newAccessToken}`,
+  //     //         },
+  //     //       }
+  //     //     );
+
+  //     //     console.log("Post created after token refresh:", retryResponse.data);
+
+  //     //     navigate("/payment", {
+  //     //       state: { formData, selectedCategoryObj, selectedCampusObj },
+  //     //     });
+  //     //   } catch (refreshError) {
+  //     //     console.error("Error refreshing token:", refreshError);
+  //     //     message.error("Failed to refresh token. Please log in again.");
+  //     //     // Redirect to login or handle logout
+  //     //   }
+  //     // } else {
+  //     //   message.error(
+  //     //     error.response?.data?.message ||
+  //     //       "Failed to create post. Please try again later."
+  //     //   );
+  //     // }
+  //   }
+  // };
+
   const onFinish = async (values) => {
     const { productName, category, price, campus, phone, duration } = values;
 
-    const newFormData = {
+    const formData = {
       title: productName,
-      description: description,
+      description, // Use state description
       price,
       categoryId: category,
       campusId: campus,
       postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
       imagesUrl: [hardcodedImageUrl],
-      fullname,
-      phone,
-      duration,
-      redirectUrl:
-        "https://sandbox.vnpayment.vn/paymentv2/Transaction/PaymentMethod.html?token=8df338774db14acb9b4a136ffc4143f2",
+      redirectUrl: "http://localhost:3000/",
     };
 
-    console.log("Posting form data:", newFormData);
+    console.log("Posting form data:", formData);
 
     try {
       const accessToken = localStorage.getItem("accessToken");
+      console.log("accessToken", accessToken);
       const response = await axios.post(
         "https://localhost:7071/api/product-post",
-        newFormData,
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -81,51 +153,22 @@ const PostCreate = () => {
           },
         }
       );
-
       console.log("Post created:", response.data);
-
-      // Set form data after successful post creation
-      setFormData(newFormData);
-
-      // Set redirect URL after successful post creation
-      setRedirectUrl(newFormData.redirectUrl);
+      window.open(response.data);
+      // navigate("/payment", {
+      //   state: { formData, selectedCategoryObj, selectedCampusObj },
+      // });
     } catch (error) {
       console.error("Error creating post:", error);
-      if (error.response && error.response.status === 401) {
-        try {
-          await refreshAccessToken();
-          // Retry original request
-          const newAccessToken = localStorage.getItem("accessToken");
-          const retryResponse = await axios.post(
-            "https://localhost:7071/api/product-post",
-            newFormData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "*/*",
-                Authorization: `Bearer ${newAccessToken}`,
-              },
-            }
-          );
-
-          console.log("Post created after token refresh:", retryResponse.data);
-
-          // Set form data after successful post creation
-          setFormData(newFormData);
-
-          // Set redirect URL after successful post creation
-          setRedirectUrl(newFormData.redirectUrl);
-        } catch (refreshError) {
-          console.error("Error refreshing token:", refreshError);
-          message.error("Failed to refresh token. Please log in again.");
-          // Redirect to login or handle logout
-        }
-      } else {
-        message.error(
-          error.response?.data?.message ||
-            "Failed to create post. Please try again later."
-        );
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
       }
+      message.error(
+        error.response?.data?.message ||
+          "Failed to create post. Please try again later."
+      );
     }
   };
 
@@ -145,15 +188,6 @@ const PostCreate = () => {
       throw new Error("Error refreshing token");
     }
   };
-
-  // Handle redirect after setting redirectUrl state
-  useEffect(() => {
-    if (redirectUrl) {
-      navigate(redirectUrl, {
-        state: { formData, selectedCategoryObj, selectedCampusObj },
-      });
-    }
-  }, [redirectUrl, navigate, formData, selectedCategoryObj, selectedCampusObj]);
 
   return (
     <div className="post-create-container">
@@ -265,7 +299,6 @@ const PostCreate = () => {
           </Form.Item>
         </Form>
       </Card>
-
       {/* Display hardcoded image */}
       <Card title="Add Image" className="post-create-image">
         <div className="upload-image-container">
