@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, message } from "antd";
+import { Card, Button } from "antd";
 import axiosInstance from "../../../authService";
 import { useAuth } from "../../Hook/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -99,14 +99,11 @@ const SellerPosts = () => {
                 )}
               </div>
               <div className="post-details">
-                <p>{post.description}</p>
+                <p>Description: {post.description}</p>
                 <p>Price: {post.price}</p>
                 <p>Category: {post.category}</p>
                 <p>Post Mode: {post.postMode}</p>
                 <p>Campus: {post.campus}</p>
-                <p>Created By: {post.createdBy.fullName}</p>
-                <p>Email: {post.createdBy.email}</p>
-                <p>Phone: {post.createdBy.phoneNumber}</p>
                 <p>
                   Created Date:{" "}
                   {new Date(post.createdDate).toLocaleDateString()}

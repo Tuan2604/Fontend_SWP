@@ -43,9 +43,9 @@ const PurchasedList = () => {
     <div className="purchased-list">
       <Card title="Purchased Items" className="payment-card">
         {purchasedItems.length > 0 ? (
-          <ul className="purchased-items-list">
+          <div className="purchased-items-grid">
             {purchasedItems.map((item) => (
-              <li key={item.id} className="purchased-item">
+              <div key={item.id} className="purchased-item">
                 <div className="item-header">
                   <h2>{item.title}</h2>
                   {item.imageUrls && item.imageUrls.length > 0 && (
@@ -56,22 +56,12 @@ const PurchasedList = () => {
                     />
                   )}
                 </div>
-                <p>{item.description}</p>
+                <p>Description: {item.description}</p>
                 <p>Price: {item.price}</p>
                 <p>Category: {item.category}</p>
-                <p>Post Mode: {item.postMode}</p>
                 <p>Campus: {item.campus}</p>
-                <p>Created By: {item.createdBy.fullName}</p>
                 <p>Email: {item.createdBy.email}</p>
                 <p>Phone: {item.createdBy.phoneNumber}</p>
-                <p>
-                  Created Date:{" "}
-                  {new Date(item.createdDate).toLocaleDateString()}
-                </p>
-                <p>
-                  Expired Date:{" "}
-                  {new Date(item.expiredDate).toLocaleDateString()}
-                </p>
                 <Button
                   type="primary"
                   danger
@@ -80,9 +70,9 @@ const PurchasedList = () => {
                 >
                   Report
                 </Button>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p>No purchased items found.</p>
         )}
