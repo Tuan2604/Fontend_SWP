@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "antd";
+import { Card, Button } from "antd";
 import axiosInstance from "../../../axiosConfig";
 import "./Purchased list.css";
 
@@ -24,6 +24,11 @@ const PurchasedList = () => {
       setError("Failed to fetch purchased items. Please try again later.");
       setLoading(false);
     }
+  };
+
+  const handleReport = (itemId) => {
+    console.log(`Report item with ID: ${itemId}`);
+    // Implement your report functionality here
   };
 
   if (loading) {
@@ -67,6 +72,14 @@ const PurchasedList = () => {
                   Expired Date:{" "}
                   {new Date(item.expiredDate).toLocaleDateString()}
                 </p>
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => handleReport(item.id)}
+                  className="report-button"
+                >
+                  Report
+                </Button>
               </li>
             ))}
           </ul>

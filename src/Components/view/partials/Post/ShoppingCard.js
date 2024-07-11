@@ -12,7 +12,7 @@ const ShoppingCard = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const fetchData = async () => {
     try {
@@ -25,10 +25,11 @@ const ShoppingCard = () => {
 
   const fetchCardsData = async () => {
     const userToken = localStorage.getItem("accessToken");
+    const pageIndex = currentPage - 1; // Adjusting pageIndex to start from 0 for API
 
     try {
       const response = await axios.get(
-        `https://localhost:7071/api/product-post/others?pageIndex=${currentPage}`,
+        `https://localhost:7071/api/product-post/others?pageIndex=${pageIndex}`,
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -83,6 +84,14 @@ const ShoppingCard = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
   const handleBuyNow = async (postId) => {
     try {
       const userToken = localStorage.getItem("accessToken");
@@ -123,7 +132,7 @@ const ShoppingCard = () => {
             <div className="card-content">
               <h3 className="card-title">{card.title}</h3>
               <p className="card-description">{card.description}</p>
-              <p className="card-price">{card.price}</p>
+              <p className="card-price">{formatPrice(card.price)}</p>
               <div className="card-buttons">
                 <button
                   className="buy-now-button"
