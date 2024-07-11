@@ -16,7 +16,7 @@ const PostCreate = () => {
   const [description, setDescription] = useState(""); // State mới để lưu mô tả sản phẩm
   const navigate = useNavigate();
   const hardcodedImageUrl =
-    "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474088jmW/anh-cay-bang-mua-la-rung_093243431.jpg";
+    "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg";
 
   useEffect(() => {
     const fetchCategoriesAndCampuses = async () => {

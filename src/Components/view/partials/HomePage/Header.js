@@ -128,7 +128,7 @@ const Header = () => {
                   </a>
                   {showMenu && (
                     <ul className="dropdown-menu">
-                      <li>
+                      {/* <li>
                         <Link to="/tai-lieu">
                           <FontAwesomeIcon icon={faBook} /> Tài liệu
                         </Link>
@@ -147,17 +147,29 @@ const Header = () => {
                         <Link to="/thiet-bi-hoc-tap">
                           <FontAwesomeIcon icon={faTools} /> Thiết bị học tập
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/post-create">
                           <FontAwesomeIcon icon={faFile} /> Create Post
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link to="/list-buyer">
                           <FontAwesomeIcon icon={faListAlt} /> ListBuyer
                         </Link>
+                      </li> */}
+                      <li>
+                        <Link to="/list-seller">
+                          <FontAwesomeIcon icon={faListAlt} /> ListSeller
+                        </Link>
                       </li>
+
+                      <li>
+                        <Link to="/seller-history">
+                          <FontAwesomeIcon icon={faListAlt} /> SellerHistory
+                        </Link>
+                      </li>
+
                       <li>
                         <Link to="/purchased-list">
                           <FontAwesomeIcon icon={faListAlt} /> Purchased list

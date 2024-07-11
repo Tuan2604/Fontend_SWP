@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,13 +21,15 @@ import PaySuccess from "./Components/view/Payment/PaySuccess";
 import CategoryManagementPage from "./Components/admin/View/Category/Category";
 import PayFail from "./Components/view/Payment/Payfail";
 import ProductPostList from "./Components/Moderator/view/BrowserPost/ProductPostList";
-import ListBuyer from "./Components/view/ListBuyer/ListBuyer"; // Import ListBuyer component
-import PurchasedList from "./Components/view/purchased list/Purchased list"; // Import PurchasedList component
+import ListBuyer from "./Components/view/ListBuyer/ListBuyer";
+import PurchasedList from "./Components/view/purchased list/Purchased list";
 import Dashboard from "./Components/admin/View/Dashboard/Dashboard";
+import SellerPosts from "./Components/view/ListSeller/ListSeller";
+import BuyerHistory from "./Components/view/Buyer history/BuyerHistory"; // Import your component
 
 import "./transitions.css";
-
 import { useAuth } from "./Components/Hook/useAuth";
+import SellerPostsHis from "./Components/view/Seller history/Seller history";
 
 const App = () => {
   const location = useLocation();
@@ -71,7 +73,7 @@ const App = () => {
             />
             <Route path="/payment" element={<Payment />} />
             <Route path="/payment/payment-success" element={<PaySuccess />} />
-            <Route path="/payfail" element={<PayFail />} />
+            <Route path="/payment/payfail" element={<PayFail />} />
             <Route
               path="/admin"
               element={
@@ -92,7 +94,6 @@ const App = () => {
                 )
               }
             />
-
             <Route
               path="/admin/dashboard"
               element={
@@ -103,7 +104,6 @@ const App = () => {
                 )
               }
             />
-
             <Route
               path="/admin/campus-management"
               element={
@@ -124,7 +124,6 @@ const App = () => {
                 )
               }
             />
-
             <Route
               path="/moderator"
               element={
@@ -147,7 +146,14 @@ const App = () => {
                 )
               }
             />
-            <Route path="/list-buyer" element={<ListBuyer />} />
+            <Route
+              path="/buyer-history/:postId"
+              element={<BuyerHistory />} // Route for buyer history
+            />
+            <Route path="/seller-history" element={<SellerPostsHis />} />
+            <Route path="/list-seller" element={<SellerPosts />} />
+            <Route path="/buyer-details/:postId" element={<ListBuyer />} />{" "}
+            {/* Add route for buyer details */}
             <Route path="/purchased-list" element={<PurchasedList />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Modal, Button, Checkbox, message } from "antd";
+import { message } from "antd";
 import axiosInstance from "../../../authService";
 import { useAuth } from "../../Hook/useAuth";
 import "./PostApplyDetails.css";
 
-const PostApplyDetails = () => {
+const PostApplyDetailsHistory = () => {
   const { postId: postIdFromUrl } = useParams(); // Get the postId from URL
   const [postApplies, setPostApplies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [postId, setPostId] = useState(postIdFromUrl || "");
   const { userInformation } = useAuth();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchPostIdAndApplies = async () => {
     try {
@@ -22,7 +20,7 @@ const PostApplyDetails = () => {
       // If no postId is provided in the URL, fetch the pending post
       if (!postIdFromUrl) {
         const postResponse = await axiosInstance.get(
-          `https://localhost:7071/api/product-post/me?status=Pending`
+          `https://localhost:7071/api/product-post/me?status=Closed`
         );
         id = postResponse.data[0]?.id;
         setPostId(id);
@@ -86,56 +84,6 @@ const PostApplyDetails = () => {
     }
   };
 
-  const handleClosePost = async () => {
-    try {
-      const selectedIdsString = selectedIds.join(",");
-      const response = await axiosInstance.put(
-        `https://localhost:7071/api/product-post/close/${postId}`,
-        selectedIdsString,
-
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Post closed successfully.");
-        message.success("The post has been closed successfully.");
-        setPostApplies([]);
-      } else {
-        throw new Error("Failed to close the post.");
-      }
-    } catch (error) {
-      console.error("Failed to close the post:", error.message);
-      setError("Failed to close the post.");
-    }
-  };
-
-  const handleCheckboxChange = (id) => {
-    const isSelected = selectedIds.includes(id);
-    if (isSelected) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = async () => {
-    await handleClosePost();
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   if (loading) {
     return <div className="post-apply-details">Loading...</div>;
   }
@@ -154,10 +102,6 @@ const PostApplyDetails = () => {
       <div className="post-apply-list">
         {postApplies.map((apply) => (
           <div key={apply.id} className="apply-item">
-            <Checkbox
-              onChange={() => handleCheckboxChange(apply.id)}
-              checked={selectedIds.includes(apply.id)}
-            />
             {apply.buyerInfo?.email !== userInformation?.email && (
               <>
                 {apply.message && (
@@ -184,19 +128,8 @@ const PostApplyDetails = () => {
           </div>
         ))}
       </div>
-      <Button onClick={showModal} className="close-post-button">
-        Close Post
-      </Button>
-      <Modal
-        title="Confirm Close Post"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>Are you sure you want to close this post?</p>
-      </Modal>
     </div>
   );
 };
 
-export default PostApplyDetails;
+export default PostApplyDetailsHistory;

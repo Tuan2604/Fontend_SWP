@@ -1,0 +1,35 @@
+.post-apply-details {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-apply-details h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.post-apply-list {
+  margin-top: 20px;
+}
+
+.apply-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.apply-item p {
+  margin: 5px 0;
+}
+
+.apply-item strong {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #333;
+}
