@@ -137,9 +137,7 @@ const ProductPostList = () => {
   ];
 
   return (
-    <ModLayout>
-      {showHeader && <h1>Product Post List</h1>}{" "}
-      {/* Conditionally render the header */}
+    <ModLayout showHeader={showHeader}>
       <Table dataSource={posts} columns={columns} rowKey="id" />
     </ModLayout>
   );

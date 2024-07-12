@@ -1,43 +1,43 @@
 .purchased-list {
-  background-color: white;
+  display: flex;
+  justify-content: center;
   padding: 20px;
-  margin: 0 auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .payment-card {
   width: 100%;
-  max-width: 550px;
-  margin: 0 auto;
+  max-width: 1200px; /* Increase max-width to accommodate more items */
 }
 
 .purchased-items-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 20px;
+  justify-content: center; /* Center the items */
 }
 
 .purchased-item {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(25% - 20px); /* Adjust width to fit four items in a row */
+  border: 1px solid #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .item-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.item-header h2 {
-  flex: 1;
-  margin-right: 20px;
 }
 
 .item-image {
+  width: 100%;
   max-width: 200px;
-  border-radius: 5px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .report-button {

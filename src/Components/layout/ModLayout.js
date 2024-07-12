@@ -4,6 +4,7 @@ import {
   MenuUnfoldOutlined,
   LogoutOutlined,
   UserOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import { MdApartment } from "react-icons/md";
 import { Layout, Menu, Button, theme } from "antd";
@@ -55,10 +56,19 @@ const ModLayout = ({ children, showHeader = true }) => {
           <Menu.Item
             key="1"
             icon={<UserOutlined />}
-            onClick={() => handleNavigate("product-post-list")}
+            onClick={() => handleNavigate("browser-post")}
           >
             Product Post List
           </Menu.Item>
+
+          <Menu.Item
+            key="2"
+            icon={<AppstoreOutlined />}
+            onClick={() => handleNavigate("dashboard")}
+          >
+            Dashboard
+          </Menu.Item>
+
           <Menu.Item
             key="logout"
             onClick={handleLogout}

@@ -1,61 +1,43 @@
-.seller-posts {
+.buyer-history {
   display: flex;
   justify-content: center;
   padding: 20px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.seller-posts-card {
+.buyer-history-card {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1200px; /* Increase max-width to accommodate more items */
 }
 
 .post-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  list-style: none;
+  justify-content: center; /* Center align the items */
 }
 
 .post-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(50% - 20px); /* Adjust width as needed */
+  width: calc(33% - 20px); /* Adjust width to fit three items in a row */
   border: 1px solid #f0f0f0;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
 .item-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.item-header h2 {
-  margin-bottom: 10px;
-  text-align: center;
+  text-align: center; /* Center align the text */
 }
 
 .item-image {
   width: 100%;
-  max-width: 200px; /* Adjust max-width as needed */
+  max-width: 150px; /* Reduce max-width */
   height: auto;
   border-radius: 10px;
   margin-bottom: 10px;
-}
-
-.post-details {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.post-details p {
-  margin: 5px 0;
-}
-
-.report-button {
-  margin-top: 10px;
 }

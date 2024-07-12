@@ -84,7 +84,7 @@ const SellerPosts = () => {
 
   return (
     <div className="seller-posts">
-      <Card title="My Pending Posts" className="seller-posts-card">
+      <Card title="List Seller" className="seller-posts-card">
         <div className="post-list">
           {sellerPosts.map((post) => (
             <div key={post.id} className="post-item">

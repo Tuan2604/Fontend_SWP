@@ -3,17 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faBook,
-  faBox,
   faFile,
-  faPen,
-  faSearch,
+  faListAlt,
   faSignInAlt,
   faSignOutAlt,
-  faTools,
   faUserPlus,
   faUserCircle,
-  faListAlt, // Import the ListAlt icon for ListBuyer
+  faSearch,
+  faList,
+  faHistory,
+  faCheckCircle,
+  faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 import { useAuth } from "../../../Hook/useAuth";
@@ -128,7 +128,46 @@ const Header = () => {
                   </a>
                   {showMenu && (
                     <ul className="dropdown-menu">
-                      {/* <li>
+                      <li>
+                        <Link to="/post-create">
+                          <FontAwesomeIcon icon={faFile} /> Create Post
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/list-seller">
+                          <FontAwesomeIcon icon={faList} /> List Seller
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/buyer-success">
+                          <FontAwesomeIcon icon={faCheckCircle} /> Buyer Success
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/seller-history">
+                          <FontAwesomeIcon icon={faHistory} /> Seller History
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/purchased-list">
+                          <FontAwesomeIcon icon={faClipboardList} /> Purchased
+                          List
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
+/* <li>
                         <Link to="/tai-lieu">
                           <FontAwesomeIcon icon={faBook} /> Tài liệu
                         </Link>
@@ -147,44 +186,4 @@ const Header = () => {
                         <Link to="/thiet-bi-hoc-tap">
                           <FontAwesomeIcon icon={faTools} /> Thiết bị học tập
                         </Link>
-                      </li> */}
-                      <li>
-                        <Link to="/post-create">
-                          <FontAwesomeIcon icon={faFile} /> Create Post
-                        </Link>
-                      </li>
-                      {/* <li>
-                        <Link to="/list-buyer">
-                          <FontAwesomeIcon icon={faListAlt} /> ListBuyer
-                        </Link>
-                      </li> */}
-                      <li>
-                        <Link to="/list-seller">
-                          <FontAwesomeIcon icon={faListAlt} /> ListSeller
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link to="/seller-history">
-                          <FontAwesomeIcon icon={faListAlt} /> SellerHistory
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link to="/purchased-list">
-                          <FontAwesomeIcon icon={faListAlt} /> Purchased list
-                        </Link>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </nav>
-    </header>
-  );
-};
-
-export default Header;
+                      </li> */

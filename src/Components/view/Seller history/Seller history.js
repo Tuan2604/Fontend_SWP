@@ -84,7 +84,7 @@ const SellerPostsHis = () => {
 
   return (
     <div className="seller-posts">
-      <Card title="My Pending Posts" className="seller-posts-card">
+      <Card title="Seller History" className="seller-posts-card">
         <div className="post-list">
           {sellerPosts.map((post) => (
             <div key={post.id} className="post-item">
@@ -99,14 +99,11 @@ const SellerPostsHis = () => {
                 )}
               </div>
               <div className="post-details">
-                <p>{post.description}</p>
+                <p>Description: {post.description}</p>
                 <p>Price: {post.price}</p>
                 <p>Category: {post.category}</p>
                 <p>Post Mode: {post.postMode}</p>
                 <p>Campus: {post.campus}</p>
-                <p>Created By: {post.createdBy.fullName}</p>
-                <p>Email: {post.createdBy.email}</p>
-                <p>Phone: {post.createdBy.phoneNumber}</p>
                 <p>
                   Created Date:{" "}
                   {new Date(post.createdDate).toLocaleDateString()}

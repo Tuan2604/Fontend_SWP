@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Select, Card, message } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./PostCreate.css";
 
@@ -11,34 +11,37 @@ const PostCreate = () => {
   const [fullname, setFullname] = useState("");
   const [categories, setCategories] = useState([]);
   const [campuses, setCampuses] = useState([]);
+  const [durations, setDurations] = useState([]);
   const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
-  const [description, setDescription] = useState(""); // State mới để lưu mô tả sản phẩm
+  const [description, setDescription] = useState("");
+  const [selectedDuration, setSelectedDuration] = useState(null);
   const navigate = useNavigate();
   const hardcodedImageUrl =
     "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg";
 
   useEffect(() => {
-    const fetchCategoriesAndCampuses = async () => {
+    const fetchInitialData = async () => {
       try {
-        const [categoriesResponse, campusesResponse] = await Promise.all([
-          axios.get("https://localhost:7071/api/category"),
-          axios.get(
-            "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
-          ),
-        ]);
+        const [categoriesResponse, campusesResponse, durationsResponse] =
+          await Promise.all([
+            axios.get("https://localhost:7071/api/category"),
+            axios.get(
+              "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10"
+            ),
+            axios.get("https://localhost:7071/api/post-mode/active"),
+          ]);
 
         setCategories(categoriesResponse.data);
         setCampuses(campusesResponse.data);
+        setDurations(durationsResponse.data);
       } catch (error) {
-        console.error("Error fetching categories and campuses:", error);
-        message.error(
-          "Failed to fetch categories and campuses. Please try again later."
-        );
+        console.error("Error fetching data:", error);
+        message.error("Failed to fetch data. Please try again later.");
       }
     };
 
-    fetchCategoriesAndCampuses();
+    fetchInitialData();
 
     const storedFullname = localStorage.getItem("fullname");
     if (storedFullname) {
@@ -46,93 +49,16 @@ const PostCreate = () => {
     }
   }, []);
 
-  // const onFinish = async (values) => {
-  //   const { productName, category, price, campus, phone, duration } = values;
-
-  //   const formData = {
-  //     title: productName,
-  //     description: description, // Sử dụng state mô tả sản phẩm
-  //     price,
-  //     categoryId: category,
-  //     campusId: campus,
-  //     postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
-  //     imagesUrl: [hardcodedImageUrl],
-  //     fullname,
-  //     phone,
-  //     duration,
-  //     productName,
-  //     campus,
-  //   };
-
-  //   console.log("Posting form data:", formData);
-
-  //   try {
-  //     const accessToken = localStorage.getItem("accessToken");
-  //     console.log("accessToken", accessToken);
-  //     const response = await axios.post(
-  //       "https://localhost:7071/api/product-post",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "*/*",
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     );
-  //     console.log("Post created:", response.data);
-
-  //     // navigate("/payment", {
-  //     //   state: { formData, selectedCategoryObj, selectedCampusObj },
-  //     // });
-  //   } catch (error) {
-  //     console.error("Error creating post:", error);
-  //     // if (error.response && error.response.status === 401) {
-  //     //   try {
-  //     //     await refreshAccessToken();
-  //     //     // Retry original request
-  //     //     const newAccessToken = localStorage.getItem("accessToken");
-  //     //     const retryResponse = await axios.post(
-  //     //       "https://localhost:7071/api/product-post",
-  //     //       formData,
-  //     //       {
-  //     //         headers: {
-  //     //           "Content-Type": "application/json",
-  //     //           Accept: "*/*",
-  //     //           Authorization: `Bearer ${newAccessToken}`,
-  //     //         },
-  //     //       }
-  //     //     );
-
-  //     //     console.log("Post created after token refresh:", retryResponse.data);
-
-  //     //     navigate("/payment", {
-  //     //       state: { formData, selectedCategoryObj, selectedCampusObj },
-  //     //     });
-  //     //   } catch (refreshError) {
-  //     //     console.error("Error refreshing token:", refreshError);
-  //     //     message.error("Failed to refresh token. Please log in again.");
-  //     //     // Redirect to login or handle logout
-  //     //   }
-  //     // } else {
-  //     //   message.error(
-  //     //     error.response?.data?.message ||
-  //     //       "Failed to create post. Please try again later."
-  //     //   );
-  //     // }
-  //   }
-  // };
-
   const onFinish = async (values) => {
     const { productName, category, price, campus, phone, duration } = values;
 
     const formData = {
       title: productName,
-      description, // Use state description
+      description,
       price,
       categoryId: category,
       campusId: campus,
-      postModeId: "cc9a5169-452e-42a6-ae1e-cbc43b9d2448",
+      postMode: duration, // Updated field for duration
       imagesUrl: [hardcodedImageUrl],
       redirectUrl: "http://localhost:3000",
     };
@@ -157,9 +83,6 @@ const PostCreate = () => {
       console.log("payment id:", response.data.paymentId);
       localStorage.setItem("paymentId", response.data.paymentId);
       window.open(response.data.paymentUrl);
-      // navigate("/payment", {
-      //   state: { formData, selectedCategoryObj, selectedCampusObj },
-      // });
     } catch (error) {
       console.error("Error creating post:", error);
       if (error.response) {
@@ -174,23 +97,6 @@ const PostCreate = () => {
     }
   };
 
-  const refreshAccessToken = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    try {
-      const response = await axios.post(
-        "https://localhost:7071/api/refresh-token",
-        { refreshToken }
-      );
-
-      const { accessToken } = response.data;
-      localStorage.setItem("accessToken", accessToken);
-      return accessToken;
-    } catch (error) {
-      throw new Error("Error refreshing token");
-    }
-  };
-
   return (
     <div className="post-create-container">
       <Card title="Create New Post" className="post-create-form">
@@ -199,6 +105,15 @@ const PostCreate = () => {
           name="create_post"
           onFinish={onFinish}
           layout="vertical"
+          initialValues={{
+            productName: "",
+            description: "",
+            category: undefined,
+            price: "",
+            campus: undefined,
+            phone: "",
+            duration: undefined,
+          }}
         >
           <Form.Item
             name="productName"
@@ -271,10 +186,7 @@ const PostCreate = () => {
             name="phone"
             label="Contact Phone Number"
             rules={[
-              {
-                required: true,
-                message: "Please enter contact phone number",
-              },
+              { required: true, message: "Please enter contact phone number" },
               {
                 pattern: new RegExp(/^[0-9\b]+$/),
                 message: "Please enter a valid phone number",
@@ -289,8 +201,17 @@ const PostCreate = () => {
             label="Post Duration"
             rules={[{ required: true, message: "Please select post duration" }]}
           >
-            <Select placeholder="Select post duration">
-              <Option value="7 days">7 days</Option>
+            <Select
+              placeholder="Select post duration"
+              onChange={(value) => {
+                setSelectedDuration(durations.find((dur) => dur.id === value));
+              }}
+            >
+              {durations.map((duration) => (
+                <Option key={duration.id} value={duration.id}>
+                  {duration.type} - {duration.price} VNĐ
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -301,7 +222,6 @@ const PostCreate = () => {
           </Form.Item>
         </Form>
       </Card>
-      {/* Display hardcoded image */}
       <Card title="Add Image" className="post-create-image">
         <div className="upload-image-container">
           <img

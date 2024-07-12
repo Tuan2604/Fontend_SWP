@@ -23,13 +23,15 @@ import PayFail from "./Components/view/Payment/Payfail";
 import ProductPostList from "./Components/Moderator/view/BrowserPost/ProductPostList";
 import ListBuyer from "./Components/view/ListBuyer/ListBuyer";
 import PurchasedList from "./Components/view/purchased list/Purchased list";
-import Dashboard from "./Components/admin/View/Dashboard/Dashboard";
+import Dashboard from "./Components/Moderator/view/Dashboard/Dashboard";
 import SellerPosts from "./Components/view/ListSeller/ListSeller";
-import BuyerHistory from "./Components/view/Buyer history/BuyerHistory"; // Import your component
+import BuyerHistory from "./Components/view/Buyer history/BuyerHistory";
+import BuyerSuccess from "./Components/view/Buy Successfull/BuySuccess";
 
 import "./transitions.css";
 import { useAuth } from "./Components/Hook/useAuth";
 import SellerPostsHis from "./Components/view/Seller history/Seller history";
+import ProtectedRoute from "./ProtectedRoute";
 
 const App = () => {
   const location = useLocation();
@@ -42,6 +44,11 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("isLoggedIn", isLoggedIn);
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    const path = location.pathname.split("/")[1];
+    setShowHeader(path !== "moderator");
+  }, [location]);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -77,83 +84,79 @@ const App = () => {
             <Route
               path="/admin"
               element={
-                isLoggedIn ? (
+                <ProtectedRoute allowedRoles={["Admin"]}>
                   <Navigate to="/admin/user-management" />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
               path="/admin/user-management"
               element={
-                isLoggedIn ? (
+                <ProtectedRoute allowedRoles={["Admin"]}>
                   <UserManagementPage setShowHeader={setShowHeader} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/admin/dashboard"
-              element={
-                isLoggedIn ? (
-                  <Dashboard setShowHeader={setShowHeader} />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
               path="/admin/campus-management"
               element={
-                isLoggedIn ? (
+                <ProtectedRoute allowedRoles={["Admin"]}>
                   <CampusManagementPage setShowHeader={setShowHeader} />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
               path="/admin/category-management"
               element={
-                isLoggedIn ? (
+                <ProtectedRoute allowedRoles={["Admin"]}>
                   <CategoryManagementPage setShowHeader={setShowHeader} />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
               path="/moderator"
               element={
-                isLoggedIn &&
-                userInformation?.userInfo?.role === "Moderator" ? (
+                <ProtectedRoute allowedRoles={["Moderator"]}>
                   <Navigate to="/moderator/browser-post" />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
               path="/moderator/browser-post"
               element={
-                isLoggedIn &&
-                userInformation?.userInfo?.role === "Moderator" ? (
+                <ProtectedRoute allowedRoles={["Moderator"]}>
                   <ProductPostList setShowHeader={setShowHeader} />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                </ProtectedRoute>
               }
             />
             <Route
-              path="/buyer-history/:postId"
-              element={<BuyerHistory />} // Route for buyer history
+              path="/moderator/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["Moderator"]}>
+                  <Dashboard setShowHeader={setShowHeader} />
+                </ProtectedRoute>
+              }
             />
+            ƯS
+            <Route
+              path="/buyer-history/:postId"
+              element={
+                <ProtectedRoute allowedRoles={["Buyer"]}>
+                  <BuyerHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/buyer-success" element={<BuyerSuccess />} />
             <Route path="/seller-history" element={<SellerPostsHis />} />
             <Route path="/list-seller" element={<SellerPosts />} />
-            <Route path="/buyer-details/:postId" element={<ListBuyer />} />{" "}
-            {/* Add route for buyer details */}
+            <Route
+              path="/buyer-details/:postId"
+              element={
+                <ProtectedRoute allowedRoles={["Buyer"]}>
+                  <ListBuyer />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/purchased-list" element={<PurchasedList />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

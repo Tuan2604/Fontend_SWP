@@ -45,19 +45,8 @@ const Login = ({ onLogin }) => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
 
-        console.log("Access Token Role:", response.data.userInfo.role);
-
         setUserInformation(response.data);
         setIsLogin(true);
-
-        // Redirect based on user role
-        if (response.data.userInfo.role === "Admin") {
-          navigate("/admin");
-        } else if (response.data.userInfo.role === "Moderator") {
-          navigate("/moderator");
-        } else {
-          navigate("/");
-        }
       } else {
         throw new Error(response.data.message || "Invalid email or password");
       }
