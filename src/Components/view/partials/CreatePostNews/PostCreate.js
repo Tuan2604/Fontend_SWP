@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Card, message } from "antd";
+import { Form, Input, Button, Select, Card, message, Upload } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { storage } from "../../../../Firebase"; // Import Firebase storage
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import "./PostCreate.css";
 
 const { Option } = Select;
@@ -16,9 +18,9 @@ const PostCreate = () => {
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
   const [description, setDescription] = useState("");
   const [selectedDuration, setSelectedDuration] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
-  const hardcodedImageUrl =
-    "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg";
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -49,25 +51,50 @@ const PostCreate = () => {
     }
   }, []);
 
+  const handleUpload = async (file) => {
+    setUploading(true);
+    const storageRef = ref(storage, `images/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.error("Error uploading file:", error);
+        setUploading(false);
+        message.error("Failed to upload image. Please try again.");
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        setImageUrl(downloadURL);
+        setUploading(false);
+        message.success("Image uploaded successfully.");
+      }
+    );
+  };
+
   const onFinish = async (values) => {
     const { productName, category, price, campus, phone, duration } = values;
 
     const formData = {
       title: productName,
-      description,
-      price,
-      categoryId: category,
-      campusId: campus,
-      postMode: duration, // Updated field for duration
-      imagesUrl: [hardcodedImageUrl],
+      description: "Sample Description", // Replace with actual description if available
+      price: price.toString(), // Convert price to string if needed
+      categoryId: category, // Ensure this is a valid category ID
+      campusId: campus, // Ensure this is a valid campus ID
+      postModeId: duration, // Ensure this is a valid post mode ID
+      imagesUrl: [imageUrl], // Ensure imageUrl is correctly set
       redirectUrl: "http://localhost:3000",
     };
 
-    console.log("Posting form data:", formData);
+    console.log("Form data being sent:", formData);
 
     try {
       const accessToken = localStorage.getItem("accessToken");
-      console.log("accessToken", accessToken);
       const response = await axios.post(
         "https://localhost:7071/api/product-post",
         formData,
@@ -85,15 +112,18 @@ const PostCreate = () => {
       window.open(response.data.paymentUrl);
     } catch (error) {
       console.error("Error creating post:", error);
+
       if (error.response) {
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
         console.error("Error response headers:", error.response.headers);
+        message.error(
+          error.response.data.message ||
+            "Failed to create post. Please try again later."
+        );
+      } else {
+        message.error("Failed to create post. Please try again later.");
       }
-      message.error(
-        error.response?.data?.message ||
-          "Failed to create post. Please try again later."
-      );
     }
   };
 
@@ -215,21 +245,32 @@ const PostCreate = () => {
             </Select>
           </Form.Item>
 
+          <Form.Item
+            label="Upload Image"
+            rules={[{ required: true, message: "Please upload an image" }]}
+          >
+            <Upload
+              customRequest={({ file, onSuccess }) => {
+                handleUpload(file);
+                onSuccess("ok"); // Indicate that the upload was successful
+              }}
+              listType="picture"
+            >
+              <Button>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
+
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Create Post
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={uploading}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Create Post"}
             </Button>
           </Form.Item>
         </Form>
-      </Card>
-      <Card title="Add Image" className="post-create-image">
-        <div className="upload-image-container">
-          <img
-            src={hardcodedImageUrl}
-            style={{ width: "100%", marginBottom: "10px" }}
-            alt="Post"
-          />
-        </div>
       </Card>
     </div>
   );
