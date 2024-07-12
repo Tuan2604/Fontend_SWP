@@ -139,11 +139,6 @@ const Header = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/buyer-success">
-                          <FontAwesomeIcon icon={faCheckCircle} /> Buyer Success
-                        </Link>
-                      </li>
-                      <li>
                         <Link to="/seller-history">
                           <FontAwesomeIcon icon={faHistory} /> Seller History
                         </Link>
@@ -153,6 +148,12 @@ const Header = () => {
                           <FontAwesomeIcon icon={faClipboardList} /> Purchased
                           List
                         </Link>
+                        <li>
+                          <Link to="/buyer-success">
+                            <FontAwesomeIcon icon={faCheckCircle} /> Buyer
+                            Success
+                          </Link>
+                        </li>
                       </li>
                     </ul>
                   )}

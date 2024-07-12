@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { message } from "antd";
 import axiosInstance from "../../../authService";
 import { useAuth } from "../../Hook/useAuth";
-import "./PostApplyDetails.css";
+import "./PostApply.css";
 
 const PostApplyDetailsHistory = () => {
   const { postId: postIdFromUrl } = useParams(); // Get the postId from URL
