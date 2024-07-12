@@ -1,171 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Card, Button, Pagination, Image } from "antd";
 import axios from "axios";
-import { Typography, message } from "antd";
 import "./ShoppingCard.css";
-const { Title } = Typography;
 
 const ShoppingCard = () => {
+  const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [cardsData, setCardsData] = useState([]);
-  const itemsPerPage = 8;
+  const pageSize = 5;
 
   useEffect(() => {
-    fetchData();
+    fetchPosts();
   }, [currentPage]);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetchCardsData();
-      setCardsData(response);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const fetchCardsData = async () => {
-    const userToken = localStorage.getItem("accessToken");
-    const pageIndex = currentPage - 1; // Adjusting pageIndex to start from 0 for API
-
+  const fetchPosts = async () => {
     try {
       const response = await axios.get(
-        `https://localhost:7071/api/product-post/others?pageIndex=${pageIndex}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
+        `https://localhost:7071/api/product-post/all?status=Waiting&pageIndex=${currentPage}&pageSize=${pageSize}`
       );
-
-      const formattedData = response.data.map((item) => ({
-        ...item,
-        imageUrl: "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg",
-      }));
-
-      return formattedData;
+      setPosts(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      if (error.response && error.response.status === 401) {
-        await refreshToken(); // Refresh token if unauthorized
-        return fetchCardsData(); // Retry fetching data
-      }
-      throw error; // Re-throw the error if it's not due to unauthorized
+      console.error("Error fetching posts:", error);
     }
   };
 
-  const refreshToken = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    try {
-      const response = await axios.post(
-        "https://localhost:7071/api/refresh-token",
-        {
-          refreshToken: refreshToken,
-        }
-      );
-
-      const { accessToken } = response.data;
-      localStorage.setItem("accessToken", accessToken);
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-      // Handle token refresh failure (e.g., logout user)
-      throw error; // Re-throw the error to propagate it up
-    }
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
-  };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
-
-  const handleBuyNow = async (postId) => {
-    try {
-      const userToken = localStorage.getItem("accessToken");
-      const messageData = "Tôi muốn mua vật phẩm này"; // Replace with your message
-
-      localStorage.setItem("postId", postId); // Save postId to local storage
-
-      const response = await axios.post(
-        `https://localhost:7071/api/post-apply/${postId}`,
-        JSON.stringify(messageData), // Convert messageData to JSON string
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Successfully applied to buy:", response.data);
-      message.success("Successfully applied to buy this product!");
-      // Optionally handle success actions here (e.g., show a success message)
-    } catch (error) {
-      console.error("Error applying to buy product:", error);
-      message.error("Failed to apply to buy this product.");
-      // Optionally handle error actions here (e.g., show an error message)
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
-    <div>
-      <Title level={2} style={{ textAlign: "left", margin: "20px 0" }}>
-        PostNews
-      </Title>
-      <div className="shopping-cards-container">
-        {currentItems.map((card, index) => (
-          <div key={index} className="shopping-card">
-            <img src={card.imageUrl} alt={card.title} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{card.title}</h3>
-              <p className="card-description">{card.description}</p>
-              <p className="card-price">{formatPrice(card.price)}</p>
-              <div className="card-buttons">
-                <button
-                  className="buy-now-button"
-                  onClick={() => handleBuyNow(card.id)}
-                >
-                  Buy Now
-                </button>
-                <Link to={`/item/${card.id}`}>
-                  <button className="view-details-button">View Details</button>
-                </Link>
-              </div>
+    <div className="shopping-card-container">
+      {posts.map((post) => (
+        <Card
+          key={post.id}
+          title={post.title}
+          extra={<Button type="link">View Details</Button>}
+          style={{ marginBottom: "20px" }}
+        >
+          <div className="shopping-card-content">
+            <Image
+              width={200}
+              src={post.imagesUrl?.[0] || "default-image-url"} // Ensure default image if none is provided
+              alt={post.title}
+            />
+            <div className="shopping-card-info">
+              <p>{post.description}</p>
+              <p>Price: {post.price}</p>
+              <Button type="primary">Buy Now</Button>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="pagination">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className={`arrow-button ${currentPage === 1 ? "disabled" : ""}`}
-        >
-          &#8249; {/* Left arrow */}
-        </button>
-        <button
-          onClick={handleNextPage}
-          disabled={indexOfLastItem >= cardsData.length}
-          className={`arrow-button ${
-            indexOfLastItem >= cardsData.length ? "disabled" : ""
-          }`}
-        >
-          &#8250; {/* Right arrow */}
-        </button>
-      </div>
+        </Card>
+      ))}
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={40} // Adjust this based on your total data count
+        onChange={handlePageChange}
+        showSizeChanger={false}
+      />
     </div>
   );
 };
