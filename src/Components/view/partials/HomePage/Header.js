@@ -14,6 +14,7 @@ import {
   faHistory,
   faCheckCircle,
   faClipboardList,
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 import { useAuth } from "../../../Hook/useAuth";
@@ -23,6 +24,8 @@ const Header = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showSellerMenu, setShowSellerMenu] = useState(false);
+  const [showBuyerMenu, setShowBuyerMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [fullname, setFullname] = useState("");
 
@@ -54,6 +57,14 @@ const Header = () => {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     navigate(`/search?query=${searchQuery}`);
+  };
+
+  const toggleSellerMenu = () => {
+    setShowSellerMenu(!showSellerMenu);
+  };
+
+  const toggleBuyerMenu = () => {
+    setShowBuyerMenu(!showBuyerMenu);
   };
 
   if (userInformation?.userInfo?.role === "Admin") return null;
@@ -133,27 +144,48 @@ const Header = () => {
                           <FontAwesomeIcon icon={faFile} /> Create Post
                         </Link>
                       </li>
-                      <li>
-                        <Link to="/list-seller">
-                          <FontAwesomeIcon icon={faList} /> List Seller
-                        </Link>
+                      <li className="dropdown-submenu">
+                        <a href="#seller" onClick={toggleSellerMenu}>
+                          <FontAwesomeIcon icon={faListAlt} /> Seller
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        </a>
+                        {showSellerMenu && (
+                          <ul className="dropdown-menu">
+                            <li>
+                              <Link to="/list-seller">
+                                <FontAwesomeIcon icon={faList} /> List Seller
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/seller-history">
+                                <FontAwesomeIcon icon={faHistory} /> Seller
+                                History
+                              </Link>
+                            </li>
+                          </ul>
+                        )}
                       </li>
-                      <li>
-                        <Link to="/seller-history">
-                          <FontAwesomeIcon icon={faHistory} /> Seller History
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/purchased-list">
-                          <FontAwesomeIcon icon={faClipboardList} /> Purchased
-                          List
-                        </Link>
-                        <li>
-                          <Link to="/buyer-success">
-                            <FontAwesomeIcon icon={faCheckCircle} /> Buyer
-                            Success
-                          </Link>
-                        </li>
+                      <li className="dropdown-submenu">
+                        <a href="#buyer" onClick={toggleBuyerMenu}>
+                          <FontAwesomeIcon icon={faClipboardList} /> Buyer
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        </a>
+                        {showBuyerMenu && (
+                          <ul className="dropdown-menu">
+                            <li>
+                              <Link to="/purchased-list">
+                                <FontAwesomeIcon icon={faClipboardList} />{" "}
+                                Purchased List
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/buyer-success">
+                                <FontAwesomeIcon icon={faCheckCircle} /> Buyer
+                                Success
+                              </Link>
+                            </li>
+                          </ul>
+                        )}
                       </li>
                     </ul>
                   )}
@@ -168,23 +200,3 @@ const Header = () => {
 };
 
 export default Header;
-/* <li>
-                        <Link to="/tai-lieu">
-                          <FontAwesomeIcon icon={faBook} /> Tài liệu
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/dung-cu-hoc-tap">
-                          <FontAwesomeIcon icon={faPen} /> Dụng cụ học tập
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/vat-pham">
-                          <FontAwesomeIcon icon={faBox} /> Vật phẩm
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/thiet-bi-hoc-tap">
-                          <FontAwesomeIcon icon={faTools} /> Thiết bị học tập
-                        </Link>
-                      </li> */

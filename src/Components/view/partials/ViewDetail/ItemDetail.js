@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Button, Typography } from "antd";
-import { PhoneOutlined, WechatOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { Typography, Button, message } from "antd";
+import { PhoneOutlined, WechatOutlined } from "@ant-design/icons";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../../Firebase"; // Adjust the path to your Firebase configuration file
 import "./ItemDetail.css";
 
 const { Title, Paragraph } = Typography;
@@ -12,29 +14,41 @@ const ItemDetail = () => {
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    const fetchItem = async () => {
+    const fetchItemDetail = async () => {
       try {
         const response = await axios.get(
           `https://localhost:7071/api/product-post/${itemId}`
         );
-        setItem(response.data);
+
+        const imageUrl = await getImageUrl(response.data.imageUrls[0]);
+
+        setItem({
+          ...response.data,
+          imageUrl,
+        });
       } catch (error) {
         console.error("Error fetching item:", error);
       }
     };
 
-    fetchItem();
+    fetchItemDetail();
   }, [itemId]);
 
-  if (!item) {
-    return <div>Loading...</div>;
-  }
+  const getImageUrl = async (imagePath) => {
+    if (!imagePath) {
+      console.error("Error: imagePath is empty");
+      return "default-image-url"; // Fallback to a default image URL if necessary
+    }
 
-  // Set a default image URL if item.imageUrl is not available
-  const imageUrl =
-    item.imageUrl || "https://lawnet.vn/uploads/image/2023/10/14/075118331.jpg";
+    try {
+      const imageRef = ref(storage, imagePath);
+      return await getDownloadURL(imageRef);
+    } catch (error) {
+      console.error("Error fetching image URL:", error);
+      return "default-image-url"; // Fallback to a default image URL if necessary
+    }
+  };
 
-  // Format price with thousand separators and VND suffix
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -44,9 +58,41 @@ const ItemDetail = () => {
     }).format(price);
   };
 
+  const handleBuyNow = async (postId) => {
+    try {
+      const userToken = localStorage.getItem("accessToken");
+      const messageData = "Tôi muốn mua vật phẩm này"; // Replace with your message
+
+      localStorage.setItem("postId", postId); // Save postId to local storage
+
+      const response = await axios.post(
+        `https://localhost:7071/api/post-apply/${postId}`,
+        JSON.stringify(messageData),
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Successfully applied to buy:", response.data);
+      message.success("Successfully applied to buy this product!");
+      // Optionally handle success actions here (e.g., show a success message)
+    } catch (error) {
+      console.error("Error applying to buy product:", error);
+      message.error("Failed to apply to buy this product.");
+      // Optionally handle error actions here (e.g., show an error message)
+    }
+  };
+
+  if (!item) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="item-detail-container">
-      <img src={imageUrl} alt={item.title} className="item-image" />
+      <img src={item.imageUrl} alt={item.title} className="item-image" />
       <div className="item-details">
         <Title level={2}>{item.title}</Title>
         <Paragraph>Description: {item.description}</Paragraph>
@@ -82,15 +128,15 @@ const ItemDetail = () => {
             Gọi điện
           </Button>
 
-          <Link to={`/chat/${itemId}`} className="chat-link">
-            <Button
-              type="default"
-              icon={<WechatOutlined />}
-              className="contact-button"
-            >
+          <Button
+            type="default"
+            icon={<WechatOutlined />}
+            className="contact-button"
+          >
+            <Link to={`/chat/${itemId}`} className="chat-link">
               Chat
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

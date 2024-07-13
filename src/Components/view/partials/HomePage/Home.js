@@ -14,6 +14,7 @@ const Home = () => {
   const location = useLocation();
   const search = new URLSearchParams(location.search);
   const statusPayment = search.get("vnp_TransactionStatus");
+  const transactionNo = search.get("vnp_TransactionNo");
   const [status, setStatus] = useState("");
   const accessToken = localStorage.getItem("accessToken");
 
@@ -64,7 +65,7 @@ const Home = () => {
       console.log("nothing");
     }
   }, [statusPayment]);
-
+  console.log("paymentId", paymentId, "status", status);
   useEffect(() => {
     if (paymentId && status) {
       axios
@@ -73,6 +74,7 @@ const Home = () => {
           {
             id: paymentId,
             status: status,
+            transactionId: transactionNo,
           },
           {
             headers: {

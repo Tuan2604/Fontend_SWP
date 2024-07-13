@@ -70,6 +70,7 @@ const PostCreate = () => {
       },
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("Image URL:", downloadURL); // Log the image URL to the console
         setImageUrl(downloadURL);
         setUploading(false);
         message.success("Image uploaded successfully.");
