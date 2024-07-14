@@ -117,7 +117,6 @@ const UserManagementPage = () => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => handleEditCategory(record)}>Edit</a>
-          <a onClick={() => handleDeleteCategory(record.id)}>Delete</a>
         </Space>
       ),
     },

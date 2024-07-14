@@ -63,10 +63,10 @@ const ModLayout = ({ children, showHeader = true }) => {
 
           <Menu.Item
             key="2"
-            icon={<AppstoreOutlined />}
-            onClick={() => handleNavigate("dashboard")}
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("dashboard2")}
           >
-            Dashboard
+            DashBoard
           </Menu.Item>
 
           <Menu.Item

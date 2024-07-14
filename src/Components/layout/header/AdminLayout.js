@@ -74,6 +74,15 @@ const AdminLayout = ({ children }) => {
           >
             Category Management
           </Menu.Item>
+
+          <Menu.Item
+            key="4"
+            icon={<AppstoreOutlined />}
+            onClick={() => handleNavigate("dashboard")}
+          >
+            Dashboard
+          </Menu.Item>
+
           <Menu.Item
             key="logout"
             onClick={handleLogout}

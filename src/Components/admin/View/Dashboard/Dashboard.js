@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import AdminLayout from "../../../layout/ModLayout";
+import AdminLayout from "../../../layout/header/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../../Hook/useAuth";

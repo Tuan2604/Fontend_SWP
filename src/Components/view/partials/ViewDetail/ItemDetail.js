@@ -119,7 +119,7 @@ const ItemDetail = () => {
           <Paragraph className="item-campus">Campus: {item.campus}</Paragraph>
         )}
 
-        <div className="contact-buttons">
+        {/* <div className="contact-buttons">
           <Button
             type="primary"
             icon={<PhoneOutlined />}
@@ -137,7 +137,7 @@ const ItemDetail = () => {
               Chat
             </Link>
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

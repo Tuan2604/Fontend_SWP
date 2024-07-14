@@ -4,7 +4,7 @@ import { UserOutlined, WechatOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import "./Register.css";
+import "./Register.css"; // Import CSS file specific to the register page
 import { useAuth } from "../../Hook/useAuth";
 
 const { Title } = Typography;
@@ -21,9 +21,9 @@ const Register = () => {
       const response = await axios.post(
         "https://localhost:7071/api/authentication/register",
         {
-          fullname: fullname,
-          email: email,
-          phoneNumber: phoneNumber,
+          fullname,
+          email,
+          phoneNumber,
         },
         {
           headers: {
@@ -67,6 +67,7 @@ const Register = () => {
       setError(error.message);
     }
   };
+
   useEffect(() => {
     if (isLogin) navigate("/");
   }, [isLogin, navigate]);
@@ -74,67 +75,76 @@ const Register = () => {
   if (isLogin) return null;
 
   return (
-    <div className="register-container">
-      <img
-        src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
-        alt="logo-form"
-      />
-      <Title level={3}>Register</Title>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-      <Form name="register" className="register-form" onFinish={onFinish}>
-        <Form.Item
-          name="fullname"
-          rules={[
-            { required: true, message: "Please input your Full Name!" },
-            {
-              pattern: /^[a-zA-Z0-9\s]{5,30}$/,
-              message:
-                "Full Name must be 5-30 characters long and not contain special characters",
-            },
-          ]}
-        >
-          <Input placeholder="Full Name" prefix={<UserOutlined />} />
-        </Form.Item>
-        <Form.Item
-          name="email"
-          rules={[
-            { required: true, message: "Please input your Email!" },
-            { type: "email", message: "Please enter a valid email address!" },
-            {
-              pattern: /^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/,
-              message:
-                "Email must be a valid FPT email address (ending with @fpt.edu.vn)",
-            },
-          ]}
-        >
-          <Input placeholder="Email" prefix={<WechatOutlined />} />
-        </Form.Item>
-        <Form.Item
-          name="phoneNumber"
-          rules={[
-            { required: true, message: "Please input your Phone number!" },
-            {
-              pattern: /^0[0-9]{9}$/,
-              message: "Phone number must start with 0 and be 10 digits long",
-            },
-          ]}
-        >
-          <Input placeholder="Phone Number" prefix={<PhoneOutlined />} />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="register-form-button"
-          >
-            Register
-          </Button>
-        </Form.Item>
-        <Form.Item style={{ textAlign: "center" }}>
-          Already have an account? <Link to="/login">Login here</Link>
-        </Form.Item>
-      </Form>
+    <div className="register-page">
+      <div className="image-section"></div>
+      <div className="form-section">
+        <div className="register-container">
+          <img
+            src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
+            alt="logo-form"
+          />
+          <Title level={3}>Register</Title>
+          {error && <p className="error">{error}</p>}
+          {success && <p className="success">{success}</p>}
+          <Form name="register" className="register-form" onFinish={onFinish}>
+            <Form.Item
+              name="fullname"
+              rules={[
+                { required: true, message: "Please input your Full Name!" },
+                {
+                  pattern: /^[a-zA-Z0-9\s]{5,30}$/,
+                  message:
+                    "Full Name must be 5-30 characters long and not contain special characters",
+                },
+              ]}
+            >
+              <Input placeholder="Full Name" prefix={<UserOutlined />} />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                { required: true, message: "Please input your Email!" },
+                {
+                  type: "email",
+                  message: "Please enter a valid email address!",
+                },
+                {
+                  pattern: /^[a-zA-Z0-9._%+-]+@fpt\.edu\.vn$/,
+                  message:
+                    "Email must be a valid FPT email address (ending with @fpt.edu.vn)",
+                },
+              ]}
+            >
+              <Input placeholder="Email" prefix={<WechatOutlined />} />
+            </Form.Item>
+            <Form.Item
+              name="phoneNumber"
+              rules={[
+                { required: true, message: "Please input your Phone number!" },
+                {
+                  pattern: /^0[0-9]{9}$/,
+                  message:
+                    "Phone number must start with 0 and be 10 digits long",
+                },
+              ]}
+            >
+              <Input placeholder="Phone Number" prefix={<PhoneOutlined />} />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="register-form-button"
+              >
+                Register
+              </Button>
+            </Form.Item>
+            <Form.Item style={{ textAlign: "center" }}>
+              Already have an account? <Link to="/login">Login here</Link>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };

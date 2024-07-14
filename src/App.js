@@ -23,7 +23,7 @@ import PayFail from "./Components/view/Payment/Payfail";
 import ProductPostList from "./Components/Moderator/view/BrowserPost/ProductPostList";
 import ListBuyer from "./Components/view/ListBuyer/ListBuyer";
 import PurchasedList from "./Components/view/purchased list/Purchased list";
-import Dashboard from "./Components/Moderator/view/Dashboard/Dashboard";
+import Dashboard from "./Components/admin/View/Dashboard/Dashboard";
 import SellerPosts from "./Components/view/ListSeller/ListSeller";
 import BuyerHistory from "./Components/view/Buyer history/BuyerHistory";
 import BuyerSuccess from "./Components/view/Buy Successfull/BuySuccess";
@@ -32,6 +32,7 @@ import "./transitions.css";
 import { useAuth } from "./Components/Hook/useAuth";
 import SellerPostsHis from "./Components/view/Seller history/Seller history";
 import ProtectedRoute from "./ProtectedRoute";
+import Dashboard2 from "./Components/Moderator/view/DashBoard/DashboardModer";
 
 const App = () => {
   const location = useLocation();
@@ -47,7 +48,7 @@ const App = () => {
 
   useEffect(() => {
     const path = location.pathname.split("/")[1];
-    setShowHeader(path !== "moderator");
+    setShowHeader(!["login", "register", "moderator"].includes(path));
   }, [location]);
 
   const handleLogin = () => {
@@ -114,6 +115,14 @@ const App = () => {
               }
             />
             <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute allowedRoles={["Admin"]}>
+                  <Dashboard setShowHeader={setShowHeader} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/moderator"
               element={
                 <ProtectedRoute allowedRoles={["Moderator"]}>
@@ -130,10 +139,10 @@ const App = () => {
               }
             />
             <Route
-              path="/moderator/dashboard"
+              path="/moderator/dashboard2"
               element={
                 <ProtectedRoute allowedRoles={["Moderator"]}>
-                  <Dashboard setShowHeader={setShowHeader} />
+                  <Dashboard2 setShowHeader={setShowHeader} />
                 </ProtectedRoute>
               }
             />

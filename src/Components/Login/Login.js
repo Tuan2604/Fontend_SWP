@@ -4,7 +4,7 @@ import { WechatOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import "./Login.css";
+import "./Login.css"; // Import CSS file specific to the login page
 import { useAuth } from "../Hook/useAuth";
 
 const { Title } = Typography;
@@ -79,54 +79,61 @@ const Login = ({ onLogin }) => {
   if (isLogin) return null;
 
   return (
-    <div className="login-container">
-      <img
-        src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
-        alt="logo-form"
-      />
-      <Title level={3}>Login</Title>
-      {error && <p className="error">{error}</p>}
-      <Form
-        name="login_form"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your Email" }]}
-        >
-          <Input prefix={<WechatOutlined />} placeholder="Email" />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Password"
+    <div className="login-page">
+      <div className="image-section"></div>
+      <div className="form-section">
+        <div className="login-container">
+          <img
+            src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
+            alt="logo-form"
           />
-        </Form.Item>
-        <Form.Item>
-          <Link className="login-form-forgot" to="/forget-password">
-            Forgot password?
-          </Link>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+          <Title level={3}>Login</Title>
+          {error && <p className="error">{error}</p>}
+          <Form
+            name="login_form"
+            className="login-form"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
           >
-            Login
-          </Button>
-        </Form.Item>
-        <Form.Item style={{ textAlign: "center" }}>
-          Don't have an account? <Link to="/register">Register now</Link>
-        </Form.Item>
-      </Form>
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: "Please input your Email" }]}
+            >
+              <Input prefix={<WechatOutlined />} placeholder="Email" />
+            </Form.Item>
+
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Link className="login-form-forgot" to="/forget-password">
+                Forgot password?
+              </Link>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Login
+              </Button>
+            </Form.Item>
+            <Form.Item style={{ textAlign: "center" }}>
+              Don't have an account? <Link to="/register">Register now</Link>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };

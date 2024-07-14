@@ -3,8 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
-  faFile,
-  faListAlt,
   faSignInAlt,
   faSignOutAlt,
   faUserPlus,
@@ -15,6 +13,8 @@ import {
   faCheckCircle,
   faClipboardList,
   faCaretDown,
+  faBell,
+  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 import { useAuth } from "../../../Hook/useAuth";
@@ -22,9 +22,8 @@ import { useAuth } from "../../../Hook/useAuth";
 const Header = () => {
   const { isLogin, userInformation, handleLogout } = useAuth();
   const navigate = useNavigate();
-  const [showMenu, setShowMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
-  const [showSellerMenu, setShowSellerMenu] = useState(false);
+  const [showNewsMenu, setShowNewsMenu] = useState(false);
   const [showBuyerMenu, setShowBuyerMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [fullname, setFullname] = useState("");
@@ -42,10 +41,6 @@ const Header = () => {
     }
   };
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
-
   const handleWelcomeClick = () => {
     setShowAccountMenu(!showAccountMenu);
   };
@@ -59,12 +54,30 @@ const Header = () => {
     navigate(`/search?query=${searchQuery}`);
   };
 
-  const toggleSellerMenu = () => {
-    setShowSellerMenu(!showSellerMenu);
+  const handleMouseEnter = (menuType) => {
+    switch (menuType) {
+      case "news":
+        setShowNewsMenu(true);
+        break;
+      case "buyer":
+        setShowBuyerMenu(true);
+        break;
+      default:
+        break;
+    }
   };
 
-  const toggleBuyerMenu = () => {
-    setShowBuyerMenu(!showBuyerMenu);
+  const handleMouseLeave = (menuType) => {
+    switch (menuType) {
+      case "news":
+        setShowNewsMenu(false);
+        break;
+      case "buyer":
+        setShowBuyerMenu(false);
+        break;
+      default:
+        break;
+    }
   };
 
   if (userInformation?.userInfo?.role === "Admin") return null;
@@ -116,10 +129,10 @@ const Header = () => {
             )}
             {isLogin && (
               <>
-                <li className="welcome" onClick={handleWelcomeClick}>
+                <li className="welcome" onMouseEnter={handleWelcomeClick}>
                   Welcome {fullname}
                   {showAccountMenu && (
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu show">
                       <li>
                         <Link to="/account">
                           <FontAwesomeIcon icon={faUserCircle} /> Account
@@ -133,65 +146,74 @@ const Header = () => {
                     </ul>
                   )}
                 </li>
-                <li className="dropdown">
-                  <a href="#danh-muc" onClick={toggleMenu}>
-                    <FontAwesomeIcon icon={faBars} /> Menu
+
+                <li
+                  className="dropdown"
+                  onMouseEnter={() => handleMouseEnter("news")}
+                  onMouseLeave={() => handleMouseLeave("news")}
+                >
+                  <a href="#news-management">
+                    <FontAwesomeIcon icon={faBars} /> News Management
+                    <FontAwesomeIcon icon={faCaretDown} />
                   </a>
-                  {showMenu && (
-                    <ul className="dropdown-menu">
+                  {showNewsMenu && (
+                    <ul className="dropdown-menu show">
                       <li>
-                        <Link to="/post-create">
-                          <FontAwesomeIcon icon={faFile} /> Create Post
+                        <Link to="/list-seller">
+                          <FontAwesomeIcon icon={faList} /> List News
                         </Link>
                       </li>
-                      <li className="dropdown-submenu">
-                        <a href="#seller" onClick={toggleSellerMenu}>
-                          <FontAwesomeIcon icon={faListAlt} /> Seller
-                          <FontAwesomeIcon icon={faCaretDown} />
-                        </a>
-                        {showSellerMenu && (
-                          <ul className="dropdown-menu">
-                            <li>
-                              <Link to="/list-seller">
-                                <FontAwesomeIcon icon={faList} /> List Seller
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/seller-history">
-                                <FontAwesomeIcon icon={faHistory} /> Seller
-                                History
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
+                      <li>
+                        <Link to="/seller-history">
+                          <FontAwesomeIcon icon={faHistory} /> News History
+                        </Link>
                       </li>
-                      <li className="dropdown-submenu">
-                        <a href="#buyer" onClick={toggleBuyerMenu}>
-                          <FontAwesomeIcon icon={faClipboardList} /> Buyer
-                          <FontAwesomeIcon icon={faCaretDown} />
-                        </a>
-                        {showBuyerMenu && (
-                          <ul className="dropdown-menu">
-                            <li>
-                              <Link to="/purchased-list">
-                                <FontAwesomeIcon icon={faClipboardList} />{" "}
-                                Purchased List
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/buyer-success">
-                                <FontAwesomeIcon icon={faCheckCircle} /> Buyer
-                                Success
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
+                    </ul>
+                  )}
+                </li>
+                <li
+                  className="dropdown"
+                  onMouseEnter={() => handleMouseEnter("buyer")}
+                  onMouseLeave={() => handleMouseLeave("buyer")}
+                >
+                  <a href="#buyer">
+                    <FontAwesomeIcon icon={faClipboardList} /> Manage Posts
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </a>
+                  {showBuyerMenu && (
+                    <ul className="dropdown-menu show">
+                      <li>
+                        <Link to="/purchased-list">
+                          <FontAwesomeIcon icon={faClipboardList} /> Purchased
+                          List
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/buyer-success">
+                          <FontAwesomeIcon icon={faCheckCircle} /> Buyer Success
+                        </Link>
                       </li>
                     </ul>
                   )}
                 </li>
               </>
             )}
+
+            <li>
+              <Link to="/notifications">
+                <FontAwesomeIcon icon={faBell} /> Notifications
+              </Link>
+            </li>
+            <li>
+              <Link to="/purchased-list">
+                <FontAwesomeIcon icon={faShoppingCart} /> Cart
+              </Link>
+            </li>
+            <li>
+              <Link to="/post-create" className="post-ad">
+                Create Post
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>

@@ -117,6 +117,22 @@ const ProductPostList = () => {
       key: "description",
     },
     {
+      title: "Price",
+      dataIndex: "price", // Assuming price is the field name
+      key: "price",
+    },
+    {
+      title: "Created By",
+      dataIndex: "createdBy",
+      key: "createdBy",
+      render: (createdBy) => `${createdBy.fullName} (${createdBy.email})`, // Display fullName and email
+    },
+    {
+      title: "Post Mode",
+      dataIndex: "postMode", // Assuming postMode is the field name
+      key: "postMode",
+    },
+    {
       title: "Actions",
       key: "actions",
       render: (text, record) => (

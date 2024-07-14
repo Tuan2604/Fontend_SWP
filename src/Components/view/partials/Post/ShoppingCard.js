@@ -20,7 +20,9 @@ const ShoppingCard = () => {
 
   const fetchData = async () => {
     try {
+      console.log(`Fetching data for page: ${currentPage}`);
       const response = await fetchCardsData();
+      console.log("Fetched data:", response);
       setCardsData(response);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -35,11 +37,11 @@ const ShoppingCard = () => {
       const response = await axios.get(
         `https://localhost:7071/api/product-post/others?pageIndex=${pageIndex}`,
         {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
+          headers: userToken ? { Authorization: `Bearer ${userToken}` } : {},
         }
       );
+
+      console.log("API response:", response.data);
 
       const formattedData = await Promise.all(
         response.data.map(async (item) => {
@@ -51,10 +53,12 @@ const ShoppingCard = () => {
         })
       );
 
+      console.log("Formatted data:", formattedData);
+
       return formattedData;
     } catch (error) {
       console.error("Error fetching data:", error);
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 401 && userToken) {
         await refreshToken(); // Refresh token if unauthorized
         return fetchCardsData(); // Retry fetching data
       }
@@ -69,7 +73,6 @@ const ShoppingCard = () => {
     }
 
     try {
-      // Assuming 'storage' is correctly imported from Firebase SDK
       const imageRef = ref(storage, imagePath);
       return await getDownloadURL(imageRef);
     } catch (error) {
@@ -99,12 +102,15 @@ const ShoppingCard = () => {
   };
 
   const handlePageChange = (page) => {
+    console.log(`Changing to page: ${page}`);
     setCurrentPage(page);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cardsData.slice(indexOfFirstItem, indexOfLastItem);
+
+  console.log("Current items:", currentItems);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -116,6 +122,10 @@ const ShoppingCard = () => {
   const handleBuyNow = async (postId) => {
     try {
       const userToken = localStorage.getItem("accessToken");
+      if (!userToken) {
+        message.error("You need to log in to buy this product.");
+        return;
+      }
       const messageData = "Tôi muốn mua vật phẩm này"; // Replace with your message
 
       localStorage.setItem("postId", postId); // Save postId to local storage
@@ -133,11 +143,9 @@ const ShoppingCard = () => {
 
       console.log("Successfully applied to buy:", response.data);
       message.success("Successfully applied to buy this product!");
-      // Optionally handle success actions here (e.g., show a success message)
     } catch (error) {
       console.error("Error applying to buy product:", error);
       message.error("Failed to apply to buy this product.");
-      // Optionally handle error actions here (e.g., show an error message)
     }
   };
 

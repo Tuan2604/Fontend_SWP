@@ -5,6 +5,7 @@ import axios from "axios";
 import { storage } from "../../../../Firebase"; // Import Firebase storage
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import "./PostCreate.css";
+import { Title } from "chart.js";
 
 const { Option } = Select;
 
@@ -16,8 +17,7 @@ const PostCreate = () => {
   const [durations, setDurations] = useState([]);
   const [selectedCategoryObj, setSelectedCategoryObj] = useState(null);
   const [selectedCampusObj, setSelectedCampusObj] = useState(null);
-  const [description, setDescription] = useState("");
-  const [selectedDuration, setSelectedDuration] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(null); // Added state for selected duration
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
@@ -79,11 +79,19 @@ const PostCreate = () => {
   };
 
   const onFinish = async (values) => {
-    const { productName, category, price, campus, phone, duration } = values;
+    const {
+      productName,
+      category,
+      price,
+      campus,
+      phone,
+      duration,
+      description,
+    } = values;
 
     const formData = {
       title: productName,
-      description: "Sample Description", // Replace with actual description if available
+      description, // Use the description from form values
       price: price.toString(), // Convert price to string if needed
       categoryId: category, // Ensure this is a valid category ID
       campusId: campus, // Ensure this is a valid campus ID
@@ -129,150 +137,160 @@ const PostCreate = () => {
   };
 
   return (
-    <div className="post-create-container">
-      <Card title="Create New Post" className="post-create-form">
-        <Form
-          form={form}
-          name="create_post"
-          onFinish={onFinish}
-          layout="vertical"
-          initialValues={{
-            productName: "",
-            description: "",
-            category: undefined,
-            price: "",
-            campus: undefined,
-            phone: "",
-            duration: undefined,
-          }}
-        >
-          <Form.Item
-            name="productName"
-            label="Product Name"
-            rules={[{ required: true, message: "Please enter product name" }]}
+    <div className="PostCreate-body">
+      <div className="post-create-container">
+        <div className="image-upload-section">
+          <Upload
+            customRequest={({ file, onSuccess }) => {
+              handleUpload(file);
+              onSuccess("ok"); // Indicate that the upload was successful
+            }}
+            listType="picture"
           >
-            <Input placeholder="Enter product name" />
-          </Form.Item>
-
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[{ required: true, message: "Please enter description" }]}
-          >
-            <Input.TextArea
-              placeholder="Enter description"
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="category"
-            label="Category"
-            rules={[{ required: true, message: "Please select category" }]}
-          >
-            <Select
-              placeholder="Select category"
-              onChange={(value) => {
-                setSelectedCategoryObj(
-                  categories.find((cat) => cat.id === value)
-                );
+            <Button>Click to Upload</Button>
+          </Upload>
+        </div>
+        <div className="form-section-poscreat">
+          <Card title="Create New Post" className="post-create-form">
+            <Form
+              form={form}
+              name="create_post"
+              onFinish={onFinish}
+              layout="vertical"
+              initialValues={{
+                productName: "",
+                description: "",
+                category: undefined,
+                price: "",
+                campus: undefined,
+                phone: "",
+                duration: undefined,
               }}
             >
-              {categories.map((category) => (
-                <Option key={category.id} value={category.id}>
-                  {category.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="productName"
+                label="Product Name"
+                rules={[
+                  { required: true, message: "Please enter product name" },
+                ]}
+              >
+                <Input placeholder="Enter product name" />
+              </Form.Item>
 
-          <Form.Item
-            name="price"
-            label="Price"
-            rules={[{ required: true, message: "Please enter price" }]}
-          >
-            <Input placeholder="Enter price" />
-          </Form.Item>
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[
+                  { required: true, message: "Please enter description" },
+                ]}
+              >
+                <Input.TextArea placeholder="Enter description" />
+              </Form.Item>
 
-          <Form.Item
-            name="campus"
-            label="Campus"
-            rules={[{ required: true, message: "Please select campus" }]}
-          >
-            <Select
-              placeholder="Select campus"
-              onChange={(value) => {
-                setSelectedCampusObj(campuses.find((cp) => cp.id === value));
-              }}
-            >
-              {campuses.map((campus) => (
-                <Option key={campus.id} value={campus.id}>
-                  {campus.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="category"
+                label="Category"
+                rules={[{ required: true, message: "Please select category" }]}
+              >
+                <Select
+                  placeholder="Select category"
+                  onChange={(value) => {
+                    setSelectedCategoryObj(
+                      categories.find((cat) => cat.id === value)
+                    );
+                  }}
+                >
+                  {categories.map((category) => (
+                    <Option key={category.id} value={category.id}>
+                      {category.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="phone"
-            label="Contact Phone Number"
-            rules={[
-              { required: true, message: "Please enter contact phone number" },
-              {
-                pattern: new RegExp(/^[0-9\b]+$/),
-                message: "Please enter a valid phone number",
-              },
-            ]}
-          >
-            <Input placeholder="Enter contact phone number" />
-          </Form.Item>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: "Please enter price" }]}
+              >
+                <Input placeholder="Enter price" />
+              </Form.Item>
 
-          <Form.Item
-            name="duration"
-            label="Post Duration"
-            rules={[{ required: true, message: "Please select post duration" }]}
-          >
-            <Select
-              placeholder="Select post duration"
-              onChange={(value) => {
-                setSelectedDuration(durations.find((dur) => dur.id === value));
-              }}
-            >
-              {durations.map((duration) => (
-                <Option key={duration.id} value={duration.id}>
-                  {duration.type} - {duration.price} VNĐ
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="campus"
+                label="Campus"
+                rules={[{ required: true, message: "Please select campus" }]}
+              >
+                <Select
+                  placeholder="Select campus"
+                  onChange={(value) => {
+                    setSelectedCampusObj(
+                      campuses.find((cp) => cp.id === value)
+                    );
+                  }}
+                >
+                  {campuses.map((campus) => (
+                    <Option key={campus.id} value={campus.id}>
+                      {campus.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            label="Upload Image"
-            rules={[{ required: true, message: "Please upload an image" }]}
-          >
-            <Upload
-              customRequest={({ file, onSuccess }) => {
-                handleUpload(file);
-                onSuccess("ok"); // Indicate that the upload was successful
-              }}
-              listType="picture"
-            >
-              <Button>Click to Upload</Button>
-            </Upload>
-          </Form.Item>
+              <Form.Item
+                name="phone"
+                label="Contact Phone Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter contact phone number",
+                  },
+                  {
+                    pattern: new RegExp(/^[0-9\b]+$/),
+                    message: "Please enter a valid phone number",
+                  },
+                ]}
+              >
+                <Input placeholder="Enter contact phone number" />
+              </Form.Item>
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={uploading}
-              disabled={uploading}
-            >
-              {uploading ? "Uploading..." : "Create Post"}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+              <Form.Item
+                name="duration"
+                label="Post Duration"
+                rules={[
+                  { required: true, message: "Please select post duration" },
+                ]}
+              >
+                <Select
+                  placeholder="Select post duration"
+                  onChange={(value) => {
+                    setSelectedDuration(
+                      durations.find((dur) => dur.id === value)
+                    );
+                  }}
+                >
+                  {durations.map((duration) => (
+                    <Option key={duration.id} value={duration.id}>
+                      {duration.type} - {duration.price} VNĐ
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={uploading}
+                  disabled={uploading}
+                >
+                  {uploading ? "Uploading..." : "Create Post"}
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
