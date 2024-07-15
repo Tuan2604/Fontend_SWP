@@ -79,50 +79,52 @@ const SellerPosts = () => {
   }
 
   return (
-    <div className="seller-posts">
-      <Card title="List Seller" className="seller-posts-card">
-        {sellerPosts.length > 0 ? (
-          <div className="post-list">
-            {sellerPosts.map((post) => (
-              <div key={post.id} className="post-item">
-                <div className="item-header">
-                  <h2>{post.title}</h2>
-                  {post.imageUrls && post.imageUrls.length > 0 && (
-                    <img
-                      src={post.imageUrls[0]}
-                      alt={post.title}
-                      className="item-image"
-                    />
-                  )}
+    <div className="body-seller-list">
+      <div className="seller-list">
+        <Card title="List Seller" className="seller-list-card">
+          {sellerPosts.length > 0 ? (
+            <div className="post-list-seller">
+              {sellerPosts.map((post) => (
+                <div key={post.id} className="post-item-seller">
+                  <div className="item-header-seller">
+                    {post.imageUrls && post.imageUrls.length > 0 && (
+                      <img
+                        src={post.imageUrls[0]}
+                        alt={post.title}
+                        className="item-image-seller"
+                      />
+                    )}
+                    <h2>{post.title}</h2>
+                  </div>
+                  <div className="post-details">
+                    <p>Description: {post.description}</p>
+                    <p>Price: {post.price}</p>
+                    <p>Category: {post.category}</p>
+                    <p>Post Mode: {post.postMode}</p>
+                    <p>Campus: {post.campus}</p>
+                    <p>
+                      Created Date:{" "}
+                      {new Date(post.createdDate).toLocaleDateString()}
+                    </p>
+                    <p>
+                      Expired Date:{" "}
+                      {new Date(post.expiredDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <Button
+                    type="primary"
+                    onClick={() => handleViewBuyerDetails(post.id)}
+                  >
+                    View Buyer Details
+                  </Button>
                 </div>
-                <div className="post-details">
-                  <p>Description: {post.description}</p>
-                  <p>Price: {post.price}</p>
-                  <p>Category: {post.category}</p>
-                  <p>Post Mode: {post.postMode}</p>
-                  <p>Campus: {post.campus}</p>
-                  <p>
-                    Created Date:{" "}
-                    {new Date(post.createdDate).toLocaleDateString()}
-                  </p>
-                  <p>
-                    Expired Date:{" "}
-                    {new Date(post.expiredDate).toLocaleDateString()}
-                  </p>
-                </div>
-                <Button
-                  type="primary"
-                  onClick={() => handleViewBuyerDetails(post.id)}
-                >
-                  View Buyer Details
-                </Button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No pending posts found.</p>
-        )}
-      </Card>
+              ))}
+            </div>
+          ) : (
+            <p>No pending posts found.</p>
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
