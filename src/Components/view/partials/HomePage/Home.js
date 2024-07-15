@@ -34,19 +34,6 @@ const Home = () => {
     autoplaySpeed: 3000,
     arrows: true, // Ensure arrows are enabled
   };
-  // if (statusPayment === "00") {
-  //   navigate("/");
-  // }
-  // useEffect(() => {
-  //   if (statusPayment === "00") {
-  //     setStatus("Success");
-  //   } else if (statusPayment === "02") {
-  //     setStatus("Error");
-  //   } else {
-  //     console.log("nothing");
-  //   }
-  //   axios.put('https://localhost:7071/api/payment')
-  // }, [status]);
 
   useEffect(() => {
     // Retrieve paymentId from localStorage
@@ -97,20 +84,20 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      <div className="background-container">
+        <Slider {...sliderSettings}>
+          {sliderImages.map((url, index) => (
+            <div key={index} className="slider-image-container">
+              <img
+                src={url}
+                alt={`Slide ${index + 1}`}
+                className="slider-image"
+              />
+            </div>
+          ))}
+        </Slider>
+      </div>
       <div className="content-container">
-        <div className="slider-container">
-          <Slider {...sliderSettings}>
-            {sliderImages.map((url, index) => (
-              <div key={index} className="slider-image-container">
-                <img
-                  src={url}
-                  alt={`Slide ${index + 1}`}
-                  className="slider-image"
-                />
-              </div>
-            ))}
-          </Slider>
-        </div>
         <CategoryBar /> {/* Use the CategoryBar component */}
         <ShoppingCard /> {/* Render the corrected ShoppingCard component */}
       </div>

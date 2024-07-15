@@ -1,6 +1,5 @@
 .body-seller-list {
-  background-image: url("https://img.freepik.com/free-vector/hand-drawn-shopping-pattern-design_23-2149633578.jpg"); /* Set your background image URL here */
-  background-size: cover;
+  background: url("../../../../src/Components/asssets/BackGround/7109538.jpg");
   background-position: center;
   /* Ensure it covers the full height of the viewport */
   padding: 20px;
