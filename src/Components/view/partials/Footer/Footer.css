@@ -1,71 +1,58 @@
 .footer {
   background-color: #333;
   color: #fff;
-  padding: 40px 20px;
+  padding: 15px 10px; /* Reduced padding to decrease height */
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%; /* Ensure the footer spans the full width */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
+  max-width: 600px; /* Reduced maximum width */
   flex-wrap: wrap;
 }
 
 .footer-section {
   flex: 1;
-  padding: 20px;
+  padding: 10px; /* Adjusted padding */
   min-width: 200px;
+  text-align: left; /* Align text to the left */
 }
 
 .footer-section h3 {
-  margin-bottom: 15px;
-  font-size: 18px;
+  margin-bottom: 8px; /* Adjusted margin */
+  font-size: 18px; /* Adjusted font size */
   text-transform: uppercase;
 }
 
-.footer-section p,
-.footer-section ul {
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1.6;
+.footer-section p {
+  margin-bottom: 6px; /* Adjusted margin */
+  font-size: 14px; /* Adjusted font size */
+  line-height: 1.4; /* Adjusted line height */
 }
 
-.footer-section ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 10px;
-}
-
-.footer-section ul li a {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-section ul li a:hover {
-  color: #e38d13;
+.footer-section .icon {
+  margin-right: 6px; /* Add margin to the right of the icon */
 }
 
 .social-icons {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-bottom: 8px; /* Adjusted margin to reduce height */
 }
 
 .social-icons a {
   color: #fff;
-  font-size: 20px;
-  margin: 0 10px;
+  font-size: 20px; /* Adjusted font size */
+  margin: 0 6px; /* Adjusted margin */
   transition: color 0.3s;
 }
 
@@ -74,11 +61,10 @@
 }
 
 .footer-bottom {
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: 8px; /* Adjusted margin */
+  font-size: 12px; /* Adjusted font size */
   border-top: 1px solid #555;
-  padding-top: 10px;
+  padding-top: 6px; /* Adjusted padding */
   width: 100%;
-  max-width: 1200px;
   text-align: center;
 }

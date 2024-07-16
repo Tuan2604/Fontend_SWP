@@ -7,7 +7,7 @@ import Login from "./Components/Login/Login";
 import UserManagementPage from "./Components/admin/View/UserManagement/UserManagement";
 import CampusManagementPage from "./Components/admin/View/CampusManagementPage/CampusManagementPage";
 import Register from "./Components/view/Register/Register";
-import Header from "./Components/view/partials/HomePage/Header";
+import Header from "./Components/view/partials/Header/Header";
 import Home from "./Components/view/partials/HomePage/Home";
 import PostCreate from "./Components/view/partials/CreatePostNews/PostCreate";
 import ForgetPassword from "./Components/view/partials/ResetPassword/ForgetPassword";
