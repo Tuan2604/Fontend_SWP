@@ -1,0 +1,49 @@
+.payment-card {
+  width: 100%;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.payment-info-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.payment-info {
+  flex: 1;
+}
+
+.payment-info p {
+  margin-bottom: 10px;
+}
+
+.payment-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.payment-image {
+  max-width: 400px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.confirm-payment-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}

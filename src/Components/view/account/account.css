@@ -1,130 +1,98 @@
-/* .login-container {
-  max-width: 250px;
-  margin: 3em auto;
-  padding: 1.5em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+/* Ensure the container takes full height and width */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-h2 {
+.account-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 650px;
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+}
+
+.account-sidebar {
   text-align: center;
-  margin-bottom: 1em;
 }
 
-.input-container {
-  margin-bottom: 1em;
+.account-sidebar .ant-avatar {
+  margin-bottom: 10px;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 50px;
 }
 
-label {
-  display: block;
-  margin-bottom: 0.5em;
+.account-badges {
+  margin-top: 10px;
 }
 
-input {
-  width: 100%;
-  padding: 0.5em;
-  box-sizing: border-box;
-}
-
-button {
-  width: 100%;
-  padding: 0.5em;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 1em; 
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.error {
-  color: red;
+.account-badges .badge {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  line-height: 30px;
   text-align: center;
-  margin-bottom: 1em;
+  margin-right: 5px;
 }
 
-.login-container img {
-  width: 100%;
+.account-details {
+  width: 50%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.google-signin-button {
-  background-color: #db4437; 
-  border: none;
-  margin-top: 1em;
+.account-details .ant-form-item-label > label {
+  color: #000000; /* Change label color to black */
+  font-size: 25px;
 }
 
-.google-signin-button:hover {
-  background-color: #c33d2e;
-} */
-
-/* src/Components/view/Login/Login.css */
-.login-container {
-  max-width: 250px;
-  margin: 3em auto;
-  padding: 1.5em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+.account-details .ant-form-item input {
+  border-radius: 4px;
+  font-size: 25px;
+  width: 60%;
 }
 
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 1em;
+.account-details .ant-form-item {
+  margin-bottom: 16px; /* Add margin between form items */
+  background-color: transparent;
 }
 
-.login-container .input-container {
-  margin-bottom: 1em;
+.account-details .ant-btn {
+  width: 100px; /* Set button width */
+  background-color: #1890ff; /* Button background color */
+  border: none; /* Remove border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-container label {
-  display: block;
-  margin-bottom: 0.5em;
+.account-details .ant-btn:hover {
+  background-color: #40a9ff; /* Change button color on hover */
 }
 
-.login-container input {
-  width: 100%;
-  padding: 0.5em;
-  box-sizing: border-box;
+.account-details .ant-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-container button {
-  width: 100%;
-  padding: 0.5em;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 1em;
-}
-
-.login-container button:hover {
-  background-color: #0056b3;
-}
-
-.login-container .error {
-  color: red;
-  text-align: center;
-  margin-bottom: 1em;
-}
-
-.login-container img {
-  width: 100%;
-}
-
-.login-container .google-signin-button {
-  background-color: #db4437;
-  border: none;
-  margin-top: 0px;
-}
-
-.login-container .google-signin-button:hover {
-  background-color: #c33d2e;
+.ant-input-disabled,
+.ant-input-disabled:hover,
+.ant-input-disabled:focus,
+.ant-input-disabled:active {
+  background-color: rgba(0, 0, 0, 0.04); /* Màu nền khi disabled */
+  border-color: #d9d9d9; /* Màu viền */
+  box-shadow: none; /* Bỏ hiệu ứng box-shadow */
+  cursor: not-allowed; /* Con trỏ là not-allowed khi disabled */
+  opacity: 1; /* Độ mờ khi disabled */
 }

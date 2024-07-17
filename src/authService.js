@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// Hàm làm mới token
+// Function to refresh token
 const refreshToken = async () => {
   try {
     const storedRefreshToken = localStorage.getItem("refreshToken");
@@ -33,12 +33,12 @@ const refreshToken = async () => {
     });
     // Optional: Navigate to login page or log out user
     localStorage.clear();
-    window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập nếu làm mới token thất bại
+    window.location.href = "/login"; // Redirect to login page if token refresh fails
     return null;
   }
 };
 
-// Tạo instance của axios với interceptor để làm mới token
+// Create axios instance with interceptors for token refreshing
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(
@@ -60,13 +60,18 @@ axiosInstance.interceptors.response.use(
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry &&
-      localStorage.getItem("refreshToken") // Thêm điều kiện kiểm tra refreshToken
+      localStorage.getItem("refreshToken") // Check if refreshToken exists
     ) {
       originalRequest._retry = true;
-      const newAccessToken = await refreshToken();
-      if (newAccessToken) {
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axiosInstance(originalRequest);
+      try {
+        const newAccessToken = await refreshToken();
+        if (newAccessToken) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        }
+      } catch (error) {
+        // Handle refresh token failure
+        return Promise.reject(error);
       }
     }
     return Promise.reject(error);

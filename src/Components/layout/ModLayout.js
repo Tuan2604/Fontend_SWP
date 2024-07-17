@@ -3,25 +3,28 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   LogoutOutlined,
-  AreaChartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { MdApartment } from "react-icons/md";
-
 import { Layout, Menu, Button, theme } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Hook/useAuth";
+
 const { Header, Sider, Content } = Layout;
 
-const ModLayout = ({ children }) => {
+const ModLayout = ({ children, showHeader = true }) => {
+  const { handleLogout } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
-    navigate("/");
-  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleNavigate = (path) => {
+    navigate(`/moderator/${path}`);
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -48,13 +51,24 @@ const ModLayout = ({ children }) => {
             </h1>
           </div>
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<UserOutlined />}>
-            <Link to={"/mod/saler-management"}>Saler Management</Link>
+
+        <Menu theme="dark" mode="inline">
+          <Menu.Item
+            key="1"
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("browser-post")}
+          >
+            Product Post List
           </Menu.Item>
-          <Menu.Item key="2" icon={<AreaChartOutlined />}>
-            <Link to={"/mod/post-management"}>Post Management</Link>
+
+          <Menu.Item
+            key="2"
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("dashboard2")}
+          >
+            DashBoard
           </Menu.Item>
+
           <Menu.Item
             key="logout"
             onClick={handleLogout}
@@ -64,37 +78,40 @@ const ModLayout = ({ children }) => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+      <Layout className="site-layout">
+        {showHeader && (
+          <Header
+            className="site-layout-background"
+            style={{ padding: 0, background: colorBgContainer }}
+          >
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
+            />
+          </Header>
+        )}
+        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+          <div
+            className="site-layout-background"
             style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
+              padding: 24,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
             }}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {children}
+          >
+            {children}
+          </div>
         </Content>
       </Layout>
     </Layout>
   );
 };
+
 export default ModLayout;

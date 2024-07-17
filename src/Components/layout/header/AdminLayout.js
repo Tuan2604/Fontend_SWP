@@ -1,26 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { MdApartment, MdLocationCity } from "react-icons/md";
 import {
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  LogoutOutlined,
   UserOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
-import { MdApartment } from "react-icons/md";
+import { Button, Layout, Menu, theme } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Hook/useAuth";
 
-import { Layout, Menu, Button, theme } from "antd";
-import { Link, useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout = ({ children }) => {
+  const { handleLogout } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
-    navigate("/");
-  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleNavigate = (path) => {
+    navigate(`/admin/${path}`);
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
@@ -47,12 +52,35 @@ const AdminLayout = ({ children }) => {
             </h1>
           </div>
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<UserOutlined />}>
+        <Menu theme="dark">
+          <Menu.Item
+            key="1"
+            icon={<UserOutlined />}
+            onClick={() => handleNavigate("user-management")}
+          >
             User Management
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined />}>
-            CampusManagementPage
+          <Menu.Item
+            key="2"
+            icon={<MdLocationCity />}
+            onClick={() => handleNavigate("campus-management")}
+          >
+            Campus Management
+          </Menu.Item>
+          <Menu.Item
+            key="3"
+            icon={<AppstoreOutlined />}
+            onClick={() => handleNavigate("category-management")}
+          >
+            Category Management
+          </Menu.Item>
+
+          <Menu.Item
+            key="4"
+            icon={<AppstoreOutlined />}
+            onClick={() => handleNavigate("dashboard")}
+          >
+            Dashboard
           </Menu.Item>
 
           <Menu.Item
@@ -96,4 +124,5 @@ const AdminLayout = ({ children }) => {
     </Layout>
   );
 };
+
 export default AdminLayout;

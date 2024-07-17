@@ -10,7 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   justify-content: center;
   align-items: center;
-  background: url("https://daihoc.fpt.edu.vn/wp-content/uploads/2022/08/dai-hoc-fpt-tp-hcm-1.jpeg");
+  /* background: url("https://daihoc.fpt.edu.vn/wp-content/uploads/2022/08/dai-hoc-fpt-tp-hcm-1.jpeg"); */
   padding: 0;
   height: 100em;
   /* display: flex; */

@@ -1,0 +1,38 @@
+.seller-posts {
+  margin: 20px;
+}
+
+.seller-posts-card {
+  width: 100%;
+  max-width: 70000px;
+  margin: 20px auto;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.item-header h2 {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.item-image {
+  max-width: 200px;
+  border-radius: 5px;
+}

@@ -1,0 +1,9 @@
+.pay-success-container {
+  background-color: #ffffff; /* White background */
+  padding: 20px; /* Add padding for spacing */
+  text-align: center; /* Center align text */
+  width: 100%; /* Full width */
+  max-width: 600px; /* Limit maximum width */
+  margin: 20px auto; /* Center align horizontally with margin */
+  color: forestgreen;
+}

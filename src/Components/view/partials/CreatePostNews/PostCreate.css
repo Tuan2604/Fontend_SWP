@@ -1,0 +1,49 @@
+.custom-file-input {
+  display: none; /* Hide the default file input */
+}
+
+.custom-file-label {
+  display: inline-block;
+  padding: 10px 20px;
+  color: white;
+  background-color: #1890ff;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  max-width: 200px;
+}
+
+.custom-file-label:hover {
+  background-color: #40a9ff;
+}
+
+.post-create-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 90vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+.image-upload-section {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #d9d9d9;
+  padding: 20px;
+  background-color: white;
+}
+
+.form-section-poscreat {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+}
+
+.post-create-form .ant-form-item {
+  margin-bottom: 10px;
+}

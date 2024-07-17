@@ -1,0 +1,66 @@
+.body-seller-list {
+  background: url("../../../../src/Components/asssets/BackGround/7109538.jpg");
+  background-position: center;
+  /* Ensure it covers the full height of the viewport */
+  padding: 20px;
+  padding: 0;
+  height: 100em;
+  /* display: flex; */
+}
+
+.seller-list {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.seller-list-card {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.post-list-seller {
+  display: flex;
+  flex-direction: column; /* Change to column to make it a list */
+  gap: 20px; /* Adjust gap for spacing between items */
+}
+
+.post-item-seller {
+  display: flex;
+  justify-content: space-between; /* Align items horizontally */
+  width: 100%; /* Full width */
+  border: 1px solid #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff; /* White background for each post */
+}
+
+.item-header-seller {
+  display: flex;
+  flex-direction: row; /* Align image and title in a row */
+  align-items: center;
+  flex: 1; /* Take available space */
+}
+
+.item-image-seller {
+  width: 100px; /* Set a fixed size for the image */
+  height: auto;
+  border-radius: 10px;
+  margin-right: 20px; /* Space between image and title */
+}
+
+.post-details {
+  flex: 3; /* Take more space for details */
+  padding-left: 30px;
+}
+
+.post-details p {
+  margin: 5px 0;
+}
+
+button {
+  align-self: center;
+}

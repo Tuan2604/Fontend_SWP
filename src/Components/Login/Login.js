@@ -3,26 +3,22 @@ import { Form, Input, Button, Typography } from "antd";
 import { WechatOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../authService"; // Sử dụng axiosInstance thay cho axios
-import "./Login.css";
+import axios from "axios";
+import "./Login.css"; // Import CSS file specific to the login page
+import { useAuth } from "../Hook/useAuth";
 
 const { Title } = Typography;
 
-const Login = ({ onLogin, isLoggedIn }) => {
+const Login = ({ onLogin }) => {
+  const { setIsLogin, isLogin, setUserInformation, userInformation } =
+    useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const role = localStorage.getItem("role");
-      navigate(role === "Admin" ? "/admin" : "/");
-    }
-  }, [isLoggedIn, navigate]);
 
   const onFinish = async (values) => {
     const { email, password } = values;
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         "https://localhost:7071/api/authentication/login",
         { email, password },
         {
@@ -49,23 +45,8 @@ const Login = ({ onLogin, isLoggedIn }) => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
 
-        // Log user data to console for debugging
-        console.log("Stored user data:", {
-          email: response.data.userInfo.email,
-          fullname: response.data.userInfo.fullname,
-          role: response.data.userInfo.role,
-          phoneNumber: response.data.userInfo.phoneNumber,
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        });
-
-        onLogin();
-
-        if (response.data.userInfo.role === "Admin") {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
+        setUserInformation(response.data);
+        setIsLogin(true);
       } else {
         throw new Error(response.data.message || "Invalid email or password");
       }
@@ -80,55 +61,79 @@ const Login = ({ onLogin, isLoggedIn }) => {
     }
   };
 
-  return (
-    <div className="login-container">
-      <img
-        src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
-        alt="logo-form"
-      />
-      <Title level={3}>Login</Title>
-      {error && <p className="error">{error}</p>}
-      <Form
-        name="login_form"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your Email" }]}
-        >
-          <Input prefix={<WechatOutlined />} placeholder="Email" />
-        </Form.Item>
+  useEffect(() => {
+    if (isLogin) {
+      if (userInformation) {
+        // Redirect if already logged in
+        if (userInformation?.userInfo?.role === "Admin") {
+          navigate("/admin");
+        } else if (userInformation?.userInfo?.role === "Moderator") {
+          navigate("/moderator");
+        } else {
+          navigate("/");
+        }
+      }
+    }
+  }, [isLogin, navigate, userInformation]);
 
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Password"
+  if (isLogin) return null;
+
+  return (
+    <div className="login-page">
+      <div className="image-section"></div>
+      <div className="form-section">
+        <div className="login-container">
+          <img
+            src="https://fpt.edu.vn/Content/images/assets/Logo-FU-03.png"
+            alt="logo-form"
           />
-        </Form.Item>
-        <Form.Item>
-          <Link className="login-form-forgot" to="/forget-password">
-            Forgot password?
-          </Link>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+          <Title level={3}>Login</Title>
+          {error && <p className="error">{error}</p>}
+          <Form
+            name="login_form"
+            className="login-form"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
           >
-            Login
-          </Button>
-        </Form.Item>
-        <Form.Item style={{ textAlign: "center" }}>
-          Don't have an account? <Link to="/register">Register now</Link>
-        </Form.Item>
-      </Form>
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: "Please input your Email" }]}
+            >
+              <Input prefix={<WechatOutlined />} placeholder="Email" />
+            </Form.Item>
+
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Link className="login-form-forgot" to="/forget-password">
+                Forgot password?
+              </Link>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Login
+              </Button>
+            </Form.Item>
+            <Form.Item style={{ textAlign: "center" }}>
+              Don't have an account? <Link to="/register">Register now</Link>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };

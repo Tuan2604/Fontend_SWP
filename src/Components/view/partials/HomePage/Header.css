@@ -1,0 +1,139 @@
+.header {
+  background-color: #ff7f50;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-welcome {
+  padding-bottom: 20px;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  margin-right: 20px;
+}
+
+.home-icon {
+  height: 40px;
+}
+
+.search-container {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 200px; /* Move the search bar 100px to the left */
+}
+
+.search-input {
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  width: 100em;
+  max-width: 399px;
+}
+
+.search-button {
+  width: 45px;
+  padding: 8px 12px;
+  background-color: #fff;
+  color: #e38d13;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: -30px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+}
+
+.menu ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  margin-left: 20px;
+  position: relative;
+}
+
+.menu li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.menu li a .fa-icon {
+  margin-right: 5px;
+}
+
+.welcome {
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  padding-bottom: 20px;
+}
+
+.dropdown-menu {
+  background-color: #fff;
+  position: absolute;
+  top: 100%; /* Ensures the dropdown is directly below the parent */
+  right: 0; /* Aligns the dropdown to the left side of the parent */
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: none;
+}
+
+.dropdown-menu li {
+  padding: 10px;
+  width: 150px;
+}
+
+.dropdown-menu li a {
+  color: #333;
+  font-size: 14px;
+}
+
+.show .dropdown-menu {
+  display: block;
+}
+
+.sub-menu {
+  position: absolute;
+  right: 160px; /* Aligns sub-menu to the left of the parent menu */
+  top: 0;
+  display: none;
+  z-index: 1000;
+}
+
+.show .sub-menu {
+  display: block;
+}
+
+.post-ad {
+  background-color: #ff9800;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.post-ad:hover {
+  background-color: #e68900;
+}

@@ -8,17 +8,18 @@ import {
   Form,
   Input,
   Button,
-  Select,
+  message,
 } from "antd";
-import axiosInstance from "../../../../authService";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./UserManagement.css";
 import AdminLayout from "../../../layout/header/AdminLayout";
+import { useAuth } from "../../../Hook/useAuth";
 
 const { Title } = Typography;
-const { Option } = Select;
 
-const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
+const UserManagementPage = ({ setShowHeader, setIsLoggedIn }) => {
+  const { isLogin, setIsLogin, userInformation } = useAuth();
   const navigate = useNavigate();
 
   const [reload, setReload] = useState(false);
@@ -28,8 +29,8 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/admin/login"); // Redirect to admin login if not logged in
+    if (!isLogin) {
+      navigate("/login"); // Redirect to admin login if not logged in
       return;
     }
     handleFetchData();
@@ -37,21 +38,27 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
     return () => {
       setShowHeader(true);
     };
-  }, [isLoggedIn, reload, setShowHeader, navigate]);
+  }, [isLogin, reload, setShowHeader, navigate]);
 
   const handleFetchData = async () => {
     try {
-      const response = await axiosInstance.get(
-        "https://localhost:7071/api/user-management"
+      const response = await axios.get(
+        "https://localhost:7071/api/user-management",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
       if (response.status === 200) {
         setData(response.data);
       } else {
         console.error("Failed to fetch data");
+        message.error("Failed to fetch user data. Please try again later.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred while fetching user data");
+      message.error("An error occurred while fetching user data.");
     }
   };
 
@@ -60,9 +67,7 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
     setIsModalOpen(true);
     form.setFieldsValue({
       fullname: record.fullname,
-      email: record.email,
       phoneNumber: record.phoneNumber,
-      role: record.role,
     });
   };
 
@@ -72,44 +77,92 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
       const updatedUser = {
         id: selectedItem.id,
         fullname: values.fullname,
-        email: values.email,
         phoneNumber: values.phoneNumber,
-        role: values.role,
       };
-      const response = await axiosInstance.put(
+
+      await axios.put(
         "https://localhost:7071/api/user-management/edit-user",
-        updatedUser
+        updatedUser,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
-      if (response.status === 200) {
-        setIsModalOpen(false);
-        setReload(!reload); // Trigger reload of user data
-      } else {
-        console.error("Failed to update user");
-      }
+
+      setIsModalOpen(false);
+      setReload(!reload); // Trigger reload of user data
+      message.success("User updated successfully.");
     } catch (error) {
       console.error("Error updating user:", error);
+      if (error.response && error.response.status === 401) {
+        try {
+          await refreshAccessToken();
+          await handleSaveUser(); // Retry original request
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          message.error("Failed to refresh token. Please log in again.");
+          navigate("/login");
+        }
+      } else {
+        message.error("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
   const handleDeleteUser = async (id) => {
     try {
-      const response = await axiosInstance.delete(
-        `https://localhost:7071/api/user-management/delete-user/${id}`
+      await axios.delete(
+        `https://localhost:7071/api/user-management/delete-user/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
       );
-      if (response.status === 200) {
-        setReload(!reload); // Trigger reload of user data
-      } else {
-        console.error("Failed to delete user");
-      }
+
+      setReload(!reload); // Trigger reload of user data
+      message.success("User deleted successfully.");
     } catch (error) {
       console.error("Error deleting user:", error);
+      if (error.response && error.response.status === 401) {
+        try {
+          await refreshAccessToken();
+          await handleDeleteUser(id); // Retry original request
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          message.error("Failed to refresh token. Please log in again.");
+          navigate("/login");
+        }
+      } else {
+        message.error("An unexpected error occurred. Please try again later.");
+      }
+    }
+  };
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    try {
+      const response = await axios.post(
+        "https://localhost:7071/api/refresh-token",
+        { refreshToken }
+      );
+
+      const { accessToken } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      return accessToken;
+    } catch (error) {
+      throw new Error("Error refreshing token");
     }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setShowHeader(true);
-    navigate("/admin/login", { replace: true });
+    setIsLogin(false);
+    localStorage.removeItem("accessToken");
+    navigate("/login", { replace: true });
   };
 
   const columns = [
@@ -172,29 +225,11 @@ const UserManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
               <Input />
             </Form.Item>
             <Form.Item
-              name="email"
-              label="Email Address"
-              rules={[{ required: true, message: "Please enter email" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
               name="phoneNumber"
               label="Phone Number"
               rules={[{ required: true, message: "Please enter phone number" }]}
             >
               <Input />
-            </Form.Item>
-            <Form.Item
-              name="role"
-              label="Role"
-              rules={[{ required: true, message: "Please select role" }]}
-            >
-              <Select>
-                <Option value="Admin">Admin</Option>
-                <Option value="Moderator">Moderator</Option>
-                <Option value="User">User</Option>
-              </Select>
             </Form.Item>
           </Form>
         </Modal>

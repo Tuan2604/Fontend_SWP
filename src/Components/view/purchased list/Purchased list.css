@@ -1,0 +1,44 @@
+.purchased-list {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.payment-card {
+  width: 100%;
+  max-width: 1200px; /* Increase max-width to accommodate more items */
+}
+
+.purchased-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.purchased-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.item-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.report-button {
+  margin-top: 10px;
+}

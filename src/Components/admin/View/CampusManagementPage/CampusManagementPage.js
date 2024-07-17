@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Space, Table, Modal, Form, Input, Button, Typography } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./CampusManagementPage.css";
 import AdminLayout from "../../../layout/header/AdminLayout";
+import { useAuth } from "../../../Hook/useAuth"; // Import useAuth hook
 
 const { Title } = Typography;
 
-const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
+const CampusManagementPage = ({ setShowHeader }) => {
+  const { isLogin, token } = useAuth(); // Use token from useAuth
   const navigate = useNavigate();
   const [reload, setReload] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +17,7 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLogin) {
       navigate("/admin/login");
       return;
     }
@@ -25,13 +26,25 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
     return () => {
       setShowHeader(true);
     };
-  }, [isLoggedIn, reload, setShowHeader, navigate]);
+  }, [isLogin, reload, setShowHeader, navigate]);
 
   const handleFetchData = async () => {
     try {
-      const response = await axios.get("https://localhost:7071/api/campuses");
+      const response = await axios.get(
+        "https://localhost:7071/api/campus/get-all?pageIndex=1&pageSize=10",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
+      );
       if (response.status === 200) {
-        setData(response.data);
+        const formattedData = response.data.map((campus) => ({
+          ...campus,
+          key: campus.id,
+        }));
+        setData(formattedData);
       } else {
         console.error("Failed to fetch data");
       }
@@ -46,7 +59,6 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
     setIsModalOpen(true);
     form.setFieldsValue({
       name: record.name,
-      location: record.location,
     });
   };
 
@@ -56,11 +68,16 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
       const updatedCampus = {
         id: selectedItem.id,
         name: values.name,
-        location: values.location,
       };
       const response = await axios.put(
-        `https://localhost:7071/api/campuses/${selectedItem.id}`,
-        updatedCampus
+        `https://localhost:7071/api/campus/edit`,
+        updatedCampus,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
       );
       if (response.status === 200) {
         setIsModalOpen(false);
@@ -76,7 +93,15 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   const handleDeleteCampus = async (id) => {
     try {
       const response = await axios.delete(
-        `https://localhost:7071/api/campuses/${id}`
+        `https://localhost:7071/api/campus/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          data: { id },
+        }
       );
       if (response.status === 200) {
         setReload(!reload);
@@ -99,11 +124,16 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
       const values = await form.validateFields();
       const newCampus = {
         name: values.name,
-        location: values.location,
       };
       const response = await axios.post(
-        "https://localhost:7071/api/campuses",
-        newCampus
+        "https://localhost:7071/api/campus/add",
+        newCampus,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+          },
+        }
       );
       if (response.status === 200) {
         setIsModalOpen(false);
@@ -132,11 +162,6 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Location",
-      dataIndex: "location",
-      key: "location",
-    },
-    {
       title: "Action",
       key: "action",
       render: (_, record) => (
@@ -149,7 +174,7 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
   ];
 
   return (
-    <AdminLayout onLogout={() => navigate("/admin/login", { replace: true })}>
+    <AdminLayout>
       <div className="campus-management-container">
         <Title level={3}>Campus Management</Title>
         <Button
@@ -172,13 +197,6 @@ const CampusManagementPage = ({ isLoggedIn, setShowHeader, setIsLoggedIn }) => {
               name="name"
               label="Campus Name"
               rules={[{ required: true, message: "Please enter campus name" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="location"
-              label="Location"
-              rules={[{ required: true, message: "Please enter location" }]}
             >
               <Input />
             </Form.Item>
