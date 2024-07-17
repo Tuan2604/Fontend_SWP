@@ -25,7 +25,7 @@ import ListBuyer from "./Components/view/ListBuyer/ListBuyer";
 import PurchasedList from "./Components/view/purchased list/Purchased list";
 import Dashboard from "./Components/admin/View/Dashboard/Dashboard";
 import SellerPosts from "./Components/view/ListSeller/ListSeller";
-import BuyerHistory from "./Components/view/Buyer history/BuyerHistory";
+import BuyerHistory from "./Components/view/Buyer History/BuyerHistory";
 import BuyerSuccess from "./Components/view/Buy Successfull/BuySuccess";
 
 import "./transitions.css";

@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Typography, message, Pagination } from "antd";
+import { Typography, message, Pagination, Empty } from "antd";
 import "./ShoppingCard.css";
 import { ref, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../../Firebase"; // Adjust the path to your Firebase configuration file
+import { storage } from "../../../../Firebase"; 
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const ShoppingCard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsData, setCardsData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 8;
   const pageSize = 5; // Number of items per page for pagination
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
   }, [currentPage]);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      console.log(`Fetching data for page: ${currentPage}`);
       const response = await fetchCardsData();
       console.log("Fetched data:", response);
       setCardsData(response);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,8 +45,6 @@ const ShoppingCard = () => {
           headers: userToken ? { Authorization: `Bearer ${userToken}` } : {},
         }
       );
-
-      console.log("API response:", response.data);
 
       const formattedData = await Promise.all(
         response.data.map(async (item) => {
@@ -82,24 +85,38 @@ const ShoppingCard = () => {
   };
 
   const refreshToken = async () => {
-    const refreshToken = localStorage.getItem("refreshToken");
+
+    const storedRefreshToken = localStorage.getItem("refreshToken");
 
     try {
-      const response = await axios.post(
-        "https://localhost:7071/api/refresh-token",
-        {
-          refreshToken: refreshToken,
+        const response = await axios.post(
+            "https://localhost:7071/api/refresh-token",
+            {
+                refreshToken: storedRefreshToken,
+            }
+        );
+        if (response.status === 200) {
+            const { accessToken, refreshToken } = response.data;
+            if (accessToken && refreshToken) {
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+            } 
         }
-      );
-
-      const { accessToken } = response.data;
-      localStorage.setItem("accessToken", accessToken);
+        else {
+            message.error("Your login session expired. Please log in again.");
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            navigate("/login");
+        }
     } catch (error) {
-      console.error("Error refreshing token:", error);
-      // Handle token refresh failure (e.g., logout user)
-      throw error; // Re-throw the error to propagate it up
+        message.error("Your login session expired. Please log in again.");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        navigate("/login");
     }
+
   };
+
 
   const handlePageChange = (page) => {
     console.log(`Changing to page: ${page}`);
@@ -152,31 +169,37 @@ const ShoppingCard = () => {
   return (
     <div>
       <Title level={2} style={{ textAlign: "left", margin: "20px 0" }}>
-        PostNews
+        Available Products
       </Title>
-      <div className="shopping-cards-container">
-        {currentItems.map((card, index) => (
-          <div key={index} className="shopping-card">
-            <img src={card.imageUrl} alt={card.title} className="card-image" />
-            <div className="card-content">
-              <h3 className="card-title">{card.title}</h3>
-              <p className="card-description">{card.description}</p>
-              <p className="card-price">{formatPrice(card.price)}</p>
-              <div className="card-buttons">
-                <button
-                  className="buy-now-button"
-                  onClick={() => handleBuyNow(card.id)}
-                >
-                  Buy Now
-                </button>
-                <Link to={`/item/${card.id}`}>
-                  <button className="view-details-button">View Details</button>
-                </Link>
+      {loading ? (
+        <div className="loading-text">Loading...</div>
+      ) : cardsData.length === 0 ? (
+        <Empty description="No Data" />
+      ) : (
+        <div className="shopping-cards-container">
+          {currentItems.map((card, index) => (
+            <div key={index} className="shopping-card">
+              <img src={card.imageUrl} alt={card.title} className="card-image" />
+              <div className="card-content">
+                <h3 className="card-title">{card.title}</h3>
+                <p className="card-description">{card.description}</p>
+                <p className="card-price">{formatPrice(card.price)}</p>
+                <div className="card-buttons">
+                  <button
+                    className="buy-now-button"
+                    onClick={() => handleBuyNow(card.id)}
+                  >
+                    Buy Now
+                  </button>
+                  <Link to={`/item/${card.id}`}>
+                    <button className="view-details-button">View Details</button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       <Pagination
         current={currentPage}
         pageSize={pageSize}
