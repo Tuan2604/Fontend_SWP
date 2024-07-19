@@ -200,11 +200,6 @@ const Header = () => {
             )}
 
             <li>
-              <Link to="/notifications">
-                <FontAwesomeIcon icon={faBell} /> Notifications
-              </Link>
-            </li>
-            <li>
               <Link to="/purchased-list">
                 <FontAwesomeIcon icon={faShoppingCart} /> Cart
               </Link>
