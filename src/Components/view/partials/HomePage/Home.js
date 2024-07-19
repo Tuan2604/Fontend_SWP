@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "./Home.css"; // Import the CSS file for Home component styling
 import ShoppingCard from "../Post/ShoppingCard"; // Import the corrected ShoppingCard component
-import Footer from "../Footer/Footer";
 import CategoryBar from "./CategoryBar"; // Import the CategoryBar component
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Footer from "../Footer/Footer"; // Import Footer component
 
 const Home = () => {
   const [paymentId, setPaymentId] = useState(null);
@@ -83,26 +83,28 @@ const Home = () => {
   }, [paymentId, status]);
 
   return (
-    <div className="home-container">
-      <div className="background-container">
-        <Slider {...sliderSettings}>
-          {sliderImages.map((url, index) => (
-            <div key={index} className="slider-image-container">
-              <img
-                src={url}
-                alt={`Slide ${index + 1}`}
-                className="slider-image"
-              />
-            </div>
-          ))}
-        </Slider>
+    <>
+      <div className="home-container">
+        <div className="background-container">
+          <Slider {...sliderSettings}>
+            {sliderImages.map((url, index) => (
+              <div key={index} className="slider-image-container">
+                <img
+                  src={url}
+                  alt={`Slide ${index + 1}`}
+                  className="slider-image"
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+        <div className="content-container">
+          <CategoryBar /> {/* Use the CategoryBar component */}
+          <ShoppingCard /> {/* Render the corrected ShoppingCard component */}
+        </div>
       </div>
-      <div className="content-container">
-        <CategoryBar /> {/* Use the CategoryBar component */}
-        <ShoppingCard /> {/* Render the corrected ShoppingCard component */}
-      </div>
-      <Footer />
-    </div>
+      <Footer /> {/* Ensure the Footer is always rendered at the bottom */}
+    </>
   );
 };
 

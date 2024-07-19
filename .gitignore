@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -13,6 +11,7 @@
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -21,3 +20,191 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+com.apple.timemachine.donotpresent
+AppleDouble
+AppleDB
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+
+# Logs
+logs
+*.log
+log.*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Mobile
+.expo/
+.expo-shared/
+
+# Styled Components artifacts
+.stylelintrc
+
+# ESLint cache
+.eslintcache
+
+# Parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# Project directories
+.project
+.classpath
+.csettings
+.metadata
+.externalToolBuilders
+.settings/
+
+# Webpack output
+webpack-stats.json
+.parcel-cache
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Jest
+jest/
+jest.config.js
+jest.config.ts
+jest.setup.js
+jest.setup.ts
+
+# Next.js
+.next/
+out/
+
+# Nuxt.js
+.nuxt/
+dist/
+
+# SvelteKit
+.svelte-kit/
+build/
+
+# Gatsby files
+.cache/
+public/
+
+# Gridsome files
+.gridsome/cache/
+.gridsome/config.js
+
+# vuepress
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Expo
+.expo/
+.expo-shared/
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt/
+
+# Bower dependency directory (https://bower.io/)
+bower_components/
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional stylelint cache
+.stylelintcache
+
+# Marko projects
+.project/
+.classpath/
+
+# Cache and log files
+.cache/
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Storybook
+storybook-static
+
+# vuepress
+.vuepress/dist
+
+# Sapper
+__sapper__/
+__sapper__/export/
+
+# Gridsome
+.gridsome/cache/
+.gridsome/config.js
+
+# Jest
+coverage/
+
+# JetBrains IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+.history/
