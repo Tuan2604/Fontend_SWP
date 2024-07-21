@@ -13,7 +13,6 @@ import {
   faCheckCircle,
   faClipboardList,
   faCaretDown,
-  faBell,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
@@ -171,6 +170,11 @@ const Header = () => {
                     </ul>
                   )}
                 </li>
+                <li>
+                  <Link to="/purchased-list">
+                    <FontAwesomeIcon icon={faShoppingCart} /> Cart
+                  </Link>
+                </li>
                 <li
                   className="dropdown"
                   onMouseEnter={() => handleMouseEnter("buyer")}
@@ -196,19 +200,13 @@ const Header = () => {
                     </ul>
                   )}
                 </li>
+                <li>
+                  <Link to="/post-create" className="post-ad">
+                    Create Post
+                  </Link>
+                </li>
               </>
             )}
-
-            <li>
-              <Link to="/purchased-list">
-                <FontAwesomeIcon icon={faShoppingCart} /> Cart
-              </Link>
-            </li>
-            <li>
-              <Link to="/post-create" className="post-ad">
-                Create Post
-              </Link>
-            </li>
           </ul>
         </div>
       </nav>

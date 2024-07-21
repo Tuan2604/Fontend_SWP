@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Typography, Button, message } from "antd";
-import { PhoneOutlined, WechatOutlined } from "@ant-design/icons";
+import { Typography, Button, Input, message } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../../Firebase"; // Adjust the path to your Firebase configuration file
 import "./ItemDetail.css";
 
 const { Title, Paragraph } = Typography;
+const { TextArea } = Input;
 
 const ItemDetail = () => {
   const { itemId } = useParams();
+  const navigate = useNavigate();
   const [item, setItem] = useState(null);
+  const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
     const fetchItemDetail = async () => {
@@ -61,13 +64,12 @@ const ItemDetail = () => {
   const handleBuyNow = async (postId) => {
     try {
       const userToken = localStorage.getItem("accessToken");
-      const messageData = "Tôi muốn mua vật phẩm này"; // Replace with your message
 
       localStorage.setItem("postId", postId); // Save postId to local storage
 
       const response = await axios.post(
         `https://localhost:7071/api/post-apply/${postId}`,
-        JSON.stringify(messageData),
+        JSON.stringify(messageText),
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -78,11 +80,9 @@ const ItemDetail = () => {
 
       console.log("Successfully applied to buy:", response.data);
       message.success("Successfully applied to buy this product!");
-      // Optionally handle success actions here (e.g., show a success message)
     } catch (error) {
       console.error("Error applying to buy product:", error);
-      message.error("Failed to apply to buy this product.");
-      // Optionally handle error actions here (e.g., show an error message)
+      message.error("You need to log in to buy this product.");
     }
   };
 
@@ -119,25 +119,28 @@ const ItemDetail = () => {
           <Paragraph className="item-campus">Campus: {item.campus}</Paragraph>
         )}
 
-        {/* <div className="contact-buttons">
-          <Button
-            type="primary"
-            icon={<PhoneOutlined />}
-            className="contact-button"
-          >
-            Gọi điện
-          </Button>
+        <TextArea
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
+          placeholder="Enter your message here"
+          rows={4}
+          style={{ marginBottom: "10px" }}
+        />
 
-          <Button
-            type="default"
-            icon={<WechatOutlined />}
-            className="contact-button"
-          >
-            <Link to={`/chat/${itemId}`} className="chat-link">
-              Chat
-            </Link>
-          </Button>
-        </div> */}
+        <Button
+          type="primary"
+          icon={<ShoppingCartOutlined />}
+          onClick={() => handleBuyNow(item.id)}
+        >
+          Buy Now
+        </Button>
+        <Button
+          type="default"
+          onClick={() => navigate(-1)}
+          style={{ marginLeft: "10px" }}
+        >
+          Back
+        </Button>
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ const Login = ({ onLogin }) => {
         closeButton: false,
         className: "custom-toast",
       });
-      setError(error.message);
+      setError("Login Fail");
     }
   };
 

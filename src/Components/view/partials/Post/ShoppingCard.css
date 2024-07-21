@@ -1,81 +1,81 @@
 /* ShoppingCard.css */
 
 .shopping-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .shopping-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .card-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-  
-  .card-content {
-    text-align: center;
-  }
-  
-  .card-title {
-    font-size: 18px;
-    margin: 10px 0;
-  }
-  
-  .card-description {
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .card-price {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 10px 0;
-  }
-  
-  .card-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .buy-now-button,
-  .view-details-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .buy-now-button {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .view-details-button {
-    background-color: #008cba;
-    color: white;
-  }
-  
-  .loading-text {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .ant-empty {
-    margin: 20px 0;
-    text-align: center;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.shopping-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.card-title {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.card-description {
+  font-size: 14px;
+  color: #555;
+}
+
+.card-price {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.card-buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 10px;
+  width: 100%;
+}
+
+.card-buttons .button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.card-buttons .button-group .ant-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  width: auto; /* Auto width for buttons in button-group */
+}
+
+.card-buttons .report-button {
+  margin-top: 10px;
+  background-color: #f44336; /* Example color for report button */
+  color: white;
+}
+
+.loading-text {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.ant-empty {
+  margin: 20px 0;
+  text-align: center;
+}
