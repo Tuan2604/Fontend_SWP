@@ -49,7 +49,7 @@ const ShoppingCard = () => {
   // Function to fetch cards data
   const fetchCardsData = async () => {
     const userToken = localStorage.getItem("accessToken");
-    const pageIndex = currentPage - 1; // API expects zero-based index
+    const pageIndex = currentPage; // API expects 1-based index
 
     try {
       const response = await axios.get(

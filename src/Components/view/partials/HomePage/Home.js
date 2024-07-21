@@ -99,7 +99,6 @@ const Home = () => {
           </Slider>
         </div>
         <div className="content-container">
-          <CategoryBar /> {/* Use the CategoryBar component */}
           <ShoppingCard /> {/* Render the corrected ShoppingCard component */}
         </div>
       </div>
